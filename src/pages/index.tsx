@@ -1,4 +1,3 @@
-import "@/styles/globals.css";
 import DawaeGame from "@/components/DawaeGame";
 import Head from "next/head";
 

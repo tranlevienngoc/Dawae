@@ -3,18 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 
 const countries = [
-  { code: "hk", name: "Hong Kong", start: 1000, interval: 1, flag: "🇭🇰" },
-  { code: "tw", name: "Taiwan", start: 430, interval: 20, flag: "🇹🇼" },
-  { code: "th", name: "Thailand", start: 200, interval: 25, flag: "🇹🇭" },
-  { code: "jp", name: "Japan", start: 150, interval: 40, flag: "🇯🇵" },
-  { code: "vi", name: "Vietnam", start: 10000, interval: 0, flag: "🇻🇳" }, // manual update
-  { code: "fi", name: "Finland", start: 250, interval: 34, flag: "🇫🇮" },
-  { code: "se", name: "Sweden", start: 100, interval: 20, flag: "🇸🇪" },
-  { code: "pl", name: "Poland", start: 500, interval: 15, flag: "🇵🇱" },
-  { code: "dk", name: "Denmark", start: 280, interval: 31, flag: "🇩🇰" },
-  { code: "id", name: "Indonesia", start: 590, interval: 29, flag: "🇮🇩" },
-  { code: "hu", name: "Hungary", start: 319, interval: 70, flag: "🇭🇺" },
-  { code: "rs", name: "Serbia", start: 300, interval: 5, flag: "🇷🇸" },
+  { code: "hk", name: "Hong Kong", start: 0, interval: 1, flag: "🇭🇰" },
+  { code: "tw", name: "Taiwan", start: 0, interval: 20, flag: "🇹🇼" },
+  { code: "th", name: "Thailand", start: 0, interval: 25, flag: "🇹🇭" },
+  { code: "jp", name: "Japan", start: 0, interval: 40, flag: "🇯🇵" },
+  { code: "vi", name: "Vietnam", start: 0, interval: 0, flag: "🇻🇳" }, // manual update
+  { code: "fi", name: "Finland", start: 0, interval: 34, flag: "🇫🇮" },
+  { code: "se", name: "Sweden", start: 0, interval: 20, flag: "🇸🇪" },
+  { code: "pl", name: "Poland", start: 0, interval: 15, flag: "🇵🇱" },
+  { code: "dk", name: "Denmark", start: 0, interval: 31, flag: "🇩🇰" },
+  { code: "id", name: "Indonesia", start: 0, interval: 29, flag: "🇮🇩" },
+  { code: "hu", name: "Hungary", start: 0, interval: 70, flag: "🇭🇺" },
+  { code: "rs", name: "Serbia", start: 0, interval: 5, flag: "🇷🇸" },
 ];
 
 export default function DawaeGame() {
@@ -135,8 +135,8 @@ export default function DawaeGame() {
 
   return (
     <div className="container">
-      <h1>Dawae</h1>
-      <p id="score">{score}</p>
+      <h1 className="title" >KNUCKLES</h1>
+      <p id="score">{score.toLocaleString()}</p>
       <img
         ref={imgRef}
         src="/dawae-mount.png"
@@ -154,8 +154,8 @@ export default function DawaeGame() {
             <div className="tab-label-left">
               <div>🏆</div>
               <div>
-                <span>{highestScoreCountry().name} </span>
-                <span>
+                <span className="text-label">{highestScoreCountry().name} </span>
+                <span className="text-label">
                   {Number(highestScoreCountry().currentScore).toLocaleString()}
                 </span>
               </div>
@@ -165,8 +165,8 @@ export default function DawaeGame() {
               <div
                 style={{ display: "flex", alignItems: "center", gap: "5px" }}
               >
-                <span style={{ fontSize: "14px", marginTop: "2px" }}>🇻🇳</span>
-                <span style={{ fontSize: "14px" }}>{myScore}</span>
+                <span style={{ marginTop: "2px" }} className="text-label">🇻🇳</span>
+                <span style={{ fontSize: "16px" }} className="text-label">{myScore.toLocaleString()}</span>
               </div>
 
               {isSvgClicked ? (

@@ -1,3 +1,16 @@
+@font-face {
+  font-family: 'Comic Relief Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Comic Relief Bold'), url('../../public/fonts/ComicRelief-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comic Relief Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Comic Relief Regular'), url('../../public/fonts/ComicRelief-Regular.ttf') format('truetype');
+}
 body {
   background-image: url('../../public/bg.webp');
   background-size: cover;
@@ -5,7 +18,13 @@ body {
   background-repeat: no-repeat;
   min-height: 100vh;
   margin: 0;
+  font-family: 'Comic Relief Regular';
 }
+
+
+
+
+
 
 .container {
   text-align: center;
@@ -18,9 +37,32 @@ body {
 }
 
 #score {
-  font-size: 3em; /* Larger font size for score */
+  font-size: 4em; /* Larger font size for score */
   margin-bottom: 20px;
+  font-family: 'Comic Relief Bold';
+  color: #FFF;
+  text-shadow: 
+    -1px -1px 0 #000, 
+    1px -1px 0 #000,    
+    -1px 1px 0 #000, 
+    1px 1px 0 #000;
+    font-weight: 700;
 }
+
+.title {
+  font-family: 'Comic Relief Bold';
+  color: #FFF;
+  text-shadow: 
+    -1px -1px 0 #000, 
+    1px -1px 0 #000,    
+    -1px 1px 0 #000, 
+    1px 1px 0 #000;
+}
+
+.text-label {
+  color: #000;
+  font-size: 16px;
+} 
 
 .container img {
   display: block;
