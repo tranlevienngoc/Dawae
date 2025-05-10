@@ -1,0 +1,156 @@
+body {
+  background-image: url('../../public/bg.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.container h1 {
+  font-size: 4em; /* Larger font size for "Dawae" */
+  margin-bottom: 20px;
+}
+
+#score {
+  font-size: 3em; /* Larger font size for score */
+  margin-bottom: 20px;
+}
+
+.container img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 45%;
+  max-width: 600px;
+  height: auto;
+}
+
+.tabs {
+  position: fixed;
+  bottom: -10px; /* Original fixed position from your code */
+  left: 0;
+  right: 0;
+  padding: 10px;
+  z-index: 1000; /* Ensure tabs stay above other content */
+}
+
+.tab {
+  padding: 10px;
+  background-color: #fff; /* White background for visibility */
+  border-radius: 10px 10px 0 0;
+  max-width: 600px; /* Limit width for better readability */
+  margin: 0 auto; /* Center the tab content */
+}
+
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: bold;
+}
+.tab-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 5px 0;
+}
+
+.tab-label-left{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  gap: 10px;
+}
+.tab-label-right{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  gap: 10px;
+}
+
+.tab-label .total-score {
+  font-weight: normal;
+}
+
+.tab-label .pps {
+  color: #00cc00; /* Green color for PPS */
+}
+
+.tab-content {
+  max-height: 0; /* Start collapsed */
+  opacity: 0; /* Start invisible */
+  transform: translateY(20px); /* Start slightly below */
+  overflow: hidden; /* Hide content while collapsed */
+  margin-top: 10px;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out; /* Smooth transition */
+}
+
+input[type='checkbox']:checked + .tab-label + .tab-content {
+  max-height: 500px; /* Large enough to fit content; adjust if needed */
+  opacity: 1; /* Fully visible */
+  transform: translateY(0); /* Move to normal position */
+}
+
+#table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#table tr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+#table td {
+  flex: 1;
+  text-align: left;
+}
+
+#table td:nth-child(1) {
+  flex: 0 0 30px; /* Rank column */
+}
+
+#table td:nth-child(2) {
+  flex: 0 0 30px; /* Flag column */
+}
+
+#table td:nth-child(3) {
+  flex: 2; /* Country name column */
+}
+
+#table td:nth-child(4) {
+  flex: 3; /* Score column */
+  text-align: right;
+}
+
+#table .pps {
+  color: #00cc00; /* Green color for PPS */
+}
+
+#table .user-country {
+  font-weight: bold;
+}
+
+#table .rank {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+#table .text {
+  margin-left: 6px;
+  font-size: 20px;
+}
