@@ -46,34 +46,26 @@ export default function DawaeGame() {
   } | null>(null);
   const [userIp, setUserIp] = useState("Unknown");
 
+  console.log(userCountry);
 
-  const fetchCountry = async () => {
-    console.log('fetchCountry');
+  useEffect(() => {
     if (navigator.geolocation) {
-    console.log('if');
-
-    console.log('navigator.geolocation', navigator.geolocation);
-
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          console.log('getCurrentPosition');
           try {
-            console.log('try');
             const { latitude, longitude } = position.coords;
             const response = await fetch(
-              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`,
-              { cache: "no-store" }
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
             );
-            if (!response.ok) {
-              throw new Error("Failed to fetch country");
-            }
             const data = await response.json();
-            console.log("Geolocation data:", data);
+            console.log(data);
 
             const countryData = {
               country: data.countryName || "Unknown",
               countryCode: data.countryCode || "Unknown",
             };
+
+
             setUserCountry(countryData);
           } catch (error) {
             console.error("Error fetching country:", error);
@@ -97,56 +89,7 @@ export default function DawaeGame() {
         countryCode: "Unsupported",
       });
     }
-  };
-
-
-  useEffect(() => {
-    const checkPermission = async () => {
-      if ("permissions" in navigator) {
-        const permissionStatus = await navigator.permissions.query({ name: "geolocation" });
-        if (permissionStatus.state === "granted") {
-          fetchCountry();
-        } else if (permissionStatus.state === "prompt") {
-          setUserCountry({ country: "Prompt", countryCode: "Prompt" });
-          fetchCountry(); // Thử lấy vị trí, sẽ hiển thị lời nhắc
-        } else {
-          setUserCountry({ country: "Denied", countryCode: "Denied" });
-        }
-
-        // Lắng nghe thay đổi quyền
-        permissionStatus.onchange = () => {
-          if (permissionStatus.state === "granted") {
-            console.log('calll');
-            fetchCountry();
-          } else if (permissionStatus.state === "denied") {
-            setUserCountry({ country: "Denied", countryCode: "Denied" });
-          }
-        };
-      } else {
-        // Fallback nếu không hỗ trợ permissions API
-        fetchCountry();
-      }
-    };
-
-    checkPermission();
-
-    // Cleanup listener
-    return () => {
-      if ("permissions" in navigator) {
-        navigator.permissions.query({ name: "geolocation" }).then((status) => {
-          status.onchange = null;
-        });
-      }
-    };
   }, []);
-
-  console.log(userCountry);
-
-
-
-
-
- 
 
   useEffect(() => {
     const fetchIp = async () => {
@@ -206,10 +149,6 @@ export default function DawaeGame() {
 
   // Click or touch handler
   const handleClick = () => {
-
-    if (userCountry?.country === "Prompt") {
-      fetchCountry();
-    }
     setScore((prev) => prev + 1);
     setMyScore((prev) => prev + 1);
     setCountryScores((prev) => {
@@ -218,7 +157,7 @@ export default function DawaeGame() {
       return updated;
     });
 
-    const scoreElement = document.getElementById("score");
+    const scoreElement = document.getElementById("scoreUser");
 
     scoreElement?.classList.add("score-increase");
     setTimeout(() => {
@@ -232,11 +171,10 @@ export default function DawaeGame() {
     const currentScore = localStorage.getItem("scoreUser");
     const dataScore = {
       ip: userIp,
-      country: userCountry?.country || "Unknown",
-      countryCode: userCountry?.countryCode || "Unknown",
+      country: userCountry,
       score: currentScore ? parseInt(currentScore) + 1 : 1,
     };
-    localStorage.setItem("scoreUser", JSON.stringify(dataScore));
+    localStorage.setItem("score", JSON.stringify(dataScore));
 
     // Clear any existing timeout
     if (timeoutRef.current) {
