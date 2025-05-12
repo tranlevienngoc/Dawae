@@ -16,6 +16,10 @@ export default function Home() {
           content="width=device-width, initial-scale=1.0"
         />  
         <link rel="icon" href="/logo.png" /> 
+        <link rel="preload" as="image" href="/mount.webp"></link>
+        <link rel="preload" as="image" href="/unmount.webp"></link>
+        
+
       </Head>
       <DawaeGame />
     </>

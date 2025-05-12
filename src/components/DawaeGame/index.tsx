@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +24,7 @@ export default function DawaeGame() {
   const [countryScores, setCountryScores] = useState(
     countries.map((c) => c.start)
   );
+  
   const [isClicked, setIsClicked] = useState(false);
   const [isSvgClicked, setIsSvgClicked] = useState(false);
   const highestScoreCountry = () => {
@@ -36,7 +38,52 @@ export default function DawaeGame() {
   const imgRef = useRef<HTMLImageElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scoreRef = useRef<HTMLParagraphElement | null>(null);
   const checkboxRef = useRef<HTMLInputElement>(null);
+  const [userCountry, setUserCountry] = useState("Unknown");
+  const [userIp, setUserIp] = useState("Unknown");
+
+  console.log(userIp);
+  console.log(userCountry);
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+            const response = await fetch(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+            );
+            const data = await response.json();
+            setUserCountry(data.countryName || "Unknown");
+          } catch (error) {
+            console.error("Error fetching country:", error);
+            setUserCountry("Unknown");
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          setUserCountry("Denied");
+        }
+      );
+    } else {
+      setUserCountry("Unsupported");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchIp = async () => {
+      try {
+        const response = await fetch("/api/get-ip");
+        const data = await response.json();
+        setUserIp(data.ip);
+      } catch (error) {
+        console.error("Error fetching IP:", error);
+        setUserIp("Unknown");
+      }
+    };
+    fetchIp();
+  }, []);
 
   useEffect(() => {
     audioRef.current = new Audio("/uk-click.mp3");
@@ -49,22 +96,22 @@ export default function DawaeGame() {
   }, []);
 
   // Handle intervals for countries
-  useEffect(() => {
-    const intervals = countries.map((c, index) => {
-      if (c.interval <= 0) return null;
-      return setInterval(() => {
-        setCountryScores((prev) => {
-          const updated = [...prev];
-          updated[index]++;
-          return updated;
-        });
-      }, c.interval);
-    });
+  // useEffect(() => {
+  //   const intervals = countries.map((c, index) => {
+  //     if (c.interval <= 0) return null;
+  //     return setInterval(() => {
+  //       setCountryScores((prev) => {
+  //         const updated = [...prev];
+  //         updated[index]++;
+  //         return updated;
+  //       });
+  //     }, c.interval);
+  //   });
 
-    return () => {
-      intervals.forEach((id) => id && clearInterval(id));
-    };
-  }, []);
+  //   return () => {
+  //     intervals.forEach((id) => id && clearInterval(id));
+  //   };
+  // }, []);
 
   // Handle audio looping based on isClicked
   useEffect(() => {
@@ -90,6 +137,17 @@ export default function DawaeGame() {
       return updated;
     });
 
+
+    
+
+    const scoreElement = document.getElementById("score");
+
+    
+    scoreElement?.classList.add("score-increase");
+    setTimeout(() => {
+      scoreElement?.classList.remove("score-increase");
+    }, 300);
+
     // Set isClicked to true to enable looping
     setIsClicked(true);
 
@@ -97,7 +155,14 @@ export default function DawaeGame() {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-
+    if (scoreRef.current) {
+        scoreRef.current.classList.add("score-increase");
+        setTimeout(() => {
+          if (scoreRef.current) {
+            scoreRef.current.classList.remove("score-increase");
+          }
+        }, 300); // Thời gian khớp với animation duration
+      }
     // Set a new timeout to stop audio and set isClicked to false after 1s of no clicks
     timeoutRef.current = setTimeout(() => {
       setIsClicked(false);
@@ -116,10 +181,10 @@ export default function DawaeGame() {
 
     // Handle image toggle
     if (imgRef.current) {
-      imgRef.current.src = "/dawae-unmount.png";
+      imgRef.current.src = "/unmount.webp";
       setTimeout(() => {
         if (imgRef.current) {
-          imgRef.current.src = "/dawae-mount.png";
+          imgRef.current.src = "/mount.webp";
         }
       }, 100);
     }
@@ -135,15 +200,19 @@ export default function DawaeGame() {
 
   return (
     <div className="container">
-      <h1 className="title" >KNUCKLES</h1>
+      <div className="logo">
+        <span className="nitish">UGANDAN </span>
+        <span className="k">K</span>
+        <span className="pjt">NUCKLES</span>
+      </div>
       <p id="score">{score.toLocaleString()}</p>
       <img
         ref={imgRef}
-        src="/dawae-mount.png"
+        src="/mount.webp"
         alt="Dawae"
-        height={600}
-        width="45%"
-        style={{ marginTop: 100, cursor: "pointer" }}
+        height="auto"
+        style={{ maxWidth: "760px", cursor: "pointer" }}
+        width="90%"
         onMouseDown={handleClick}
         onTouchStart={handleClick}
       />
@@ -154,7 +223,9 @@ export default function DawaeGame() {
             <div className="tab-label-left">
               <div>🏆</div>
               <div>
-                <span className="text-label">{highestScoreCountry().name} </span>
+                <span className="text-label">
+                  {highestScoreCountry().name}{" "}
+                </span>
                 <span className="text-label">
                   {Number(highestScoreCountry().currentScore).toLocaleString()}
                 </span>
@@ -165,25 +236,27 @@ export default function DawaeGame() {
               <div
                 style={{ display: "flex", alignItems: "center", gap: "5px" }}
               >
-                <span style={{ marginTop: "2px" }} className="text-label">🇻🇳</span>
-                <span style={{ fontSize: "16px" }} className="text-label">{myScore.toLocaleString()}</span>
+                <span style={{ marginTop: "2px" }} className="text-label">
+                  🇻🇳
+                </span>
+                <span style={{ fontSize: "16px" }} className="text-label">
+                  {myScore.toLocaleString()}
+                </span>
               </div>
 
               {isSvgClicked ? (
-                
                 <svg
-                stroke="currentColor"
-                fill="currentColor"
-                stroke-width="0"
-                viewBox="0 0 512 512"
-                height="20px"
-                width="20px"
-                xmlns="http://www.w3.org/2000/svg"
-                onClick={handleSvgClick} // Add click handler
-
-              >
-                <path d="M256 217.9L383 345c9.4 9.4 24.6 9.4 33.9 0 9.4-9.4 9.3-24.6 0-34L273 167c-9.1-9.1-23.7-9.3-33.1-.7L95 310.9c-4.7 4.7-7 10.9-7 17s2.3 12.3 7 17c9.4 9.4 24.6 9.4 33.9 0l127.1-127z"></path>
-              </svg>
+                  stroke="currentColor"
+                  fill="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 512 512"
+                  height="20px"
+                  width="20px"
+                  xmlns="http://www.w3.org/2000/svg"
+                  onClick={handleSvgClick} // Add click handler
+                >
+                  <path d="M256 217.9L383 345c9.4 9.4 24.6 9.4 33.9 0 9.4-9.4 9.3-24.6 0-34L273 167c-9.1-9.1-23.7-9.3-33.1-.7L95 310.9c-4.7 4.7-7 10.9-7 17s2.3 12.3 7 17c9.4 9.4 24.6 9.4 33.9 0l127.1-127z"></path>
+                </svg>
               ) : (
                 <svg
                   stroke="currentColor"
