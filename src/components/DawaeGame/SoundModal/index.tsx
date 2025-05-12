@@ -1,5 +1,4 @@
 import React from "react";
-import "./SoundModal.css"; // Import CSS thông thường
 
 interface Song {
   name: string;
