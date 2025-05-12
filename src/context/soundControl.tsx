@@ -24,7 +24,7 @@ import {
   }
   
   const SoundControlProvider = ({ children }: SoundControlProviderProps) => {
-    const [muteAudio, setMuteAudio] = useState<boolean>(true);
+    const [muteAudio, setMuteAudio] = useState<boolean>(false);
   
     const muteMe = useCallback(
       (elem: HTMLAudioElement | HTMLVideoElement, status: boolean) => {
