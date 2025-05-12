@@ -40,13 +40,8 @@ export default function DawaeGame() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scoreRef = useRef<HTMLParagraphElement | null>(null);
   const checkboxRef = useRef<HTMLInputElement>(null);
-  const [userCountry, setUserCountry] = useState<{
-    country: string;
-    countryCode: string;
-  } | null>(null);
+  const [userCountry, setUserCountry] = useState("Unknown");
   const [userIp, setUserIp] = useState("Unknown");
-
-  console.log(userCountry);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -60,34 +55,19 @@ export default function DawaeGame() {
             const data = await response.json();
             console.log(data);
 
-            const countryData = {
-              country: data.countryName || "Unknown",
-              countryCode: data.countryCode || "Unknown",
-            };
-
-
-            setUserCountry(countryData);
+            setUserCountry(data.countryName || "Unknown");
           } catch (error) {
             console.error("Error fetching country:", error);
-            setUserCountry({
-              country: "Unknown",
-              countryCode: "Unknown",
-            });
+            setUserCountry("Unknown");
           }
         },
         (error) => {
           console.error("Geolocation error:", error);
-          setUserCountry({
-            country: "Denied",
-            countryCode: "Denied",
-          });
+          setUserCountry("Denied");
         }
       );
     } else {
-      setUserCountry({
-        country: "Unsupported",
-        countryCode: "Unsupported",
-      });
+      setUserCountry("Unsupported");
     }
   }, []);
 
@@ -116,22 +96,22 @@ export default function DawaeGame() {
   }, []);
 
   // Handle intervals for countries
-  // useEffect(() => {
-  //   const intervals = countries.map((c, index) => {
-  //     if (c.interval <= 0) return null;
-  //     return setInterval(() => {
-  //       setCountryScores((prev) => {
-  //         const updated = [...prev];
-  //         updated[index]++;
-  //         return updated;
-  //       });
-  //     }, c.interval);
-  //   });
+  useEffect(() => {
+    const intervals = countries.map((c, index) => {
+      if (c.interval <= 0) return null;
+      return setInterval(() => {
+        setCountryScores((prev) => {
+          const updated = [...prev];
+          updated[index]++;
+          return updated;
+        });
+      }, c.interval);
+    });
 
-  //   return () => {
-  //     intervals.forEach((id) => id && clearInterval(id));
-  //   };
-  // }, []);
+    return () => {
+      intervals.forEach((id) => id && clearInterval(id));
+    };
+  }, []);
 
   // Handle audio looping based on isClicked
   useEffect(() => {
@@ -157,7 +137,7 @@ export default function DawaeGame() {
       return updated;
     });
 
-    const scoreElement = document.getElementById("scoreUser");
+    const scoreElement = document.getElementById("score");
 
     scoreElement?.classList.add("score-increase");
     setTimeout(() => {
@@ -168,7 +148,7 @@ export default function DawaeGame() {
     setIsClicked(true);
 
     //add score to local storage
-    const currentScore = localStorage.getItem("scoreUser");
+    const currentScore = localStorage.getItem("score");
     const dataScore = {
       ip: userIp,
       country: userCountry,
