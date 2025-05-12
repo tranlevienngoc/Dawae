@@ -24,7 +24,7 @@ export default function DawaeGame() {
   const [countryScores, setCountryScores] = useState(
     countries.map((c) => c.start)
   );
-  
+
   const [isClicked, setIsClicked] = useState(false);
   const [isSvgClicked, setIsSvgClicked] = useState(false);
   const highestScoreCountry = () => {
@@ -40,36 +40,113 @@ export default function DawaeGame() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scoreRef = useRef<HTMLParagraphElement | null>(null);
   const checkboxRef = useRef<HTMLInputElement>(null);
-  const [userCountry, setUserCountry] = useState("Unknown");
+  const [userCountry, setUserCountry] = useState<{
+    country: string;
+    countryCode: string;
+  } | null>(null);
   const [userIp, setUserIp] = useState("Unknown");
 
-  console.log(userIp);
-  console.log(userCountry);
-  useEffect(() => {
+
+  const fetchCountry = async () => {
+    console.log('fetchCountry');
     if (navigator.geolocation) {
+    console.log('if');
+
+    console.log('navigator.geolocation', navigator.geolocation);
+
       navigator.geolocation.getCurrentPosition(
         async (position) => {
+          console.log('getCurrentPosition');
           try {
+            console.log('try');
             const { latitude, longitude } = position.coords;
             const response = await fetch(
-              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`,
+              { cache: "no-store" }
             );
+            if (!response.ok) {
+              throw new Error("Failed to fetch country");
+            }
             const data = await response.json();
-            setUserCountry(data.countryName || "Unknown");
+            console.log("Geolocation data:", data);
+
+            const countryData = {
+              country: data.countryName || "Unknown",
+              countryCode: data.countryCode || "Unknown",
+            };
+            setUserCountry(countryData);
           } catch (error) {
             console.error("Error fetching country:", error);
-            setUserCountry("Unknown");
+            setUserCountry({
+              country: "Unknown",
+              countryCode: "Unknown",
+            });
           }
         },
         (error) => {
           console.error("Geolocation error:", error);
-          setUserCountry("Denied");
+          setUserCountry({
+            country: "Denied",
+            countryCode: "Denied",
+          });
         }
       );
     } else {
-      setUserCountry("Unsupported");
+      setUserCountry({
+        country: "Unsupported",
+        countryCode: "Unsupported",
+      });
     }
+  };
+
+
+  useEffect(() => {
+    const checkPermission = async () => {
+      if ("permissions" in navigator) {
+        const permissionStatus = await navigator.permissions.query({ name: "geolocation" });
+        if (permissionStatus.state === "granted") {
+          fetchCountry();
+        } else if (permissionStatus.state === "prompt") {
+          setUserCountry({ country: "Prompt", countryCode: "Prompt" });
+          fetchCountry(); // Thử lấy vị trí, sẽ hiển thị lời nhắc
+        } else {
+          setUserCountry({ country: "Denied", countryCode: "Denied" });
+        }
+
+        // Lắng nghe thay đổi quyền
+        permissionStatus.onchange = () => {
+          if (permissionStatus.state === "granted") {
+            console.log('calll');
+            fetchCountry();
+          } else if (permissionStatus.state === "denied") {
+            setUserCountry({ country: "Denied", countryCode: "Denied" });
+          }
+        };
+      } else {
+        // Fallback nếu không hỗ trợ permissions API
+        fetchCountry();
+      }
+    };
+
+    checkPermission();
+
+    // Cleanup listener
+    return () => {
+      if ("permissions" in navigator) {
+        navigator.permissions.query({ name: "geolocation" }).then((status) => {
+          status.onchange = null;
+        });
+      }
+    };
   }, []);
+
+  console.log(userCountry);
+
+
+
+
+
+ 
 
   useEffect(() => {
     const fetchIp = async () => {
@@ -129,20 +206,20 @@ export default function DawaeGame() {
 
   // Click or touch handler
   const handleClick = () => {
+
+    if (userCountry?.country === "Prompt") {
+      fetchCountry();
+    }
     setScore((prev) => prev + 1);
     setMyScore((prev) => prev + 1);
     setCountryScores((prev) => {
       const updated = [...prev];
-      updated[4] += 1; // Vietnam
+      updated[4] += 1;
       return updated;
     });
 
-
-    
-
     const scoreElement = document.getElementById("score");
 
-    
     scoreElement?.classList.add("score-increase");
     setTimeout(() => {
       scoreElement?.classList.remove("score-increase");
@@ -151,18 +228,28 @@ export default function DawaeGame() {
     // Set isClicked to true to enable looping
     setIsClicked(true);
 
+    //add score to local storage
+    const currentScore = localStorage.getItem("scoreUser");
+    const dataScore = {
+      ip: userIp,
+      country: userCountry?.country || "Unknown",
+      countryCode: userCountry?.countryCode || "Unknown",
+      score: currentScore ? parseInt(currentScore) + 1 : 1,
+    };
+    localStorage.setItem("scoreUser", JSON.stringify(dataScore));
+
     // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     if (scoreRef.current) {
-        scoreRef.current.classList.add("score-increase");
-        setTimeout(() => {
-          if (scoreRef.current) {
-            scoreRef.current.classList.remove("score-increase");
-          }
-        }, 300); // Thời gian khớp với animation duration
-      }
+      scoreRef.current.classList.add("score-increase");
+      setTimeout(() => {
+        if (scoreRef.current) {
+          scoreRef.current.classList.remove("score-increase");
+        }
+      }, 300); // Thời gian khớp với animation duration
+    }
     // Set a new timeout to stop audio and set isClicked to false after 1s of no clicks
     timeoutRef.current = setTimeout(() => {
       setIsClicked(false);
