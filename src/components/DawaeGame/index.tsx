@@ -123,13 +123,9 @@ export default function DawaeGame() {
           const permissionStatus = await navigator.permissions.query({
             name: "geolocation",
           });
-          if (permissionStatus.state === "granted") {
-            fetchCountry();
-          } else if (permissionStatus.state === "prompt") {
-            setUserCountry({
-              countryName: "Prompt",
-              countryCode: "Unknown",
-            });
+          console.log("Initial Permission status:", permissionStatus.state);
+          if (permissionStatus.state === "granted" || permissionStatus.state === "prompt") {
+            fetchCountry(); // Gọi fetchCountry ngay cả khi là "prompt"
           } else {
             setUserCountry({
               countryName: "Denied",
@@ -139,7 +135,7 @@ export default function DawaeGame() {
 
           permissionStatus.onchange = () => {
             console.log("Permission changed:", permissionStatus.state);
-            if (permissionStatus.state === "granted") {
+            if (permissionStatus.state === "granted" || permissionStatus.state === "prompt") {
               fetchCountry();
             } else if (permissionStatus.state === "denied") {
               setUserCountry({
@@ -158,7 +154,7 @@ export default function DawaeGame() {
           localStorage.setItem("userCountry", "Unsupported");
         }
       } else {
-        fetchCountry();
+        fetchCountry(); // Gọi fetchCountry nếu không hỗ trợ permissions API
       }
     };
 
@@ -356,8 +352,10 @@ export default function DawaeGame() {
         height="auto"
         style={{ maxWidth: "760px", cursor: "pointer" }}
         width="90%"
-        onMouseDown={handleClick}
-        onTouchStart={handleClick}
+     onClick={(e) => {
+      e.stopPropagation();
+      handleClick();
+     }}
       />
 
       <div className="tabs" onClick={(e) => {
