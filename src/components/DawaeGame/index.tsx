@@ -21,12 +21,19 @@ const countries = [
 export default function DawaeGame() {
   const [score, setScore] = useState(0);
   const [myScore, setMyScore] = useState(countries[4].start); // Vietnam
-  const [countryScores, setCountryScores] = useState(
-    countries.map((c) => c.start)
-  );
-
+  const [countryScores, setCountryScores] = useState<number[]>(countries.map((c) => c.start));
   const [isClicked, setIsClicked] = useState(false);
   const [isSvgClicked, setIsSvgClicked] = useState(false);
+  const [userCountry, setUserCountry] = useState<string>("Unknown");
+  const [userIp, setUserIp] = useState<string>("Unknown");
+
+  const imgRef = useRef<HTMLImageElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scoreRef = useRef<HTMLParagraphElement | null>(null);
+  const checkboxRef = useRef<HTMLInputElement>(null);
+
+  // Lấy quốc gia cao điểm nhất
   const highestScoreCountry = () => {
     const maxScoreIndex = countryScores.indexOf(Math.max(...countryScores));
     const country = countries[maxScoreIndex];
@@ -35,57 +42,152 @@ export default function DawaeGame() {
       currentScore: countryScores[maxScoreIndex],
     };
   };
-  const imgRef = useRef<HTMLImageElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const scoreRef = useRef<HTMLParagraphElement | null>(null);
-  const checkboxRef = useRef<HTMLInputElement>(null);
-  const [userCountry, setUserCountry] = useState("Unknown");
-  const [userIp, setUserIp] = useState("Unknown");
 
-  useEffect(() => {
+  // Lấy vị trí và quốc gia qua Geolocation
+  const fetchCountry = async () => {
+    console.log("fetchCountry");
     if (navigator.geolocation) {
+      console.log("if");
       navigator.geolocation.getCurrentPosition(
         async (position) => {
+          console.log("getCurrentPosition");
           try {
             const { latitude, longitude } = position.coords;
+            console.log("Coords:", { latitude, longitude });
             const response = await fetch(
-              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`,
+              { cache: "no-store" }
             );
+            if (!response.ok) {
+              throw new Error(`Failed to fetch country from Geolocation: ${response.status} ${response.statusText}`);
+            }
             const data = await response.json();
-            console.log(data);
-
+            console.log("Geolocation data:", data);
             setUserCountry(data.countryName || "Unknown");
+            localStorage.setItem("userCountry", data.countryName || "Unknown");
           } catch (error) {
             console.error("Error fetching country:", error);
             setUserCountry("Unknown");
+            localStorage.setItem("userCountry", "Unknown");
           }
         },
         (error) => {
           console.error("Geolocation error:", error);
+          console.log("Geolocation error:", error.message, error.code);
           setUserCountry("Denied");
-        }
+          localStorage.setItem("userCountry", "Denied");
+        },
+        { timeout: 10000, maximumAge: 0, enableHighAccuracy: true }
       );
     } else {
+      console.log("Geolocation not supported");
       setUserCountry("Unsupported");
+      localStorage.setItem("userCountry", "Unsupported");
     }
+  };
+
+  // Kiểm tra quyền và khởi động Geolocation
+  useEffect(() => {
+    console.log("useEffect - Check Permission");
+    const cachedCountry = localStorage.getItem("userCountry");
+    if (cachedCountry) {
+      setUserCountry(cachedCountry);
+      return;
+    }
+
+    const checkPermission = async () => {
+      if ("permissions" in navigator) {
+        try {
+          const permissionStatus = await navigator.permissions.query({ name: "geolocation" });
+          console.log("Permission status:", permissionStatus.state);
+          if (permissionStatus.state === "granted") {
+            fetchCountry();
+          } else if (permissionStatus.state === "prompt") {
+            setUserCountry("Prompt");
+          } else {
+            setUserCountry("Denied");
+          }
+
+          permissionStatus.onchange = () => {
+            console.log("Permission changed:", permissionStatus.state);
+            if (permissionStatus.state === "granted") {
+              fetchCountry();
+            } else if (permissionStatus.state === "denied") {
+              setUserCountry("Denied");
+              localStorage.setItem("userCountry", "Denied");
+            }
+          };
+        } catch (error) {
+          console.error("Error checking permissions:", error);
+          setUserCountry("Unsupported");
+          localStorage.setItem("userCountry", "Unsupported");
+        }
+      } else {
+        fetchCountry();
+      }
+    };
+
+    checkPermission();
   }, []);
 
+  // Lấy IP qua API
   useEffect(() => {
+    console.log("useEffect - Fetch IP");
     const fetchIp = async () => {
       try {
         const response = await fetch("/api/get-ip");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch IP: ${response.status} ${response.statusText}`);
+        }
         const data = await response.json();
-        setUserIp(data.ip);
+        console.log("API IP data:", data);
+        setUserIp(data.ip || "Unknown");
+        localStorage.setItem("userIp", data.ip || "Unknown");
       } catch (error) {
         console.error("Error fetching IP:", error);
         setUserIp("Unknown");
+        localStorage.setItem("userIp", "Unknown");
       }
     };
     fetchIp();
   }, []);
 
+  // Fallback: Lấy quốc gia qua IP nếu Geolocation thất bại
   useEffect(() => {
+    console.log("useEffect - Fetch IP-based Country");
+    if ((userCountry === "Denied" || userCountry === "Unsupported" || userCountry === "Unknown") && userIp !== "Unknown")  {
+      const fetchIpAndCountry = async () => {
+        try {
+          
+
+         
+          const fallbackResponse = await fetch(
+            `https://api.ipgeolocation.io/ipgeo?apiKey=5cf3259461f3432aac6f5314b2695c33&ip=${userIp}`,
+            { cache: "no-store" }
+          );
+            if (!fallbackResponse.ok) {
+              throw new Error(`Failed to fetch country from fallback: ${fallbackResponse.status} ${fallbackResponse.statusText}`);
+            }
+            const countryData = await fallbackResponse.json();
+            setUserCountry(countryData.country || "Unknown");
+         
+
+          console.log("IP-based country data:", countryData);
+          localStorage.setItem("userCountry", countryData.country || countryData.country_name || "Unknown");
+        } catch (error) {
+          console.error("Error fetching IP or country:", error);
+          setUserIp("Unknown");
+          setUserCountry("Unknown");
+          localStorage.setItem("userCountry", "Unknown");
+        }
+      };
+      fetchIpAndCountry();
+    }
+  }, [userCountry, userIp]);
+
+  // Khởi tạo audio
+  useEffect(() => {
+    console.log("useEffect - Initialize Audio");
     audioRef.current = new Audio("/uk-click.mp3");
     return () => {
       if (audioRef.current) {
@@ -95,8 +197,9 @@ export default function DawaeGame() {
     };
   }, []);
 
-  // Handle intervals for countries
+  // Xử lý interval cho các quốc gia
   useEffect(() => {
+    console.log("useEffect - Start Country Intervals");
     const intervals = countries.map((c, index) => {
       if (c.interval <= 0) return null;
       return setInterval(() => {
@@ -113,8 +216,9 @@ export default function DawaeGame() {
     };
   }, []);
 
-  // Handle audio looping based on isClicked
+  // Xử lý audio lặp khi isClicked
   useEffect(() => {
+    console.log("useEffect - Handle Audio Looping", isClicked);
     if (audioRef.current) {
       audioRef.current.onended = () => {
         if (isClicked && audioRef.current) {
@@ -127,48 +231,55 @@ export default function DawaeGame() {
     }
   }, [isClicked]);
 
-  // Click or touch handler
+  // Xử lý click
   const handleClick = () => {
+    console.log("handleClick");
     setScore((prev) => prev + 1);
     setMyScore((prev) => prev + 1);
+
+    // Cập nhật countryScores dựa trên userCountry
     setCountryScores((prev) => {
       const updated = [...prev];
-      updated[4] += 1;
+      const countryIndex = countries.findIndex((c) => c.name === userCountry);
+      updated[countryIndex !== -1 ? countryIndex : 4] += 1; // Mặc định Vietnam nếu không tìm thấy
       return updated;
     });
 
-    const scoreElement = document.getElementById("score");
-
-    scoreElement?.classList.add("score-increase");
-    setTimeout(() => {
-      scoreElement?.classList.remove("score-increase");
-    }, 300);
-
-    // Set isClicked to true to enable looping
-    setIsClicked(true);
-
-    //add score to local storage
-    const currentScore = localStorage.getItem("score");
-    const dataScore = {
-      ip: userIp,
-      country: userCountry,
-      score: currentScore ? parseInt(currentScore) + 1 : 1,
-    };
-    localStorage.setItem("score", JSON.stringify(dataScore));
-
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+    if (userCountry === "Prompt") {
+      fetchCountry();
     }
+
+    const scoreElement = document.getElementById("score");
+    if (scoreElement) {
+      scoreElement.classList.add("score-increase");
+      setTimeout(() => {
+        scoreElement.classList.remove("score-increase");
+      }, 300);
+    }
+
     if (scoreRef.current) {
       scoreRef.current.classList.add("score-increase");
       setTimeout(() => {
         if (scoreRef.current) {
           scoreRef.current.classList.remove("score-increase");
         }
-      }, 300); // Thời gian khớp với animation duration
+      }, 300);
     }
-    // Set a new timeout to stop audio and set isClicked to false after 1s of no clicks
+
+    setIsClicked(true);
+
+    // Lưu score vào localStorage
+    const currentScore = localStorage.getItem("score");
+    const dataScore = {
+      ip: userIp,
+      score: currentScore ? parseInt(currentScore) + 1 : 1,
+    };
+    localStorage.setItem("score", JSON.stringify(dataScore));
+
+    // Quản lý timeout và audio
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     timeoutRef.current = setTimeout(() => {
       setIsClicked(false);
       if (audioRef.current) {
@@ -177,14 +288,13 @@ export default function DawaeGame() {
       }
     }, 1000);
 
-    // Start audio if not already playing
     if (audioRef.current && audioRef.current.paused) {
       audioRef.current.play().catch((err) => {
         console.error("Audio playback failed:", err);
       });
     }
 
-    // Handle image toggle
+    // Toggle hình ảnh
     if (imgRef.current) {
       imgRef.current.src = "/unmount.webp";
       setTimeout(() => {
@@ -195,13 +305,17 @@ export default function DawaeGame() {
     }
   };
 
-  // Toggle tab content when SVG is clicked
+  // Xử lý click SVG
   const handleSvgClick = () => {
+    console.log("handleSvgClick");
     if (checkboxRef.current) {
       setIsSvgClicked(!isSvgClicked);
       checkboxRef.current.checked = !checkboxRef.current.checked;
     }
   };
+
+  // Nút retry Geolocation
+
 
   return (
     <div className="container">
