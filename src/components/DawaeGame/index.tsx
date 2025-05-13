@@ -3,8 +3,9 @@
 
 import { SoundcontrolContext } from "@/context/soundControl";
 import useVisible from "@/hook/useVisible";
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useRef, useState, useContext, useCallback } from "react";
 import SoundModal from "./SoundModal";
+import InfoModal from "./InfoModal";
 
 const countries = [
   { code: "hk", name: "Hong Kong", start: 0, interval: 1, flag: "🇭🇰" },
@@ -24,11 +25,12 @@ const countries = [
 export default function DawaeGame() {
   const [score, setScore] = useState(0);
   const [myScore, setMyScore] = useState(countries[4].start);
-  const [sound, setSound] = useState("/uk-click.mp3");
+  const [sound, setSound] = useState("/Da_Wae_1.mp3");
 
   const { muteAudio, toggleMuteAudio } = useContext(SoundcontrolContext);
 
   const modalSound = useVisible();
+  const modalInfo = useVisible();
   const [countryScores, setCountryScores] = useState<number[]>(
     countries.map((c) => c.start)
   );
@@ -41,7 +43,7 @@ export default function DawaeGame() {
     countryName: "Unknown",
     countryCode: "Unknown",
   });
-  const [userIp, setUserIp] = useState<string>("171.225.185.6");
+  const [userIp, setUserIp] = useState<string>("Unknown");
 
   const imgRef = useRef<HTMLImageElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -57,13 +59,6 @@ export default function DawaeGame() {
       currentScore: countryScores[maxScoreIndex],
     };
   };
-
-  useEffect(() => {
-    const dataScore = localStorage.getItem("scoreUser");
-    if (dataScore) {
-      setScore(JSON.parse(dataScore).score);
-    }
-  }, []);
 
   const fetchCountry = async () => {
     if (navigator.geolocation) {
@@ -115,70 +110,81 @@ export default function DawaeGame() {
       localStorage.setItem("userCountry", "Unsupported");
     }
   };
-
-  useEffect(() => {
-    const checkPermission = async () => {
-      if ("permissions" in navigator) {
-        try {
-          const permissionStatus = await navigator.permissions.query({
-            name: "geolocation",
+  const checkPermission = useCallback(async () => {
+    if ("permissions" in navigator) {
+      try {
+        const permissionStatus = await navigator.permissions.query({
+          name: "geolocation",
+        });
+        console.log("Initial Permission status:", permissionStatus.state);
+        if (
+          permissionStatus.state === "granted" ||
+          permissionStatus.state === "prompt"
+        ) {
+          fetchCountry();
+        } else {
+          setUserCountry({
+            countryName: "Denied",
+            countryCode: "Unknown",
           });
-          console.log("Initial Permission status:", permissionStatus.state);
-          if (permissionStatus.state === "granted" || permissionStatus.state === "prompt") {
-            fetchCountry(); // Gọi fetchCountry ngay cả khi là "prompt"
-          } else {
+        }
+
+        permissionStatus.onchange = () => {
+          if (
+            permissionStatus.state === "granted" ||
+            permissionStatus.state === "prompt"
+          ) {
+            fetchCountry();
+          } else if (permissionStatus.state === "denied") {
             setUserCountry({
               countryName: "Denied",
               countryCode: "Unknown",
             });
+            localStorage.setItem("userCountry", "Denied");
           }
-
-          permissionStatus.onchange = () => {
-            console.log("Permission changed:", permissionStatus.state);
-            if (permissionStatus.state === "granted" || permissionStatus.state === "prompt") {
-              fetchCountry();
-            } else if (permissionStatus.state === "denied") {
-              setUserCountry({
-                countryName: "Denied",
-                countryCode: "Unknown",
-              });
-              localStorage.setItem("userCountry", "Denied");
-            }
-          };
-        } catch (error) {
-          console.error("Error checking permissions:", error);
-          setUserCountry({
-            countryName: "Unsupported",
-            countryCode: "Unknown",
-          });
-          localStorage.setItem("userCountry", "Unsupported");
-        }
-      } else {
-        fetchCountry(); // Gọi fetchCountry nếu không hỗ trợ permissions API
+        };
+      } catch (error) {
+        console.error("Error checking permissions:", error);
+        setUserCountry({
+          countryName: "Unsupported",
+          countryCode: "Unknown",
+        });
+        localStorage.setItem("userCountry", "Unsupported");
       }
-    };
-
-    checkPermission();
+    } else {
+      fetchCountry();
+    }
   }, []);
+  const fetchIp = async () => {
+    try {
+      const response = await fetch("/api/get-ip");
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch IP: ${response.status} ${response.statusText}`
+        );
+      }
+      const data = await response.json();
+      setUserIp(data.ip === "::1" ? "171.225.185.6" : data.ip);
+    } catch (error) {
+      console.error("Error fetching IP:", error);
+      setUserIp("Unknown");
+    }
+  };
 
   useEffect(() => {
-    const fetchIp = async () => {
-      try {
-        const response = await fetch("/api/get-ip");
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch IP: ${response.status} ${response.statusText}`
-          );
-        }
-        const data = await response.json();
-        setUserIp(data.ip === "::1" ? "171.225.185.6" : data.ip);
-      } catch (error) {
-        console.error("Error fetching IP:", error);
-        setUserIp("Unknown");
-      }
-    };
-    fetchIp();
-  }, []);
+    const dataScore = localStorage.getItem("scoreUser");
+    if (dataScore) {
+      setScore(JSON.parse(dataScore).score);
+      setUserCountry({
+        countryName: JSON.parse(dataScore).countryName,
+        countryCode: JSON.parse(dataScore).countryCode,
+      });
+      setUserIp(JSON.parse(dataScore).ip);
+    } else {
+      fetchIp();
+      checkPermission();
+    }
+  }, [checkPermission]);
 
   useEffect(() => {
     if (
@@ -243,7 +249,6 @@ export default function DawaeGame() {
     };
   }, []);
 
-  // Xử lý audio lặp khi isClicked
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.onended = () => {
@@ -330,7 +335,6 @@ export default function DawaeGame() {
   };
 
   const handleSvgClick = () => {
-    console.log("handleSvgClick");
     if (checkboxRef.current) {
       setIsSvgClicked(!isSvgClicked);
       checkboxRef.current.checked = !checkboxRef.current.checked;
@@ -352,15 +356,19 @@ export default function DawaeGame() {
         height="auto"
         style={{ maxWidth: "760px", cursor: "pointer" }}
         width="90%"
-     onClick={(e) => {
-      e.stopPropagation();
-      handleClick();
-     }}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleClick();
+        }}
       />
 
-      <div className="tabs" onClick={(e) => {
-        e.stopPropagation()
-      }}>
+      <div
+        className="tabs"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleSvgClick();
+        }}
+      >
         <div className="tab">
           <div className="tab-header">
             <div className="tab-label-left">
@@ -391,12 +399,12 @@ export default function DawaeGame() {
                 <svg
                   stroke="currentColor"
                   fill="currentColor"
-                  stroke-width="0"
+                  strokeWidth="0"
                   viewBox="0 0 512 512"
                   height="20px"
                   width="20px"
                   xmlns="http://www.w3.org/2000/svg"
-                  onClick={handleSvgClick} // Add click handler
+                  onClick={handleSvgClick} //
                 >
                   <path d="M256 217.9L383 345c9.4 9.4 24.6 9.4 33.9 0 9.4-9.4 9.3-24.6 0-34L273 167c-9.1-9.1-23.7-9.3-33.1-.7L95 310.9c-4.7 4.7-7 10.9-7 17s2.3 12.3 7 17c9.4 9.4 24.6 9.4 33.9 0l127.1-127z"></path>
                 </svg>
@@ -409,7 +417,7 @@ export default function DawaeGame() {
                   height="20px"
                   width="20px"
                   xmlns="http://www.w3.org/2000/svg"
-                  onClick={handleSvgClick} // Add click handler
+                  onClick={handleSvgClick}
                 >
                   <path d="M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z"></path>
                 </svg>
@@ -428,9 +436,10 @@ export default function DawaeGame() {
             <table id="table">
               <tbody>
                 <tr>
-                  <td></td>
                   <td>🌏</td>
                   <td>WorldWide</td>
+
+                  <td></td>
                   <td>
                     {Number(
                       countryScores.reduce((a, b) => a + b, 0)
@@ -478,26 +487,50 @@ export default function DawaeGame() {
           </div>
         </div>
       </div>
-      <div onClick={(e) => {
-          e.stopPropagation();
-          modalSound.show();
-      }} className="sound-icon">
-        <svg
-          stroke="#fff"
-          fill="#fff"
-          stroke-width="0"
-          viewBox="0 0 512 512"
-          height="20px"
-          width="20px"
-          xmlns="http://www.w3.org/2000/svg"
+      <div className="container-icon">
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            modalSound.show();
+          }}
+          className="sound-icon"
         >
-          <path d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7l0 72 0 264c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6L448 147 192 223.8 192 432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6L128 200l0-72c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"></path>
-        </svg>
+          <svg
+            stroke="#fff"
+            fill="#fff"
+            strokeWidth="0"
+            viewBox="0 0 512 512"
+            height="20px"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M499.1 6.3c8.1 6 12.9 15.6 12.9 25.7l0 72 0 264c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6L448 147 192 223.8 192 432c0 44.2-43 80-96 80s-96-35.8-96-80s43-80 96-80c11.2 0 22 1.6 32 4.6L128 200l0-72c0-14.1 9.3-26.6 22.8-30.7l320-96c9.7-2.9 20.2-1.1 28.3 5z"></path>
+          </svg>
+        </div>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            modalInfo.show();
+          }}
+          className="info-icon"
+        >
+          <svg
+            stroke="#fff"
+            fill="#fff"
+            stroke-width="0"
+            viewBox="0 0 16 16"
+            height="30px"
+            width="30px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0"></path>
+          </svg>
+        </div>
       </div>
       {modalSound.visible && (
         <div>
           <div
-            className="modal-sound-overlay"
+            className="modal-overlay"
             onClick={(e) => {
               e.stopPropagation();
               modalSound.hide();
@@ -517,6 +550,24 @@ export default function DawaeGame() {
           </div>
         </div>
       )}
+
+      <div className={modalInfo.visible ? "show" : "info"}>
+          <div
+            className="modal-overlay"
+            onClick={(e) => {
+              e.stopPropagation();
+              modalInfo.hide();
+            }}
+          />
+
+          <div className="modal-info">
+            <div className="modal-info-content" >
+              <InfoModal
+                onClose={() => modalInfo.hide()}
+              />
+            </div>
+          </div>
+        </div>
     </div>
   );
 }

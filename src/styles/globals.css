@@ -40,6 +40,7 @@ body {
   padding-top: 10px;
   animation: slideIn 1s ease-in-out forwards;
   gap: 5px;
+  font-weight: unset;
 }
 
 .nitish,
@@ -100,11 +101,7 @@ body {
 
 }
 
-.container h1 {
-  font-size: 4em;
-  /* Larger font size for "Dawae" */
-  margin-bottom: 20px;
-}
+
 
 #score {
   font-size: 2.7em;
@@ -318,7 +315,19 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   font-size: 20px;
 }
 
-.sound-icon {
+.container-icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+}
+
+.sound-icon, .info-icon {
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -327,13 +336,11 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   justify-content: center;
   background: rgba(28, 28, 28, 0.4);
   border-radius: 10px;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
+  
 }
 
-.modal-sound-overlay {
+
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -356,10 +363,47 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
 
 .modal-sound-content {
   background: #FFF;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 15px;
+  padding: 15px;
 }
 
+
+.modal-info {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1002;
+  width: 800px;
+  
+}
+
+
+.modal-info-content {
+  background: #FFF;
+  border-radius: 15px;
+  padding: 15px;
+  height: 500px;
+  overflow-y: auto;
+}
+
+.modal-info-content::-webkit-scrollbar {
+  height: 0px;
+
+  width: 4px;
+  display: none;
+}
+.modal-info-content::-webkit-scrollbar-thumb {
+  background: rgb(185, 181, 181) !important;
+
+  border-radius: 50px;
+}
+.modal-info-content::-webkit-scrollbar-track {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+
+}
 
 @media (max-width: 768px) {
   .logo {
@@ -367,7 +411,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 520px) {
   .logo {
     font-size: 8vw;
   }
@@ -375,4 +419,21 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   .k {
     -webkit-text-stroke: 1.5px #a52a2a;
   }
+
+  .container-icon{
+    flex-direction: row;
+    gap: 10px;
+    top: unset;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.show {
+  display: block;
+}
+
+.info {
+  display: none;
 }

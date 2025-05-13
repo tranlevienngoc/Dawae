@@ -22,22 +22,28 @@ export default function SoundModal({
 }: ModalMusicProps) {
   const LISTSONG: Song[] = [
     {
-      name: "Dawae 1",
-      link: "/Do-You-Know-DaWae-1.mp3",
+      name: "Da Wae - Electronic",
+      link: "/Da_Wae_1.mp3",
     },
     {
-      name: "Dawae 2",
-      link: "/Do-You-Know-DaWae-2.mp3",
+      name: "Da Wae - Hip Hop",
+      link: "/Da_Wae_2.mp3",
     },
     {
-      name: "Dawae 3",
-      link: "/uk-click.mp3",
+      name: "Da Wae - Funk/Soul",
+      link: "/Da_Wae_3.mp3",
+    },
+    {
+      name: "Da Wae - Comedy Pop",
+      link: "/Da_Wae_4.mp3",
     },
   ];
 
 
   return (
-    <div className="container">
+    <div className="container" onClick={(e) => {
+      e.stopPropagation();
+    }}>
       <div
         style={{
           display: "flex",
@@ -46,12 +52,17 @@ export default function SoundModal({
         }}
       >
 
-        <button onClick={toggleMuteAudio} className="muteButton">
+        <button onClick={(e) => {
+          e.stopPropagation();
+          toggleMuteAudio();
+        }} className="muteButton" style={{
+          borderColor: muteAudio ? "red" : "#000"
+        }}>
           {!muteAudio ? (
             <svg
               stroke="currentColor"
               fill="currentColor"
-              stroke-width="0"
+              strokeWidth="0"
               viewBox="0 0 16 16"
               height="20px"
               width="20px"
@@ -65,9 +76,9 @@ export default function SoundModal({
             </svg>
           ) : (
             <svg
-              stroke="currentColor"
-              fill="currentColor"
-              stroke-width="0"
+              stroke="red"
+              fill="red"
+              strokeWidth="0"
               viewBox="0 0 512 512"
               height="20px"
               width="20px"
@@ -77,7 +88,7 @@ export default function SoundModal({
                 fill="none"
                 stroke-linecap="round"
                 stroke-miterlimit="10"
-                stroke-width="32"
+                strokeWidth="32"
                 d="M416 432 64 80"
               ></path>
               <path d="M224 136.92v33.8a4 4 0 0 0 1.17 2.82l24 24a4 4 0 0 0 6.83-2.82v-74.15a24.53 24.53 0 0 0-12.67-21.72 23.91 23.91 0 0 0-25.55 1.83 8.27 8.27 0 0 0-.66.51l-31.94 26.15a4 4 0 0 0-.29 5.92l17.05 17.06a4 4 0 0 0 5.37.26zm0 238.16-78.07-63.92a32 32 0 0 0-20.28-7.16H64v-96h50.72a4 4 0 0 0 2.82-6.83l-24-24a4 4 0 0 0-2.82-1.17H56a24 24 0 0 0-24 24v112a24 24 0 0 0 24 24h69.76l91.36 74.8a8.27 8.27 0 0 0 .66.51 23.93 23.93 0 0 0 25.85 1.69A24.49 24.49 0 0 0 256 391.45v-50.17a4 4 0 0 0-1.17-2.82l-24-24a4 4 0 0 0-6.83 2.82zM125.82 336zM352 256c0-24.56-5.81-47.88-17.75-71.27a16 16 0 0 0-28.5 14.54C315.34 218.06 320 236.62 320 256q0 4-.31 8.13a8 8 0 0 0 2.32 6.25l19.66 19.67a4 4 0 0 0 6.75-2A146.89 146.89 0 0 0 352 256zm64 0c0-51.19-13.08-83.89-34.18-120.06a16 16 0 0 0-27.64 16.12C373.07 184.44 384 211.83 384 256c0 23.83-3.29 42.88-9.37 60.65a8 8 0 0 0 1.9 8.26l16.77 16.76a4 4 0 0 0 6.52-1.27C410.09 315.88 416 289.91 416 256z"></path>
@@ -94,9 +105,10 @@ export default function SoundModal({
           <div
             key={item.name}
             className="songItem"
-            onClick={() => {
-                setSound(item.link)
-                closeModal()
+            onClick={(e) => {
+              e.stopPropagation();
+              setSound(item.link)
+              closeModal()
             }}
           >
             <div className="songName">{item.name}</div>
@@ -104,7 +116,7 @@ export default function SoundModal({
               <svg
                 stroke="currentColor"
                 fill="currentColor"
-                stroke-width="0"
+                strokeWidth="0"
                 viewBox="0 0 512 512"
                 height="16px"
                 width="16px"
