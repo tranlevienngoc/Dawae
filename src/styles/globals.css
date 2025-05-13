@@ -327,7 +327,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   position: fixed;
   top: 15px;
   left: 15px;
@@ -426,7 +426,6 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   }
   .container-icon{
     flex-direction: row;
-    gap: 10px;
     top: unset;
     bottom: 70px;
     left: 50%;

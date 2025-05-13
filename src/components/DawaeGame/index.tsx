@@ -27,6 +27,7 @@ export default function DawaeGame() {
   const [score, setScore] = useState(0);
   const [myScore, setMyScore] = useState(countries[4].start);
   const [sound, setSound] = useState("/Da_Wae_1.mp3");
+  const [imageSrc, setImageSrc] = useState('/unmount.webp');
 
   const { muteAudio, toggleMuteAudio } = useContext(SoundcontrolContext);
 
@@ -46,7 +47,6 @@ export default function DawaeGame() {
   });
   const [userIp, setUserIp] = useState<string>("Unknown");
 
-  const imgRef = useRef<HTMLImageElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scoreRef = useRef<HTMLParagraphElement | null>(null);
@@ -325,14 +325,10 @@ export default function DawaeGame() {
       });
     }
 
-    if (imgRef.current) {
-      imgRef.current.src = "/mount.webp";
-      setTimeout(() => {
-        if (imgRef.current) {
-          imgRef.current.src = "/unmount.webp";
-        }
-      }, 100);
-    }
+    setImageSrc('/mount.webp');
+    setTimeout(() => {
+      setImageSrc('/unmount.webp'); 
+    }, 100);
   };
 
   const handleSvgClick = () => {
@@ -342,6 +338,9 @@ export default function DawaeGame() {
     }
   };
 
+
+
+  console.log(imageSrc);
   return (
     <div className="container" onClick={handleClick}>
       <h1 className="logo">
@@ -351,8 +350,7 @@ export default function DawaeGame() {
       </h1>
       <p id="score">{score.toLocaleString()}</p>
       <Image
-        ref={imgRef}
-        src="/unmount.webp"
+        src={imageSrc}
         alt="Dawae"
         className="img-actor"
         width={760}
