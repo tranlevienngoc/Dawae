@@ -23,7 +23,7 @@ const countries = [
 ];
 
 export default function DawaeGame() {
-  const [score, setScore] = useState(1000);
+  const [score, setScore] = useState(0);
   const [myScore, setMyScore] = useState(countries[4].start);
   const [sound, setSound] = useState("/Da_Wae_1.mp3");
   const [imageSrc, setImageSrc] = useState("/unmount.webp");
@@ -174,7 +174,7 @@ export default function DawaeGame() {
   useEffect(() => {
     const dataScore = localStorage.getItem("scoreUser");
     if (dataScore) {
-      setScore(1000000);
+      setScore(JSON.parse(dataScore).score);
       setUserCountry({
         countryName: JSON.parse(dataScore).countryName,
         countryCode: JSON.parse(dataScore).countryCode,
