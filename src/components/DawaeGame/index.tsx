@@ -344,7 +344,7 @@ export default function DawaeGame() {
         <span className="k">K</span>
         <span className="pjt">NUCKLES</span>
       </h1>
-      <p id="score">{score.toLocaleString()}</p>
+      {score > 0 && <p id="score">{score.toLocaleString()}</p>}
       <Image
         src={imageSrc}
         alt="Dawae"

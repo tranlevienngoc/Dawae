@@ -23,6 +23,7 @@ body {
   margin: 0;
   font-family: 'Comic Relief Regular';
   overflow: hidden;
+
 }
 
 h1 {
@@ -97,6 +98,8 @@ h1 {
   text-align: center;
   cursor: pointer;
   overflow-y: hidden;
+  overflow-x: hidden;
+
 }
 
 
@@ -114,6 +117,7 @@ h1 {
     -1px 1px 0 #000,
     1px 1px 0 #000;
   font-weight: 700;
+  user-select: none
 }
 
 .score-increase {
@@ -365,6 +369,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
 
 .img-actor {
   width: 90%;
+  user-select: none
 }
 
 .modal-sound-content {
