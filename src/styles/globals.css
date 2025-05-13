@@ -1,11 +1,10 @@
-
-
 @font-face {
   font-family: 'Comic Relief Regular';
   font-style: normal;
   font-weight: normal;
   src: local('Comic Relief Regular'), url('../../public/fonts/ComicRelief-Regular.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'Luckiest Guy';
   font-style: normal;
@@ -14,6 +13,7 @@
   src: url(https://fonts.gstatic.com/s/luckiestguy/v23/_gP_1RrxsjcxVyin9l9n_j2hTd52.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 body {
   background-image: url('../../public/bg.avif');
   background-size: cover;
@@ -22,10 +22,14 @@ body {
   background-position: 50%;
   margin: 0;
   font-family: 'Comic Relief Regular';
-  overflow-x: hidden;
+  overflow: hidden;
+
 }
 
-
+h1 {
+  margin-block-start: unset !important;
+  margin-block-end: unset !important;
+}
 
 .logo {
   font-family: "Luckiest Guy", cursive;
@@ -37,9 +41,10 @@ body {
   position: relative;
   z-index: 1;
   opacity: 0;
-  padding-top: 10px;
+  padding-top: 25px;
   animation: slideIn 1s ease-in-out forwards;
   gap: 5px;
+  font-weight: unset;
 }
 
 .nitish,
@@ -60,6 +65,7 @@ body {
     transform: translateY(50px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -70,47 +76,48 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 0.5;
   }
 }
 
 @keyframes bounce {
+
   0%,
   100% {
     transform: rotate(-20deg) translateY(0);
   }
+
   50% {
     transform: rotate(-20deg) translateY(-10px);
   }
 }
 
-
-
-
-
-
 .container {
   text-align: center;
+  cursor: pointer;
+  overflow-y: hidden;
+  overflow-x: hidden;
+
 }
 
-.container h1 {
-  font-size: 4em; /* Larger font size for "Dawae" */
-  margin-bottom: 20px;
-}
+
 
 #score {
-  font-size: 2.7em; /* Larger font size for score */
+  font-size: 2.7em;
+  /* Larger font size for score */
   /* margin-bottom: 20px; */
   line-height: 1;
   font-family: 'Comic Relief Regular';
   color: #FFF;
-  text-shadow: 
-    -1px -1px 0 #000, 
-    1px -1px 0 #000,    
-    -1px 1px 0 #000, 
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
     1px 1px 0 #000;
-    font-weight: 700;
+  font-weight: 700;
+  user-select: none
 }
 
 .score-increase {
@@ -121,62 +128,70 @@ body {
   0% {
     transform: scale(1) rotate(0deg);
   }
+
   25% {
-    transform: scale(1.2) rotate(-5deg); 
+    transform: scale(1.2) rotate(-5deg);
   }
+
   50% {
-    transform: scale(1.4) rotate(5deg); 
+    transform: scale(1.4) rotate(5deg);
   }
+
   75% {
     transform: scale(1.2) rotate(-2deg);
   }
+
   100% {
-    transform: scale(1) rotate(0deg); 
+    transform: scale(1) rotate(0deg);
   }
 }
 
 .title {
   font-family: 'Comic Relief Regular';
   color: #FFF;
-  text-shadow: 
-    -1px -1px 0 #000, 
-    1px -1px 0 #000,    
-    -1px 1px 0 #000, 
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
     1px 1px 0 #000;
 }
 
 .text-label {
   color: #000;
   font-size: 16px;
-} 
+}
 
 .container img {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 45%;
+  width: 90%;
   max-width: 600px;
   height: auto;
 }
 
 .tabs {
   position: fixed;
-  bottom: -25px; /* Original fixed position from your code */
+  bottom: -25px;
+  /* Original fixed position from your code */
   left: 0;
   right: 0;
   padding: 10px;
   width: 90%;
   margin: 0 auto;
-  z-index: 1000; /* Ensure tabs stay above other content */
+  z-index: 1000;
+  /* Ensure tabs stay above other content */
 }
 
 .tab {
   padding: 10px;
-  background-color: #fff; /* White background for visibility */
+  background-color: #fff;
+  /* White background for visibility */
   border-radius: 10px 10px 0 0;
   max-width: 760px;
   /* Limit width for better readability */
-  margin: 0 auto; /* Center the tab content */
+  margin: 0 auto;
+  /* Center the tab content */
 }
 
 .tab-header {
@@ -186,6 +201,7 @@ body {
   cursor: pointer;
   font-weight: bold;
 }
+
 .tab-label {
   display: flex;
   align-items: center;
@@ -196,14 +212,15 @@ body {
   padding: 5px 0;
 }
 
-.tab-label-left{
+.tab-label-left {
   display: flex;
   align-items: center;
   cursor: pointer;
   font-size: 14px;
   gap: 10px;
 }
-.tab-label-right{
+
+.tab-label-right {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -216,22 +233,31 @@ body {
 }
 
 .tab-label .pps {
-  color: #00cc00; /* Green color for PPS */
+  color: #00cc00;
+  /* Green color for PPS */
 }
 
 .tab-content {
-  max-height: 0; /* Start collapsed */
-  opacity: 0; /* Start invisible */
-  transform: translateY(20px); /* Start slightly below */
-  overflow: hidden; /* Hide content while collapsed */
+  max-height: 0;
+  /* Start collapsed */
+  opacity: 0;
+  /* Start invisible */
+  transform: translateY(20px);
+  /* Start slightly below */
+  overflow: hidden;
+  /* Hide content while collapsed */
   margin-top: 10px;
-  transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out; /* Smooth transition */
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
+  /* Smooth transition */
 }
 
-input[type='checkbox']:checked + .tab-label + .tab-content {
-  max-height: 500px; /* Large enough to fit content; adjust if needed */
-  opacity: 1; /* Fully visible */
-  transform: translateY(0); /* Move to normal position */
+input[type='checkbox']:checked+.tab-label+.tab-content {
+  max-height: 500px;
+  /* Large enough to fit content; adjust if needed */
+  opacity: 1;
+  /* Fully visible */
+  transform: translateY(0);
+  /* Move to normal position */
 }
 
 #table {
@@ -252,24 +278,29 @@ input[type='checkbox']:checked + .tab-label + .tab-content {
 }
 
 #table td:nth-child(1) {
-  flex: 0 0 30px; /* Rank column */
+  flex: 0 0 30px;
+  /* Rank column */
 }
 
 #table td:nth-child(2) {
-  flex: 0 0 30px; /* Flag column */
+  flex: 0 0 30px;
+  /* Flag column */
 }
 
 #table td:nth-child(3) {
-  flex: 2; /* Country name column */
+  flex: 2;
+  /* Country name column */
 }
 
 #table td:nth-child(4) {
-  flex: 3; /* Score column */
+  flex: 3;
+  /* Score column */
   text-align: right;
 }
 
 #table .pps {
-  color: #00cc00; /* Green color for PPS */
+  color: #00cc00;
+  /* Green color for PPS */
 }
 
 #table .user-country {
@@ -278,10 +309,154 @@ input[type='checkbox']:checked + .tab-label + .tab-content {
 
 #table .rank {
   font-weight: bold;
-  font-size: 25px;
+  font-size: 22px;
+  text-align: center;
+
 }
 
 #table .text {
-  margin-left: 6px;
   font-size: 20px;
+  text-align: center;
+}
+
+
+
+.container-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 999;
+}
+
+.sound-icon,
+.info-icon {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(28, 28, 28, 0.4);
+  border-radius: 10px;
+
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.5;
+}
+
+.modal-sound {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1002;
+  width: 500px;
+}
+
+.img-actor {
+  width: 90%;
+  user-select: none
+}
+
+.modal-sound-content {
+  background: #FFF;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+
+.modal-info {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1002;
+  width: 800px;
+
+}
+
+
+.modal-info-content {
+  background: #FFF;
+  border-radius: 15px;
+  padding: 15px;
+  height: 500px;
+
+  overflow: hidden;
+}
+
+
+
+@media (max-width: 768px) {
+  .logo {
+    font-size: 8vw;
+  }
+
+  .modal-info {
+    width: 96%;
+
+  }
+}
+
+@media (max-width: 520px) {
+  .logo {
+    font-size: 8vw;
+  }
+
+  .k {
+    -webkit-text-stroke: 1.5px #a52a2a;
+  }
+
+  .container img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 96%;
+    max-width: 600px;
+    height: auto;
+  }
+
+  .container-icon {
+    flex-direction: row;
+    top: unset;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .modal-sound {
+    width: 96%;
+
+  }
+
+  .modal-info {
+    width: 96%;
+
+  }
+
+  .img-actor {
+    width: 96%;
+  }
+}
+
+.show {
+  display: block;
+}
+
+.info {
+  display: none;
 }
