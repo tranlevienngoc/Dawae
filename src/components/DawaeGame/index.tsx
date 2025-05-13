@@ -60,6 +60,8 @@ export default function DawaeGame() {
     };
   };
 
+  const [isOpenTable, setIsOpenTable] = useState(false);
+
   const fetchCountry = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -334,6 +336,7 @@ export default function DawaeGame() {
     if (checkboxRef.current) {
       setIsSvgClicked(!isSvgClicked);
       checkboxRef.current.checked = !checkboxRef.current.checked;
+      setIsOpenTable(!isOpenTable);
     }
   };
 
@@ -344,7 +347,7 @@ export default function DawaeGame() {
         <span className="k">K</span>
         <span className="pjt">NUCKLES</span>
       </h1>
-      {score > 0 && <p id="score">{score.toLocaleString()}</p>}
+      <p id={score > 0 ? "score" : "score-hidden"}>{score.toLocaleString()}</p>
       <Image
         src={imageSrc}
         alt="Dawae"
@@ -361,7 +364,7 @@ export default function DawaeGame() {
       <div
         className="tabs"
         onClick={(e) => {
-          e.stopPropagation();
+            e.stopPropagation();
           handleSvgClick();
         }}
       >
@@ -431,7 +434,7 @@ export default function DawaeGame() {
             style={{ display: "none" }}
             id="chck1"
             ref={checkboxRef}
-          />{" "}
+          />
           {/* Add ref */}
           <label className="tab-label" htmlFor="chck1"></label>
           <div className="tab-content">
