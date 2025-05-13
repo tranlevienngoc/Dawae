@@ -101,7 +101,7 @@ export default function SoundModal({
       <div className="songList">
         <div className="songListTitle">List Song</div>
 
-        {LISTSONG.map((item) => (
+        {LISTSONG.map((item, index) => (
           <div
             key={item.name}
             className="songItem"
@@ -111,7 +111,7 @@ export default function SoundModal({
               closeModal()
             }}
           >
-            <div className="songName">{item.name}</div>
+            <div className="songName">{`${index + 1}.`} {item.name}</div>
             {sound === item.link && (
               <svg
                 stroke="currentColor"

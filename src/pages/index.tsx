@@ -11,11 +11,29 @@ export default function Home() {
           content="Do you know da wae, bruddah? Tap Ugandan Knuckles to unleash his iconic spit and stack points for your country. Compete on the global leaderboard to prove your nation is the ultimate Knuckles warrior."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/logo.png" />
         <link rel="preload" as="image" href="/mount.webp"></link>
         <link rel="preload" as="image" href="/unmount.webp"></link>
         <meta name="author" content="Ugandan Knuckles Tribe" />
-        
+
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicon-180x180.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="shortcut icon" href="/favicon.ico" />
+
         <meta property="og:type" content="website" />
         <meta property="og:title" content="UGANDAN KNUCKLES" />
         <meta property="og:url" content="/mount.webp" />

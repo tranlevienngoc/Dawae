@@ -41,7 +41,9 @@ export default function InfoModal({ onClose }: InfoModalProps) {
   ];
 
   return (
-    <div className="containter-info">
+    <div className="containter-info" onClick={(e)=>{
+      e.stopPropagation();
+    }}>
       <button className="close-button" onClick={(e)=>{
         e.stopPropagation();
         onClose();
@@ -58,13 +60,15 @@ export default function InfoModal({ onClose }: InfoModalProps) {
           <path d="m289.94 256 95-95A24 24 0 0 0 351 127l-95 95-95-95a24 24 0 0 0-34 34l95 95-95 95a24 24 0 1 0 34 34l95-95 95 95a24 24 0 0 0 34-34z"></path>
         </svg>
       </button>
-      {CONTENT.map((item) => (
-        <div key={item.title}>
-          <h2 className="info-title">{item.title}</h2>
-          <p className="info-content">{item.content}</p>
-          {item.content2 && <p className="info-content-2">{item.content2}</p>}
-        </div>
-      ))}
+     <div className="containter-info-content">
+          {CONTENT.map((item) => (
+            <div key={item.title}>
+              <h2 className="info-title">{item.title}</h2>
+              <p className="info-content">{item.content}</p>
+              {item.content2 && <p className="info-content-2">{item.content2}</p>}
+            </div>
+          ))}
+     </div>
     </div>
   );
 }

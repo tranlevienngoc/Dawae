@@ -5,6 +5,8 @@ import "@/components/DawaeGame/InfoModal/InfoModal.css";
 import { SoundControlProvider } from "@/context/soundControl";
 
 function MyApp({ Component, pageProps }: AppProps) {
+
+  
   return (
     <>
       <SoundControlProvider>
