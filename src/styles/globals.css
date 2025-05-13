@@ -25,7 +25,10 @@ body {
   overflow-x: hidden;
 }
 
-
+h1{
+  margin-block-start: unset !important;
+  margin-block-end: unset !important;
+}
 
 .logo {
   font-family: "Luckiest Guy", cursive;
