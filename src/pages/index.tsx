@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>UGANDAN KNUCKLES</title>
+        <title>UGANDAN KNUCKLES - Da Wae Never Fades!</title>
         <meta
           name="description"
           content="Do you know da wae, bruddah? Tap Ugandan Knuckles to unleash his iconic spit and stack points for your country. Compete on the global leaderboard to prove your nation is the ultimate Knuckles warrior."
@@ -35,7 +35,7 @@ export default function Home() {
         <link rel="shortcut icon" href="/favicon.ico" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="UGANDAN KNUCKLES" />
+        <meta property="og:title" content="UGANDAN KNUCKLES - Da Wae Never Fades!" />
         <meta property="og:url" content="/mount.webp" />
         <meta
           property="og:description"
