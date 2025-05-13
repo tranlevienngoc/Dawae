@@ -1,4 +1,3 @@
- 
 "use client";
 
 import { SoundcontrolContext } from "@/context/soundControl";
@@ -24,10 +23,10 @@ const countries = [
 ];
 
 export default function DawaeGame() {
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(1000);
   const [myScore, setMyScore] = useState(countries[4].start);
   const [sound, setSound] = useState("/Da_Wae_1.mp3");
-  const [imageSrc, setImageSrc] = useState('/unmount.webp');
+  const [imageSrc, setImageSrc] = useState("/unmount.webp");
 
   const { muteAudio, toggleMuteAudio } = useContext(SoundcontrolContext);
 
@@ -175,7 +174,7 @@ export default function DawaeGame() {
   useEffect(() => {
     const dataScore = localStorage.getItem("scoreUser");
     if (dataScore) {
-      setScore(JSON.parse(dataScore).score);
+      setScore(1000000);
       setUserCountry({
         countryName: JSON.parse(dataScore).countryName,
         countryCode: JSON.parse(dataScore).countryCode,
@@ -325,9 +324,9 @@ export default function DawaeGame() {
       });
     }
 
-    setImageSrc('/mount.webp');
+    setImageSrc("/mount.webp");
     setTimeout(() => {
-      setImageSrc('/unmount.webp'); 
+      setImageSrc("/unmount.webp");
     }, 100);
   };
 
@@ -338,9 +337,6 @@ export default function DawaeGame() {
     }
   };
 
-
-
-  console.log(imageSrc);
   return (
     <div className="container" onClick={handleClick}>
       <h1 className="logo">
@@ -404,7 +400,7 @@ export default function DawaeGame() {
                   height="20px"
                   width="20px"
                   xmlns="http://www.w3.org/2000/svg"
-                  onClick={(e)=>{
+                  onClick={(e) => {
                     e.stopPropagation();
                     handleSvgClick();
                   }} //
@@ -420,7 +416,7 @@ export default function DawaeGame() {
                   height="20px"
                   width="20px"
                   xmlns="http://www.w3.org/2000/svg"
-                  onClick={(e)=>{
+                  onClick={(e) => {
                     e.stopPropagation();
                     handleSvgClick();
                   }}
@@ -442,7 +438,7 @@ export default function DawaeGame() {
             <table id="table">
               <tbody>
                 <tr>
-                  <td style={{textAlign:"center"}}>🌏</td>
+                  <td style={{ textAlign: "center" }}>🌏</td>
                   <td>WorldWide</td>
 
                   <td></td>

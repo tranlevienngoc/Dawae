@@ -22,19 +22,19 @@ export default function SoundModal({
 }: ModalMusicProps) {
   const LISTSONG: Song[] = [
     {
-      name: "Da Wae - Electronic",
+      name: "Do You Know Da Wae - Electronic",
       link: "/Da_Wae_1.mp3",
     },
     {
-      name: "Da Wae - Hip Hop",
+      name: "Do You Know Da Wae - Hip Hop",
       link: "/Da_Wae_2.mp3",
     },
     {
-      name: "Da Wae - Funk/Soul",
+      name: "Do You Know Da Wae - Funk/Soul",
       link: "/Da_Wae_3.mp3",
     },
     {
-      name: "Da Wae - Comedy Pop",
+      name: "Do You Know Da Wae - Comedy Pop",
       link: "/Da_Wae_4.mp3",
     },
   ];

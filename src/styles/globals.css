@@ -22,10 +22,10 @@ body {
   background-position: 50%;
   margin: 0;
   font-family: 'Comic Relief Regular';
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-h1{
+h1 {
   margin-block-start: unset !important;
   margin-block-end: unset !important;
 }
@@ -93,15 +93,10 @@ h1{
   }
 }
 
-
-
-
-
-
 .container {
   text-align: center;
   cursor: pointer;
-
+  overflow-y: hidden;
 }
 
 
@@ -322,7 +317,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
 
 
 
-.container-icon{
+.container-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -331,10 +326,11 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   position: fixed;
   top: 15px;
   left: 15px;
-  z-index: 1000;
+  z-index: 999;
 }
 
-.sound-icon, .info-icon {
+.sound-icon,
+.info-icon {
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -343,7 +339,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   justify-content: center;
   background: rgba(28, 28, 28, 0.4);
   border-radius: 10px;
-  
+
 }
 
 
@@ -365,7 +361,9 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   transform: translate(-50%, -50%);
   z-index: 1002;
   width: 500px;
-}.img-actor{
+}
+
+.img-actor {
   width: 90%;
 }
 
@@ -383,7 +381,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   transform: translate(-50%, -50%);
   z-index: 1002;
   width: 800px;
-  
+
 }
 
 
@@ -392,8 +390,8 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   border-radius: 15px;
   padding: 15px;
   height: 500px;
- 
-  overflow: hidden; 
+
+  overflow: hidden;
 }
 
 
@@ -402,7 +400,8 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   .logo {
     font-size: 8vw;
   }
-  .modal-info{
+
+  .modal-info {
     width: 96%;
 
   }
@@ -416,6 +415,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   .k {
     -webkit-text-stroke: 1.5px #a52a2a;
   }
+
   .container img {
     display: block;
     margin-left: auto;
@@ -424,22 +424,26 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
     max-width: 600px;
     height: auto;
   }
-  .container-icon{
+
+  .container-icon {
     flex-direction: row;
     top: unset;
     bottom: 70px;
     left: 50%;
     transform: translateX(-50%);
   }
+
   .modal-sound {
-    width: 96%;
-   
-  }
-  .modal-info{
     width: 96%;
 
   }
-  .img-actor{
+
+  .modal-info {
+    width: 96%;
+
+  }
+
+  .img-actor {
     width: 96%;
   }
 }
