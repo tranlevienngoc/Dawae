@@ -100,7 +100,7 @@ h1 {
   overflow-y: hidden;
   overflow-x: hidden;
   height: 100vh;
-  
+
 
 }
 
@@ -375,6 +375,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   transform: translate(-50%, -50%);
   z-index: 1002;
   width: 500px;
+  cursor: default;
 }
 
 .img-actor {
@@ -386,6 +387,8 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   background: #FFF;
   border-radius: 15px;
   padding: 15px;
+  cursor: default;
+
 }
 
 
@@ -396,6 +399,8 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   transform: translate(-50%, -50%);
   z-index: 1002;
   width: 800px;
+  cursor: default;
+
 
 }
 
@@ -405,7 +410,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
   border-radius: 15px;
   padding: 15px;
   height: 500px;
-
+  cursor: default;
   overflow: hidden;
 }
 
@@ -469,4 +474,18 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
 
 .info {
   display: none;
+}
+
+.flag-icon {
+  width: 24px !important;
+  height: 18px !important;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.flag-icon-table {
+  width: 20px !important;
+  height: 14px !important;
+  display: inline-block;
+  vertical-align: middle;
 }

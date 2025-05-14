@@ -41,7 +41,7 @@ export default function SoundModal({
 
 
   return (
-    <div className="container" onClick={(e) => {
+    <div className="container-modal-sound" onClick={(e) => {
       e.stopPropagation();
     }}>
       <div

@@ -5,21 +5,21 @@ import useVisible from "@/hook/useVisible";
 import { useEffect, useRef, useState, useContext, useCallback } from "react";
 import SoundModal from "./SoundModal";
 import InfoModal from "./InfoModal";
-import Image from "next/image";
+import ReactCountryFlag from "react-country-flag"
 
 const countries = [
-  { code: "hk", name: "Hong Kong", start: 0, interval: 1, flag: "🇭🇰" },
-  { code: "tw", name: "Taiwan", start: 0, interval: 20, flag: "🇹🇼" },
-  { code: "th", name: "Thailand", start: 0, interval: 25, flag: "🇹🇭" },
-  { code: "jp", name: "Japan", start: 0, interval: 40, flag: "🇯🇵" },
-  { code: "vi", name: "Vietnam", start: 0, interval: 0, flag: "🇻🇳" }, // manual update
-  { code: "fi", name: "Finland", start: 0, interval: 34, flag: "🇫🇮" },
-  { code: "se", name: "Sweden", start: 0, interval: 20, flag: "🇸🇪" },
-  { code: "pl", name: "Poland", start: 0, interval: 15, flag: "🇵🇱" },
-  { code: "dk", name: "Denmark", start: 0, interval: 31, flag: "🇩🇰" },
-  { code: "id", name: "Indonesia", start: 0, interval: 29, flag: "🇮🇩" },
-  { code: "hu", name: "Hungary", start: 0, interval: 70, flag: "🇭🇺" },
-  { code: "rs", name: "Serbia", start: 0, interval: 5, flag: "🇷🇸" },
+  { code: "hk", name: "Hong Kong", start: 0, interval: 1, flag: "flag-icon-hk" },
+  { code: "tw", name: "Taiwan", start: 0, interval: 20, flag: "flag-icon-tw" },
+  { code: "th", name: "Thailand", start: 0, interval: 25, flag: "flag-icon-th" },
+  { code: "jp", name: "Japan", start: 0, interval: 40, flag: "flag-icon-jp" },
+  { code: "vn", name: "Vietnam", start: 0, interval: 0, flag: "flag-icon-vn" },
+  { code: "fi", name: "Finland", start: 0, interval: 34, flag: "flag-icon-fi" },
+  { code: "se", name: "Sweden", start: 0, interval: 20, flag: "flag-icon-se" },
+  { code: "pl", name: "Poland", start: 0, interval: 15, flag: "flag-icon-pl" },
+  { code: "dk", name: "Denmark", start: 0, interval: 31, flag: "flag-icon-dk" },
+  { code: "id", name: "Indonesia", start: 0, interval: 29, flag: "flag-icon-id" },
+  { code: "hu", name: "Hungary", start: 0, interval: 70, flag: "flag-icon-hu" },
+  { code: "rs", name: "Serbia", start: 0, interval: 5, flag: "flag-icon-rs" },
 ];
 
 export default function DawaeGame() {
@@ -348,7 +348,7 @@ export default function DawaeGame() {
         <span className="pjt">NUCKLES</span>
       </h1>
       <p id={score > 0 ? "score" : "score-hidden"}>{score.toLocaleString()}</p>
-      <Image
+      <img
         src={imageSrc}
         alt="Dawae"
         className="img-actor"
@@ -364,7 +364,7 @@ export default function DawaeGame() {
       <div
         className="tabs"
         onClick={(e) => {
-            e.stopPropagation();
+          e.stopPropagation();
           handleSvgClick();
         }}
       >
@@ -386,9 +386,7 @@ export default function DawaeGame() {
               <div
                 style={{ display: "flex", alignItems: "center", gap: "5px" }}
               >
-                <span style={{ marginTop: "2px" }} className="text-label">
-                  🇻🇳
-                </span>
+                <ReactCountryFlag countryCode={userCountry.countryCode} svg className="flag-icon" />
                 <span style={{ fontSize: "16px" }} className="text-label">
                   {myScore.toLocaleString()}
                 </span>
@@ -463,18 +461,13 @@ export default function DawaeGame() {
                         : `${i + 1}`}
                     </td>
                     <td>
-                      <span
-                        className={`flag-icon flag-icon-${c.code}`}
-                        style={{ marginRight: "5px" }}
-                      >
-                        {c.flag}
-                      </span>
+                      <ReactCountryFlag className="flag-icon-table" countryCode={c.code} svg />
                     </td>
                     <td className={c.code === "vi" ? "user-country" : ""}>
                       {c.name}
                     </td>
                     <td>
-                      {i === 0 || c.code === "vi" ? (
+                      {i === 0 || c.code === "vn" ? (
                         <span>
                           <span className="pps">
                             {i === 0 ? "101.5" : "50"} PPS

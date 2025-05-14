@@ -2,7 +2,8 @@
     background: #FFF;
     border-radius: 15px;
     padding: 15px;
-    overflow: hidden; /* Đảm bảo border-radius cắt nội dung */
+    overflow: hidden;
+    cursor: default;
   }
   
   .containter-info {
@@ -10,29 +11,29 @@
     flex-direction: column;
     gap: 10px;
     position: relative;
-    max-height: 500px; /* Điều chỉnh để giới hạn chiều cao và kích hoạt thanh cuộn */
+    max-height: 500px; 
   }
   
   .containter-info-content {
-    overflow-y: auto; /* Kích hoạt thanh cuộn dọc */
+    overflow-y: auto; 
     padding-right: 0px;
-    margin-right: -8px; /* Thêm padding để thanh cuộn cách xa cạnh */
+    margin-right: -8px; 
   }
   
-  /* Tùy chỉnh thanh cuộn */
+ 
   .containter-info-content::-webkit-scrollbar {
-    width: 6px; /* Tăng độ rộng để dễ nhìn hơn */
+    width: 6px;
   }
   
   .containter-info-content::-webkit-scrollbar-thumb {
     background:  rgb(181, 178, 178);
-    border-radius: 10px; /* Phù hợp với kiểu bo tròn */
+    border-radius: 10px; 
   }
   
   .containter-info-content::-webkit-scrollbar-track {
     background-color: rgb(229, 227, 227) ;
     border-radius: 10px;
-    margin: 10px 0; /* Thêm margin để thanh cuộn không chạm cạnh trên/dưới */
+    margin: 10px 0; 
   }
 
 .info-title {
@@ -62,4 +63,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
+
