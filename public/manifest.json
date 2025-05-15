@@ -1,0 +1,33 @@
+{
+  "name": "Ugandan Knuckles Clicking",
+  "short_name": "DAWAE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

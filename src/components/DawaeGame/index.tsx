@@ -438,7 +438,7 @@ export default function DawaeGame() {
           <div className="tab-content">
             <table id="table">
               <tbody>
-                <tr>
+                <tr style={{   borderBottom: "1px solid #e3e2e2" }}>
                   <td style={{ textAlign: "center" }}>🌏</td>
                   <td>WorldWide</td>
 
@@ -450,7 +450,7 @@ export default function DawaeGame() {
                   </td>
                 </tr>
                 {countries.map((c, i) => (
-                  <tr key={c.code}>
+                  <tr key={c.code} style={{   borderBottom: i != countries.length - 1 ? "1px solid #e3e2e2" : "none" }}>
                     <td className={i < 3 ? "rank" : "text"}>
                       {i < 3
                         ? i === 0

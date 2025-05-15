@@ -10,11 +10,12 @@ export default function InfoModal({ onClose }: InfoModalProps) {
       title: "Why UgandanKnuckles.click?",
       content:
         " Bruddahs, many believed da Ugandan Knuckles tribe was lost to da ages, wiped out by da trials of time. But lo, we found millions of Knuckles warriors—click-click-click!—scattered across da world, still clickin’, still spittin’, still searchin’ for Da Wae! Our sacred mission is to revive da spirit of Ugandan Knuckles, to make da tribe great again! Dis app unites bruddahs globally, tappin’ to honor Da Queen and prove Da Wae lives eternal. Join us, spit on da doubters, and let’s show da world da Knuckles tribe never fades.",
+      link: "https://x.com/DaWaeClicking",
     },
     {
       title: "Who is Ugandan Knuckles?",
       content:
-        "Da Ugandan Knuckles are an indigenous Tribe in Uganda. They are part of the echidna family and are mainly found on Lolui Island in Lake Victoria, but there are various communities throughout Uganda.",
+        "The Ugandan Knuckles are an indigenous Tribe in Uganda. They are part of the echidna family and are mainly found on Lolui Island in Lake Victoria, but there are various communities throughout Uganda.",
     },
     {
       title: "Religion",
@@ -41,13 +42,19 @@ export default function InfoModal({ onClose }: InfoModalProps) {
   ];
 
   return (
-    <div className="containter-info" onClick={(e)=>{
-      e.stopPropagation();
-    }}>
-      <button className="close-button" onClick={(e)=>{
+    <div
+      className="containter-info"
+      onClick={(e) => {
         e.stopPropagation();
-        onClose();
-      }}>
+      }}
+    >
+      <button
+        className="close-button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+      >
         <svg
           stroke="currentColor"
           fill="currentColor"
@@ -60,15 +67,17 @@ export default function InfoModal({ onClose }: InfoModalProps) {
           <path d="m289.94 256 95-95A24 24 0 0 0 351 127l-95 95-95-95a24 24 0 0 0-34 34l95 95-95 95a24 24 0 1 0 34 34l95-95 95 95a24 24 0 0 0 34-34z"></path>
         </svg>
       </button>
-     <div className="containter-info-content">
-          {CONTENT.map((item) => (
-            <div key={item.title}>
-              <h2 className="info-title">{item.title}</h2>
-              <p className="info-content">{item.content}</p>
-              {item.content2 && <p className="info-content-2">{item.content2}</p>}
-            </div>
-          ))}
-     </div>
+      <div className="containter-info-content">
+        {CONTENT.map((item) => (
+          <div key={item.title}>
+            <h2 className="info-title">{item.title}</h2>
+            <p className="info-content">{item.content} 
+              {item.link && <a href={item.link} target="_blank" rel="noopener noreferrer" className="info-link">Follow da tribe on X</a>}
+            </p>
+            {item.content2 && <p className="info-content-2">{item.content2}</p>}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
