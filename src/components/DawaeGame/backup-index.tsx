@@ -2,11 +2,10 @@
 
 import { SoundcontrolContext } from "@/context/soundControl";
 import useVisible from "@/hook/useVisible";
-import { useRef, useState, useContext, useCallback, useEffect } from "react";
+import { useEffect, useRef, useState, useContext, useCallback } from "react";
 import SoundModal from "./SoundModal";
 import InfoModal from "./InfoModal";
 import ReactCountryFlag from "react-country-flag"
-import { getLeaderboard, LeaderboardResponse } from "@/api/countries";
 
 const countries = [
   { code: "hk", name: "Hong Kong", start: 0, interval: 1, flag: "flag-icon-hk" },
@@ -24,7 +23,6 @@ const countries = [
 ];
 
 export default function DawaeGame() {
-  const [leaderboard, setLeaderboard] = useState<LeaderboardResponse[]>([]);
   const [score, setScore] = useState(0);
   const [myScore, setMyScore] = useState(countries[4].start);
   const [sound, setSound] = useState("/Da_Wae_1.mp3");
@@ -269,6 +267,8 @@ export default function DawaeGame() {
   const handleClick = () => {
     setScore((prev) => prev + 1);
     setMyScore((prev) => prev + 1);
+
+    console.log(countryScores, 'countryScores------------------>');
     
     setCountryScores((prev) => {
       const updated = [...prev];
@@ -342,20 +342,6 @@ export default function DawaeGame() {
     }
   };
 
-  console.log(leaderboard, 'leaderboard------------------>');
-
-  // useEffect(() => {
-  //   const fetchLeaderboard = async () => {
-  //     const leaderboard = await getLeaderboard();
-  //     if (leaderboard) {
-  //       setLeaderboard(leaderboard);
-  //       // console.log(leaderboard, 'leaderboard------------------>');
-  //     }
-  //   };
-  //   fetchLeaderboard();
-  // }, []);
-  // console.log(leaderboard, 'leaderboard------------------>');
-  
   return (
     <div className="container" onClick={handleClick}>
       <h1 className="logo">
