@@ -22,7 +22,7 @@ const countries = [
   { code: "rs", name: "Serbia", start: 0, interval: 5, flag: "flag-icon-rs" },
 ];
 
-export default function DawaeGame() {
+export default function DawaeGameBackup() {
   const [score, setScore] = useState(0);
   const [myScore, setMyScore] = useState(countries[4].start);
   const [sound, setSound] = useState("/Da_Wae_1.mp3");
