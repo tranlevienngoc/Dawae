@@ -4,8 +4,8 @@ export interface LeaderboardResponse {
   code: string;
   name: string;
   total_clicks: number;
+  pps: number;
 }
-
 export interface ClickResponse {
   created_at: string;
   id: number;

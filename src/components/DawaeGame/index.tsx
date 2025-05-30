@@ -10,7 +10,6 @@ import { clickUgandanNuckle, getLeaderboard, LeaderboardResponse } from "@/api/c
 
 export default function DawaeGame() {
     const [leaderboard, setLeaderboard] = useState<LeaderboardResponse[]>([]);
-
     const [score, setScore] = useState(0);
     const [sound, setSound] = useState("/Da_Wae_1.mp3");
     const [imageSrc, setImageSrc] = useState("/unmount.webp");
@@ -109,6 +108,7 @@ export default function DawaeGame() {
             updated[countryIndex !== -1 ? countryIndex : 4] = {
                 ...updated[countryIndex !== -1 ? countryIndex : 4],
                 total_clicks: updated[countryIndex !== -1 ? countryIndex : 4].total_clicks + 1,
+                pps: 0
             };
 
             return updated;
@@ -176,16 +176,29 @@ export default function DawaeGame() {
 
     useEffect(() => {
         const intervals = setInterval(async () => {
-            const leaderboard = await getLeaderboard();
-            if (leaderboard) {
-                setLeaderboard(leaderboard);
+            const leaderboardNew = await getLeaderboard();
+            const newArray: LeaderboardResponse[] = [];
+            if (leaderboardNew) {
+                for (let i = 0; i < leaderboardNew.length; i++) {
+                    const findCountry = leaderboard.find((c) => c.code === leaderboardNew[i].code);
+                    if (findCountry) {
+                        newArray.push({
+                            code: leaderboardNew[i].code,
+                            name: leaderboardNew[i].name,
+                            total_clicks: leaderboardNew[i].total_clicks,
+                            pps: leaderboardNew[i].total_clicks - findCountry.total_clicks
+                        });
+                    }
+                }
+                setLeaderboard(newArray);
             }
+
         }, 6000);
 
         return () => {
             clearInterval(intervals);
         };
-    }, []);
+    }, [leaderboard]);
 
     useEffect(() => {
         if (leaderboard.length) {
@@ -206,7 +219,8 @@ export default function DawaeGame() {
                         const countryIndex = updated.findIndex((c) => c.code === userCountry.countryCode);
                         updated[countryIndex !== -1 ? countryIndex : 4] = {
                             ...updated[countryIndex !== -1 ? countryIndex : 4],
-                            total_clicks: updated[countryIndex !== -1 ? countryIndex : 4].total_clicks + 1,
+                            total_clicks: updated[countryIndex !== -1 ? countryIndex : 4].total_clicks,
+                            pps: 0
                         };
                         return updated;
                     });
@@ -333,13 +347,19 @@ export default function DawaeGame() {
                                         </td>
                                         <td className={c.code === "vi" ? "user-country" : ""}>{c.name}</td>
                                         <td>
-                                            {i === 0 || c.code === "vn" ? (
+                                            {/* {i === 0 || c.code === "vn" ? (
                                                 <span>
                                                     <span className="pps">{i === 0 ? "101.5" : "50"} PPS</span>{" "}
                                                     {c.total_clicks}
                                                 </span>
                                             ) : (
                                                 c.total_clicks
+                                            )} */}
+                                            {c.total_clicks}
+                                            {(c.pps) > 0 && (
+                                              <span>
+                                                  <span className="pps">{c.pps} PPS</span>{" "}
+                                              </span>
                                             )}
                                         </td>
                                     </tr>
