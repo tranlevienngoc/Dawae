@@ -6,7 +6,7 @@ import { useRef, useState, useContext, useCallback, useEffect } from "react";
 import SoundModal from "./SoundModal";
 import InfoModal from "./InfoModal";
 import ReactCountryFlag from "react-country-flag";
-import { clickUgandanNuckle, getLeaderboard, LeaderboardResponse } from "@/api/countries";
+import { getLeaderboard, LeaderboardResponse } from "@/api/countries";
 
 export default function DawaeGame() {
     const [leaderboard, setLeaderboard] = useState<LeaderboardResponse[]>([]);
@@ -225,8 +225,19 @@ export default function DawaeGame() {
         const intervals = setInterval(async () => {
             if (score > 0) {
                try {
-                const clickResponse = await clickUgandanNuckle(userCountry.countryCode, score);
-                if (clickResponse) {
+                const response = await fetch('/api/click', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        countryCode: userCountry.countryCode,
+                        clickCount: score
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success && result.data) {
                     setLeaderboard((prev: LeaderboardResponse[]) => {
                         const updated = [...prev];
                         const countryIndex = updated.findIndex((c) => c.code === userCountry.countryCode);
