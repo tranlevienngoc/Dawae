@@ -164,6 +164,18 @@ export default function DawaeGame() {
         }
     };
 
+    const [clickCount, setClickCount] = useState(0);
+
+    useEffect(() => {
+       const click = localStorage.getItem('click_count');
+       if (click) {
+          setClickCount(Number(JSON.parse(click)));
+       } else {
+          localStorage.setItem('click_count', JSON.stringify(0));
+       }
+     }, []);
+    console.log(clickCount);
+    
     useEffect(() => {
         const fetchLeaderboard = async () => {
             const leaderboard = await getLeaderboard();
@@ -193,7 +205,7 @@ export default function DawaeGame() {
                 setLeaderboard(newArray);
             }
 
-        }, 6000);
+        }, 5000);
 
         return () => {
             clearInterval(intervals);
@@ -212,6 +224,7 @@ export default function DawaeGame() {
     useEffect(() => {
         const intervals = setInterval(async () => {
             if (score > 0) {
+               try {
                 const clickResponse = await clickUgandanNuckle(userCountry.countryCode, score);
                 if (clickResponse) {
                     setLeaderboard((prev: LeaderboardResponse[]) => {
@@ -225,14 +238,20 @@ export default function DawaeGame() {
                         return updated;
                     });
                     setScore(0);
+                    setClickCount(clickCount + score);
+                    localStorage.setItem('click_count', JSON.stringify(clickCount + score));
                 }
+               } catch (error) {
+                console.error("Failed to click:", error);
+               }
             }
-        }, 12000);
+        }, 15000);
 
         return () => {
             clearInterval(intervals);
         };
-    }, [score, userCountry.countryCode]);
+    }, [clickCount, score, userCountry.countryCode]);
+     
 
     return (
         <div className="container" onClick={handleClick}>
@@ -241,7 +260,8 @@ export default function DawaeGame() {
                 <span className="k">K</span>
                 <span className="pjt">NUCKLES</span>
             </h1>
-            <p id={score > 0 ? "score" : "score-hidden"}>{score.toLocaleString()}</p>
+            {/* <p id={score > 0 ? "score" : "score-hidden"}>{score.toLocaleString()}</p> */}
+            <p id={clickCount > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p>
             <img
                 src={imageSrc}
                 alt="Dawae"
@@ -355,12 +375,12 @@ export default function DawaeGame() {
                                             ) : (
                                                 c.total_clicks
                                             )} */}
-                                            {c.total_clicks}
                                             {(c.pps) > 0 && (
-                                              <span>
+                                                <span>
                                                   <span className="pps">{c.pps} PPS</span>{" "}
                                               </span>
                                             )}
+                                            {c.total_clicks}
                                         </td>
                                     </tr>
                                 ))}
