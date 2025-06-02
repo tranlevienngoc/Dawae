@@ -282,7 +282,7 @@ export default function DawaeGame() {
                 <span className="pjt">NUCKLES</span>
             </h1>
             {/* <p id={score > 0 ? "score" : "score-hidden"}>{score.toLocaleString()}</p> */}
-            <p id={clickCount > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p>
+            <p id={(clickCount + score) > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p>
             <img
                 src={imageSrc}
                 alt="Dawae"
