@@ -7,6 +7,7 @@ import SoundModal from "./SoundModal";
 import InfoModal from "./InfoModal";
 import ReactCountryFlag from "react-country-flag";
 import { getLeaderboard, LeaderboardResponse } from "@/api/countries";
+import axios from "axios";
 
 export default function DawaeGame() {
     const [leaderboard, setLeaderboard] = useState<LeaderboardResponse[]>([]);
@@ -52,16 +53,29 @@ export default function DawaeGame() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/trace");
-                const result = await response.json();
-                if (result.success && result.data) {
-                    const { loc } = result.data;
-                    if (loc) {
-                        setUserCountry({
-                            countryName: loc,
-                            countryCode: loc.split("/")[0].toLocaleUpperCase(),
-                        });
+                const response = await axios.get('https://popcat.click/cdn-cgi/trace', {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                      'Referer': 'https://popcat.click/',
+                      'Origin': 'https://popcat.click'
                     }
+                  });
+                const data = await response.data;
+                console.log(data, 'data--------------->123123');
+                
+                const result = data.split("\n").reduce((acc: Record<string, string>, line: string) => {
+                    const [key, value] = line.split("=");
+                    if (key && value) {
+                        acc[key] = value;
+                    }
+                    return acc;
+                }, {});
+                if (result.loc) {
+                    setUserCountry({
+                        countryName: result.loc,
+                        countryCode: result.loc.split("/")[0].toLocaleUpperCase(),
+                    });
                 }
             } catch (error) {
                 console.error("Failed to fetch data:", error);
