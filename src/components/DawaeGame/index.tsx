@@ -52,7 +52,7 @@ export default function DawaeGame() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/trace");
+                const response = await fetch("/api/trace-test");
                 const { data } = await response.json();
                 const parsedData = data.split("\n").reduce((acc: Record<string, string>, line: string) => {
                     const [key, value] = line.split("=");
