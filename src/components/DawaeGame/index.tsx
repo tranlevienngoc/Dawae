@@ -52,20 +52,16 @@ export default function DawaeGame() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/trace-test");
-                const { data } = await response.json();
-                const parsedData = data.split("\n").reduce((acc: Record<string, string>, line: string) => {
-                    const [key, value] = line.split("=");
-                    if (key && value) {
-                        acc[key] = value;
+                const response = await fetch("/api/trace");
+                const result = await response.json();
+                if (result.success && result.data) {
+                    const { loc } = result.data;
+                    if (loc) {
+                        setUserCountry({
+                            countryName: loc,
+                            countryCode: loc.split("/")[0].toLocaleUpperCase(),
+                        });
                     }
-                    return acc;
-                }, {});
-                if (parsedData.loc) {
-                    setUserCountry({
-                        countryName: parsedData.loc,
-                        countryCode: parsedData.loc.split("/")[0].toLocaleUpperCase(),
-                    });
                 }
             } catch (error) {
                 console.error("Failed to fetch data:", error);
