@@ -7,7 +7,23 @@ import SoundModal from "./SoundModal";
 import InfoModal from "./InfoModal";
 import ReactCountryFlag from "react-country-flag";
 import { getLeaderboard, LeaderboardResponse } from "@/api/countries";
+import { authorizationTwitter, getInfoTwitter, getMe } from "@/api/auth";
 import axios from "axios";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { toastError } from "@/utils/toast";
+import { toastSuccess } from "@/utils/toast";
+import { useAuth } from "@/context/AuthContect";
+import { MainNetworkAccess } from "@/access";
+import { TYPE_STATUS_AUTH } from "@/constants";
+import Image from "next/image";
+
+declare module "next-auth" {
+    interface Session {
+        accessToken?: string;
+        refreshToken?: string;
+    }
+}
 
 export default function DawaeGame() {
     const [leaderboard, setLeaderboard] = useState<LeaderboardResponse[]>([]);
@@ -53,17 +69,16 @@ export default function DawaeGame() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://popcat.click/cdn-cgi/trace', {
+                const response = await axios.get("https://popcat.click/cdn-cgi/trace", {
                     headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'Referer': 'https://popcat.click/',
-                      'Origin': 'https://popcat.click'
-                    }
-                  });
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        Referer: "https://popcat.click/",
+                        Origin: "https://popcat.click",
+                    },
+                });
                 const data = await response.data;
-                console.log(data, 'data--------------->123123');
-                
+
                 const result = data.split("\n").reduce((acc: Record<string, string>, line: string) => {
                     const [key, value] = line.split("=");
                     if (key && value) {
@@ -76,6 +91,9 @@ export default function DawaeGame() {
                         countryName: result.loc,
                         countryCode: result.loc.split("/")[0].toLocaleUpperCase(),
                     });
+                    if (result.loc.split("/")[0]) {
+                        localStorage.setItem("country_code", result.loc.split("/")[0].toLocaleUpperCase());
+                    }
                 }
             } catch (error) {
                 console.error("Failed to fetch data:", error);
@@ -118,7 +136,7 @@ export default function DawaeGame() {
             updated[countryIndex !== -1 ? countryIndex : 4] = {
                 ...updated[countryIndex !== -1 ? countryIndex : 4],
                 total_clicks: updated[countryIndex !== -1 ? countryIndex : 4].total_clicks + 1,
-                pps: 0
+                pps: 0,
             };
 
             return updated;
@@ -177,15 +195,14 @@ export default function DawaeGame() {
     const [clickCount, setClickCount] = useState(0);
 
     useEffect(() => {
-       const click = localStorage.getItem('click_count');
-       if (click) {
-          setClickCount(Number(JSON.parse(click)));
-       } else {
-          localStorage.setItem('click_count', JSON.stringify(0));
-       }
-     }, []);
-    console.log(clickCount);
-    
+        const click = localStorage.getItem("click_count");
+        if (click) {
+            setClickCount(Number(JSON.parse(click)));
+        } else {
+            localStorage.setItem("click_count", JSON.stringify(0));
+        }
+    }, []);
+
     useEffect(() => {
         const fetchLeaderboard = async () => {
             const leaderboard = await getLeaderboard();
@@ -208,13 +225,12 @@ export default function DawaeGame() {
                             code: leaderboardNew[i].code,
                             name: leaderboardNew[i].name,
                             total_clicks: leaderboardNew[i].total_clicks,
-                            pps: leaderboardNew[i].total_clicks - findCountry.total_clicks
+                            pps: leaderboardNew[i].total_clicks - findCountry.total_clicks,
                         });
                     }
                 }
                 setLeaderboard(newArray);
             }
-
         }, 5000);
 
         return () => {
@@ -234,37 +250,37 @@ export default function DawaeGame() {
     useEffect(() => {
         const intervals = setInterval(async () => {
             if (score > 0) {
-               try {
-                const response = await fetch('/api/click', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        countryCode: userCountry.countryCode,
-                        clickCount: score
-                    })
-                });
-                
-                const result = await response.json();
-                if (result.success && result.data) {
-                    setLeaderboard((prev: LeaderboardResponse[]) => {
-                        const updated = [...prev];
-                        const countryIndex = updated.findIndex((c) => c.code === userCountry.countryCode);
-                        updated[countryIndex !== -1 ? countryIndex : 4] = {
-                            ...updated[countryIndex !== -1 ? countryIndex : 4],
-                            total_clicks: updated[countryIndex !== -1 ? countryIndex : 4].total_clicks,
-                            pps: 0
-                        };
-                        return updated;
+                try {
+                    const response = await fetch("/api/click", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            countryCode: userCountry.countryCode,
+                            clickCount: score,
+                        }),
                     });
-                    setScore(0);
-                    setClickCount(clickCount + score);
-                    localStorage.setItem('click_count', JSON.stringify(clickCount + score));
+
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        setLeaderboard((prev: LeaderboardResponse[]) => {
+                            const updated = [...prev];
+                            const countryIndex = updated.findIndex((c) => c.code === userCountry.countryCode);
+                            updated[countryIndex !== -1 ? countryIndex : 4] = {
+                                ...updated[countryIndex !== -1 ? countryIndex : 4],
+                                total_clicks: updated[countryIndex !== -1 ? countryIndex : 4].total_clicks,
+                                pps: 0,
+                            };
+                            return updated;
+                        });
+                        setScore(0);
+                        setClickCount(clickCount + score);
+                        localStorage.setItem("click_count", JSON.stringify(clickCount + score));
+                    }
+                } catch (error) {
+                    console.error("Failed to click:", error);
                 }
-               } catch (error) {
-                console.error("Failed to click:", error);
-               }
             }
         }, 15000);
 
@@ -272,17 +288,171 @@ export default function DawaeGame() {
             clearInterval(intervals);
         };
     }, [clickCount, score, userCountry.countryCode]);
-     
+
+    const handleLoginTwitter = useCallback(async () => {
+        const url = await authorizationTwitter();
+        if (url) {
+            window.location.replace(url);
+        }
+    }, []);
+
+    const router = useRouter();
+
+    const { user, setUser, setIsLoadingUser, resetUser } = useAuth();
+    const { data: session } = useSession();
+
+    useEffect(() => {
+        async function fetchData() {
+            
+            const { oauth_token, oauth_verifier } = router.query;
+            if (oauth_token && oauth_verifier) {
+                try {
+                    const infoTwitter = await getInfoTwitter({
+                        oauthToken: oauth_token as string,
+                        oauthVerifier: oauth_verifier as string,
+                    });
+                    if (infoTwitter) {
+                        if (!user?.id) {
+                            const countryCode = localStorage.getItem("country_code") || 'VN';
+                            const signInResponse = await signIn("credentials", {
+                                redirect: false,
+                                email: infoTwitter?.email,
+                                user_name: infoTwitter?.screen_name,
+                                avatar: infoTwitter?.picture,
+                                twitter_id: infoTwitter?.id,
+                                country_code: countryCode,
+                            });
+    
+                            if (signInResponse?.ok) {
+                                localStorage.setItem("userTwitter", JSON.stringify(infoTwitter));
+                                toastSuccess("Logged in successfully!");
+                                router.push('/');
+                                setIsLoadingUser(false);
+                                return;
+                            } else {
+                                localStorage.removeItem("refCode");
+                                return toastError("Login faild");
+                            }
+                        } else {
+                            localStorage.setItem("userTwitter", JSON.stringify(infoTwitter));
+                        }
+                    }
+                } catch (error) {
+                    console.error("Failed to get info twitter:", error);
+                }
+            }
+        }
+        if (!user?.id) {
+            fetchData();
+        }
+    }, [router, setIsLoadingUser, user, user?.id, userCountry.countryCode]);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const user = await getMe();
+
+                if (user) {
+                    setUser({
+                        id: user.id,
+                        //   email: user.email,
+                        avatar: user.avatar,
+                        user_name: user.user_name,
+                    });
+                    setIsLoadingUser(false);
+                }
+            } catch (error) {
+                console.error("Failed to get user:", error);
+            }
+        }
+
+        if (status === TYPE_STATUS_AUTH.LOADING) {
+            setIsLoadingUser(true);
+        }
+
+        if (session?.accessToken) {
+            MainNetworkAccess.defaultHeaders = {
+                Authorization: `Bearer ${session?.accessToken}`,
+            };
+            fetchData();
+            setIsLoadingUser(true);
+        }
+
+        if (status === TYPE_STATUS_AUTH.UNAUTHENTICATED) {
+            console.error("No access token available");
+            setIsLoadingUser(false);
+        }
+    }, [session?.accessToken, setIsLoadingUser, setUser]);
+
+
+    const handleLogout = useCallback(() => {
+        signOut({
+          redirect: false,
+        });
+        MainNetworkAccess.defaultHeaders = {};
+        resetUser();
+    
+        localStorage.removeItem('userTwitter');
+        router.push('/');
+      }, [resetUser, router]);
 
     return (
-        <div className="container" onClick={handleClick}>
+        <div className="container" onClick={handleClick} style={{ position: "relative" }}>
             <h1 className="logo">
                 <span className="nitish">UGANDAN </span>
                 <span className="k">K</span>
                 <span className="pjt">NUCKLES</span>
             </h1>
-            {/* <p id={score > 0 ? "score" : "score-hidden"}>{score.toLocaleString()}</p> */}
-            <p id={(clickCount + score) > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p>
+            {!user?.id ? (
+                <button
+                    style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        color: "#757575",
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        background: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        padding: "10px 20px",
+                        cursor: "pointer",
+                        zIndex: 9999,
+                    }}
+                    onClick={(e) => {
+                        handleLoginTwitter();
+                        e.stopPropagation();
+                    }}
+                >
+                    Login with X
+                </button>
+            ) : (
+                <div
+                    style={{
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        zIndex: 9999,
+                    }}
+                    onClick={(e) => {
+                        handleLogout();
+                        e.stopPropagation();
+                    }}
+                >
+                    <Image
+                        src={user?.avatar as string}
+                        alt="Login"
+                        width={100}
+                        height={100}
+                        style={{ borderRadius: "50%", zIndex: 9999 }}
+                    />
+                </div>
+            )}
+            <p id={clickCount + score > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p>
             <img
                 src={imageSrc}
                 alt="Dawae"
@@ -369,9 +539,7 @@ export default function DawaeGame() {
                                     <td>WorldWide</td>
 
                                     <td></td>
-                                    <td>
-                                        {worldWideScore.toLocaleString()}
-                                    </td>
+                                    <td>{worldWideScore.toLocaleString()}</td>
                                 </tr>
                                 {leaderboard.map((c, i) => (
                                     <tr
@@ -396,10 +564,10 @@ export default function DawaeGame() {
                                             ) : (
                                                 c.total_clicks
                                             )} */}
-                                            {(c.pps) > 0 && (
+                                            {c.pps > 0 && (
                                                 <span>
-                                                  <span className="pps">{c.pps} PPS</span>{" "}
-                                              </span>
+                                                    <span className="pps">{c.pps} PPS</span>{" "}
+                                                </span>
                                             )}
                                             {c.total_clicks}
                                         </td>

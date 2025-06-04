@@ -1,7 +1,6 @@
 import { ClickResponse } from '@/api/countries';
 import { clickUgandanNuckle } from '@/api/countries';
 import type { NextApiRequest, NextApiResponse } from 'next';
-// import { clickUgandanNuckle, ClickResponse } from '../../api/countries';
 
 type ResponseData = {
   success: boolean;
