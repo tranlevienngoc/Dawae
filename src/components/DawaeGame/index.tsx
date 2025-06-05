@@ -296,7 +296,7 @@ export default function DawaeGame() {
                     console.error("Failed to click:", error);
                 }
             }
-        }, 15000);
+        }, 5000);
 
         return () => {
             clearInterval(intervals);
