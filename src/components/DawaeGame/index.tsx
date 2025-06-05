@@ -194,6 +194,12 @@ export default function DawaeGame() {
 
     const [clickCount, setClickCount] = useState(0);
 
+    const router = useRouter();
+
+    const { user, setUser, setIsLoadingUser, resetUser } = useAuth();
+    console.log(user, 'user-------->');
+    const { data: session } = useSession();
+
     useEffect(() => {
         const click = localStorage.getItem("click_count");
         if (click) {
@@ -275,8 +281,16 @@ export default function DawaeGame() {
                             return updated;
                         });
                         setScore(0);
-                        setClickCount(clickCount + score);
-                        localStorage.setItem("click_count", JSON.stringify(clickCount + score));
+                        if (user?.id) {
+                            // localStorage.setItem("click_count", JSON.stringify(Number(user?.clicks) + score));
+                            setUser({
+                                ...user,
+                                clicks: Number(user?.clicks) + score,
+                            });
+                        } else {
+                            localStorage.setItem("click_count", JSON.stringify(clickCount + score));
+                            setClickCount(clickCount + score);
+                        }
                     }
                 } catch (error) {
                     console.error("Failed to click:", error);
@@ -287,7 +301,7 @@ export default function DawaeGame() {
         return () => {
             clearInterval(intervals);
         };
-    }, [clickCount, score, userCountry.countryCode]);
+    }, [clickCount, score, setUser, user, userCountry.countryCode]);
 
     const handleLoginTwitter = useCallback(async () => {
         const url = await authorizationTwitter();
@@ -295,11 +309,6 @@ export default function DawaeGame() {
             window.location.replace(url);
         }
     }, []);
-
-    const router = useRouter();
-
-    const { user, setUser, setIsLoadingUser, resetUser } = useAuth();
-    const { data: session } = useSession();
 
     useEffect(() => {
         async function fetchData() {
@@ -358,6 +367,8 @@ export default function DawaeGame() {
                         //   email: user.email,
                         avatar: user.avatar,
                         user_name: user.user_name,
+                        country_code: user.country_code,
+                        clicks: user.clicks,
                     });
                     setIsLoadingUser(false);
                 }
@@ -452,7 +463,8 @@ export default function DawaeGame() {
                     />
                 </div>
             )}
-            <p id={clickCount + score > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p>
+            {/* <p id={clickCount + score > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p> */}
+            <p id={(user?.id ? Number( user?.clicks) : clickCount) + score > 0 ? "score" : "score-hidden"}>{(user?.id ? Number( user?.clicks) : clickCount) + score > 0 ? (user?.id ? Number( user?.clicks) : clickCount) + score : 0}</p>
             <img
                 src={imageSrc}
                 alt="Dawae"
@@ -554,16 +566,8 @@ export default function DawaeGame() {
                                         <td>
                                             <ReactCountryFlag className="flag-icon-table" countryCode={c.code} svg />
                                         </td>
-                                        <td className={c.code === "vi" ? "user-country" : ""}>{c.name}</td>
+                                        <td className={c.code === userCountry.countryCode.toLowerCase() ? "user-country" : ""} >{c.name}</td>
                                         <td>
-                                            {/* {i === 0 || c.code === "vn" ? (
-                                                <span>
-                                                    <span className="pps">{i === 0 ? "101.5" : "50"} PPS</span>{" "}
-                                                    {c.total_clicks}
-                                                </span>
-                                            ) : (
-                                                c.total_clicks
-                                            )} */}
                                             {c.pps > 0 && (
                                                 <span>
                                                     <span className="pps">{c.pps} PPS</span>{" "}

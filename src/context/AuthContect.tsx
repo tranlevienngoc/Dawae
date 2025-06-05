@@ -25,6 +25,8 @@ const AuthValues: AuthType = {
     // email: '',
     avatar: '',
     user_name: '',
+    country_code: '',
+    clicks: 0,
   },
   setUser: () => ({}),
   sign: '',
@@ -60,6 +62,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // email: '',
       avatar: '',
       user_name: '',
+      country_code: '',
+      clicks: 0,
     });
     setSign(undefined);
     localStorage.removeItem(LOCALSTORAGE_KEYS.Sign);
