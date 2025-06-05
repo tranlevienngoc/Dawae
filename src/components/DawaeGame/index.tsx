@@ -566,7 +566,9 @@ export default function DawaeGame() {
                                         <td>
                                             <ReactCountryFlag className="flag-icon-table" countryCode={c.code} svg />
                                         </td>
-                                        <td className={c.code === userCountry.countryCode.toLowerCase() ? "user-country" : ""} >{c.name}</td>
+                                        <td className={
+                                            (c.code === userCountry.countryCode.toLowerCase() ? "user-country " : "") + "country-name"
+                                        }>{c.name}</td>
                                         <td>
                                             {c.pps > 0 && (
                                                 <span>
