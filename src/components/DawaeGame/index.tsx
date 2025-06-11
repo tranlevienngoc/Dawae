@@ -436,6 +436,22 @@ export default function DawaeGame() {
         };
     }, [isShowSignOut]);
 
+
+    useEffect(() => {
+        const intervals = setInterval(async () => {
+            if (tabSelected.value === "knuckles_warriors") {
+                const userLeaderboard = await getUserLeaderboard();
+                if (userLeaderboard) {
+                    setUserLeaderboard(userLeaderboard);
+                }
+            }
+        }, 5000);
+
+        return () => {
+            clearInterval(intervals);
+        };
+    }, [tabSelected.value]);
+
     return (
         <div className="container" onClick={handleClick} style={{ position: "relative" }}>
             <h1 className="logo">
