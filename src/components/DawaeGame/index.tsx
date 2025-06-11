@@ -2,7 +2,7 @@
 
 import { SoundcontrolContext } from "@/context/soundControl";
 import useVisible from "@/hook/useVisible";
-import { useRef, useState, useContext, useCallback, useEffect } from "react";
+import { useRef, useState, useContext, useCallback, useEffect, useMemo } from "react";
 import SoundModal from "./SoundModal";
 import InfoModal from "./InfoModal";
 import ReactCountryFlag from "react-country-flag";
@@ -17,6 +17,7 @@ import { useAuth } from "@/context/AuthContect";
 import { MainNetworkAccess } from "@/access";
 import { TYPE_STATUS_AUTH } from "@/constants";
 import Image from "next/image";
+import { getUserLeaderboard, UserLeaderboardResponse } from "@/api/users";
 
 declare module "next-auth" {
     interface Session {
@@ -27,6 +28,7 @@ declare module "next-auth" {
 
 export default function DawaeGame() {
     const [leaderboard, setLeaderboard] = useState<LeaderboardResponse[]>([]);
+    const [userLeaderboard, setUserLeaderboard] = useState<UserLeaderboardResponse[]>([]);
     const [score, setScore] = useState(0);
     const [sound, setSound] = useState("/Da_Wae_1.mp3");
     const [imageSrc, setImageSrc] = useState("/unmount.webp");
@@ -183,7 +185,7 @@ export default function DawaeGame() {
     const router = useRouter();
 
     const { user, setUser, setIsLoadingUser, resetUser } = useAuth();
-    console.log(user, 'user-------->');
+    console.log(user, "user-------->");
     const { data: session } = useSession();
 
     useEffect(() => {
@@ -204,6 +206,19 @@ export default function DawaeGame() {
         };
         fetchLeaderboard();
     }, []);
+
+    const fetchUserLeaderboard = useCallback(async () => {
+        const userLeaderboard = await getUserLeaderboard();
+        if (userLeaderboard) {
+            setUserLeaderboard(userLeaderboard);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchUserLeaderboard();
+    }, [fetchUserLeaderboard]);
+
+    console.log(userLeaderboard, "userLeaderboard-------->");
 
     useEffect(() => {
         const intervals = setInterval(async () => {
@@ -298,7 +313,6 @@ export default function DawaeGame() {
 
     useEffect(() => {
         async function fetchData() {
-            
             const { oauth_token, oauth_verifier } = router.query;
             if (oauth_token && oauth_verifier) {
                 try {
@@ -308,7 +322,7 @@ export default function DawaeGame() {
                     });
                     if (infoTwitter) {
                         if (!user?.id) {
-                            const countryCode = localStorage.getItem("country_code") || 'VN';
+                            const countryCode = localStorage.getItem("country_code") || "VN";
                             const signInResponse = await signIn("credentials", {
                                 redirect: false,
                                 email: infoTwitter?.email,
@@ -317,11 +331,11 @@ export default function DawaeGame() {
                                 twitter_id: infoTwitter?.id,
                                 country_code: countryCode,
                             });
-    
+
                             if (signInResponse?.ok) {
                                 localStorage.setItem("userTwitter", JSON.stringify(infoTwitter));
                                 toastSuccess("Logged in successfully!");
-                                router.push('/');
+                                router.push("/");
                                 setIsLoadingUser(false);
                                 return;
                             } else {
@@ -381,17 +395,31 @@ export default function DawaeGame() {
         }
     }, [session?.accessToken, setIsLoadingUser, setUser]);
 
-
     const handleLogout = useCallback(() => {
         signOut({
-          redirect: false,
+            redirect: false,
         });
         MainNetworkAccess.defaultHeaders = {};
         resetUser();
-    
-        localStorage.removeItem('userTwitter');
-        router.push('/');
-      }, [resetUser, router]);
+
+        localStorage.removeItem("userTwitter");
+        router.push("/");
+    }, [resetUser, router]);
+
+    const tabs = useMemo(() => {
+        return [
+            {
+                name: "Country Tribes",
+                value: "country_tribes",
+            },
+            {
+                name: "Knuckles Warriors",
+                value: "knuckles_warriors",
+            },
+        ];
+    }, []);
+
+    const [tabSelected, setTabSelected] = useState(tabs[0]);
 
     return (
         <div className="container" onClick={handleClick} style={{ position: "relative" }}>
@@ -450,7 +478,11 @@ export default function DawaeGame() {
                 </div>
             )}
             {/* <p id={clickCount + score > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p> */}
-            <p id={(user?.id ? Number( user?.clicks) : clickCount) + score > 0 ? "score" : "score-hidden"}>{(user?.id ? Number( user?.clicks) : clickCount) + score > 0 ? (user?.id ? Number( user?.clicks) : clickCount) + score : 0}</p>
+            <p id={(user?.id ? Number(user?.clicks) : clickCount) + score > 0 ? "score" : "score-hidden"}>
+                {(user?.id ? Number(user?.clicks) : clickCount) + score > 0
+                    ? (user?.id ? Number(user?.clicks) : clickCount) + score
+                    : 0}
+            </p>
             <img
                 src={imageSrc}
                 alt="Dawae"
@@ -530,41 +562,122 @@ export default function DawaeGame() {
                     {/* Add ref */}
                     <label className="tab-label" htmlFor="chck1"></label>
                     <div className="tab-content" style={{ overflowY: "auto" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                width: "100%",
+                                justifyContent: "center",
+                            }}
+                        >
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.value}
+                                    style={{
+                                        border:
+                                            tab.value === tabSelected.value ? "1px solid #9f9f9f" : "1px solid #f3f3f3",
+                                        background: "#f3f3f3",
+                                        color: "#707070",
+                                        fontWeight: 600,
+                                        borderRadius: "999px",
+                                        padding: "10px 40px",
+                                        outline: "none",
+                                        boxShadow: "0px 3px 0px 0 #dedede",
+                                        cursor: "pointer",
+                                        transition: "all 0.2s",
+                                    }}
+                                    onClick={(e) => {
+                                        setTabSelected(tab);
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    {tab.name}
+                                </button>
+                            ))}
+                        </div>
                         <table id="table">
                             <tbody>
-                                <tr style={{ borderBottom: "1px solid #e3e2e2" }}>
-                                    <td style={{ textAlign: "center" }}>🌏</td>
-                                    <td>WorldWide</td>
-
-                                    <td></td>
-                                    <td>{worldWideScore.toLocaleString()}</td>
-                                </tr>
-                                {leaderboard.map((c, i) => (
-                                    <tr
-                                        key={c.code}
-                                        style={{
-                                            borderBottom: i != leaderboard.length - 1 ? "1px solid #e3e2e2" : "none",
-                                        }}
-                                    >
-                                        <td className={i < 3 ? "rank" : "text"}>
-                                            {i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : `${i + 1}`}
-                                        </td>
-                                        <td>
-                                            <ReactCountryFlag className="flag-icon-table" countryCode={c.code} svg />
-                                        </td>
-                                        <td className={
-                                            (c.code === userCountry.countryCode.toLowerCase() ? "user-country " : "") + "country-name"
-                                        }>{c.name}</td>
-                                        <td>
-                                            {c.pps > 0 && (
-                                                <span>
-                                                    <span className="pps">{c.pps} PPS</span>{" "}
-                                                </span>
-                                            )}
-                                            {c.total_clicks}
-                                        </td>
+                                {tabSelected.value === "country_tribes" && (
+                                    <tr style={{ borderBottom: "1px solid #e3e2e2" }}>
+                                        <td style={{ textAlign: "center" }}>🌏</td>
+                                        <td>WorldWide</td>
+                                        <td></td>
+                                        <td>{worldWideScore.toLocaleString()}</td>
                                     </tr>
-                                ))}
+                                )}
+                                {tabSelected.value === "country_tribes" &&
+                                    leaderboard.map((c, i) => (
+                                        <tr
+                                            key={c.code}
+                                            style={{
+                                                borderBottom:
+                                                    i != leaderboard.length - 1 ? "1px solid #e3e2e2" : "none",
+                                            }}
+                                        >
+                                            <td className={i < 3 ? "rank" : "text"}>
+                                                {i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : `${i + 1}`}
+                                            </td>
+                                            <td>
+                                                <ReactCountryFlag
+                                                    className="flag-icon-table"
+                                                    countryCode={c.code}
+                                                    svg
+                                                />
+                                            </td>
+                                            <td
+                                                className={
+                                                    (c.code === userCountry.countryCode.toLowerCase()
+                                                        ? "user-country "
+                                                        : "") + "country-name"
+                                                }
+                                            >
+                                                {c.name}
+                                            </td>
+                                            <td>
+                                                {c.pps > 0 && (
+                                                    <span>
+                                                        <span className="pps">{c.pps} PPS</span>{" "}
+                                                    </span>
+                                                )}
+                                                {c.total_clicks}
+                                            </td>
+                                        </tr>
+                                    ))}
+
+                                {tabSelected.value === "knuckles_warriors" &&
+                                    userLeaderboard.map((c, i) => (
+                                        <tr
+                                            key={c.id}
+                                            style={{
+                                                borderBottom:
+                                                    i != userLeaderboard.length - 1 ? "1px solid #e3e2e2" : "none",
+                                            }}
+                                        >
+                                            <td className={i < 3 ? "rank" : "text"}>
+                                                {i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : `${i + 1}`}
+                                            </td>
+                                            <td>
+                                                <Image
+                                                    src={c.avatar}
+                                                    alt={c.user_name}
+                                                    width={32}
+                                                    height={32}
+                                                    style={{ borderRadius: "50%" }}
+                                                />
+                                            </td>
+                                            <td
+                                                className={
+                                                    (c.country_code === userCountry.countryCode.toLowerCase()
+                                                        ? "user-country "
+                                                        : "") + "country-name"
+                                                }
+                                            >
+                                                {c.user_name}
+                                            </td>
+                                            <td>{c.clicks}</td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
