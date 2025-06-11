@@ -185,7 +185,6 @@ export default function DawaeGame() {
     const router = useRouter();
 
     const { user, setUser, setIsLoadingUser, resetUser } = useAuth();
-    console.log(user, "user-------->");
     const { data: session } = useSession();
 
     useEffect(() => {
@@ -217,8 +216,6 @@ export default function DawaeGame() {
     useEffect(() => {
         fetchUserLeaderboard();
     }, [fetchUserLeaderboard]);
-
-    console.log(userLeaderboard, "userLeaderboard-------->");
 
     useEffect(() => {
         const intervals = setInterval(async () => {
@@ -283,7 +280,6 @@ export default function DawaeGame() {
                         });
                         setScore(0);
                         if (user?.id) {
-                            // localStorage.setItem("click_count", JSON.stringify(Number(user?.clicks) + score));
                             setUser({
                                 ...user,
                                 clicks: Number(user?.clicks) + score,
@@ -421,6 +417,25 @@ export default function DawaeGame() {
 
     const [tabSelected, setTabSelected] = useState(tabs[0]);
 
+    const [isShowSignOut, setIsShowSignOut] = useState(false);
+    const avatarWrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                isShowSignOut &&
+                avatarWrapperRef.current &&
+                !avatarWrapperRef.current.contains(event.target as Node)
+            ) {
+                setIsShowSignOut(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isShowSignOut]);
+
     return (
         <div className="container" onClick={handleClick} style={{ position: "relative" }}>
             <h1 className="logo">
@@ -453,31 +468,74 @@ export default function DawaeGame() {
                 </button>
             ) : (
                 <div
+                    ref={avatarWrapperRef}
                     style={{
                         width: "50px",
                         height: "50px",
-                        borderRadius: "50%",
-                        overflow: "hidden",
                         position: "absolute",
                         top: "10px",
                         right: "10px",
                         zIndex: 9999,
+                        cursor: "pointer",
                     }}
                     onClick={(e) => {
-                        handleLogout();
+                        setIsShowSignOut(true);
                         e.stopPropagation();
                     }}
                 >
-                    <Image
-                        src={user?.avatar as string}
-                        alt="Login"
-                        width={100}
-                        height={100}
-                        style={{ borderRadius: "50%", zIndex: 9999 }}
-                    />
+                    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                        <Image
+                            src={user?.avatar || "https://pbs.twimg.com/profile_images/1459222508498874368/C-X0d6Dj_normal.png"}
+                            alt="Login"
+                            width={100}
+                            height={100}
+                            style={{ borderRadius: "50%", zIndex: 9999, position: "absolute", top: 0, left: 0 }}
+                        />
+                        {isShowSignOut && (
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    top: "50px",
+                                    left: "-80px",
+                                    width: "100px",
+                                    height: "40px",
+                                    background: "white",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    borderRadius: "10px",
+                                    color: "black",
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    padding: "0 10px",
+                                    border: "1px solid #f0f0f0",
+                                }}
+                                onClick={(e) => {
+                                    handleLogout();
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <svg
+                                    stroke="currentColor"
+                                    fill="none"
+                                    strokeWidth="2"
+                                    viewBox="0 0 24 24"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    height="20px"
+                                    width="20px"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" x2="9" y1="12" y2="12"></line>
+                                </svg>
+                                <span style={{ fontSize: "16px", fontWeight: "bold", marginLeft: "10px" }}>Sign Out</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
-            {/* <p id={clickCount + score > 0 ? "score" : "score-hidden"}>{(clickCount + score).toLocaleString()}</p> */}
             <p id={(user?.id ? Number(user?.clicks) : clickCount) + score > 0 ? "score" : "score-hidden"}>
                 {(user?.id ? Number(user?.clicks) : clickCount) + score > 0
                     ? (user?.id ? Number(user?.clicks) : clickCount) + score
@@ -675,7 +733,7 @@ export default function DawaeGame() {
                                             >
                                                 {c.user_name}
                                             </td>
-                                            <td>{c.clicks}</td>
+                                            <td style={{ color: 'black'}}>{c.clicks}</td>
                                         </tr>
                                     ))}
                             </tbody>
