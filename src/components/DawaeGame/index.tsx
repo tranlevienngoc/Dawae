@@ -69,30 +69,16 @@ export default function DawaeGame() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://popcat.click/cdn-cgi/trace", {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                        Referer: "https://popcat.click/",
-                        Origin: "https://popcat.click",
-                    },
-                });
+                const response = await axios.get("https://api.ugandanknuckles.click/v1/cdn-cgi/trace");
                 const data = await response.data;
 
-                const result = data.split("\n").reduce((acc: Record<string, string>, line: string) => {
-                    const [key, value] = line.split("=");
-                    if (key && value) {
-                        acc[key] = value;
-                    }
-                    return acc;
-                }, {});
-                if (result.loc) {
+                if (data.country_code) {
                     setUserCountry({
-                        countryName: result.loc,
-                        countryCode: result.loc.split("/")[0].toLocaleUpperCase(),
+                        countryName: data.country_code,
+                        countryCode: data.country_code,
                     });
-                    if (result.loc.split("/")[0]) {
-                        localStorage.setItem("country_code", result.loc.split("/")[0].toLocaleUpperCase());
+                    if (data.country_code) {
+                        localStorage.setItem("country_code", data.country_code.toLocaleUpperCase());
                     }
                 }
             } catch (error) {
