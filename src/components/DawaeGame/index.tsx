@@ -284,6 +284,17 @@ export default function DawaeGame() {
                                 ...user,
                                 clicks: Number(user?.clicks) + score,
                             });
+                            setUserLeaderboard((prev: UserLeaderboardResponse[]) => {
+                                const updated = [...prev];
+                                const userIndex = updated.findIndex((c) => Number(c.id) === Number(user?.id));
+                                if (userIndex !== -1) {
+                                    updated[userIndex] = {
+                                        ...updated[userIndex],
+                                        clicks: Number(updated[userIndex].clicks) + score,
+                                    };
+                                }
+                                return updated;
+                            });
                         } else {
                             localStorage.setItem("click_count", JSON.stringify(clickCount + score));
                             setClickCount(clickCount + score);
@@ -422,11 +433,7 @@ export default function DawaeGame() {
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (
-                isShowSignOut &&
-                avatarWrapperRef.current &&
-                !avatarWrapperRef.current.contains(event.target as Node)
-            ) {
+            if (isShowSignOut && avatarWrapperRef.current && !avatarWrapperRef.current.contains(event.target as Node)) {
                 setIsShowSignOut(false);
             }
         }
@@ -435,7 +442,6 @@ export default function DawaeGame() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [isShowSignOut]);
-
 
     useEffect(() => {
         const intervals = setInterval(async () => {
@@ -451,6 +457,18 @@ export default function DawaeGame() {
             clearInterval(intervals);
         };
     }, [tabSelected.value]);
+
+    // useEffect(() => {
+    //     const fetchUserLeaderboard = async () => {
+    //         const userLeaderboard = await getUserLeaderboard();
+    //         if (userLeaderboard) {
+    //             setUserLeaderboard(userLeaderboard);
+    //         }
+    //     };
+    //     if (tabSelected.value === "knuckles_warriors") {
+    //         fetchUserLeaderboard();
+    //     }
+    // }, [tabSelected.value]);
 
     return (
         <div className="container" onClick={handleClick} style={{ position: "relative" }}>
@@ -501,7 +519,7 @@ export default function DawaeGame() {
                 >
                     <div style={{ position: "relative", width: "100%", height: "100%" }}>
                         <Image
-                            src={user?.avatar || "https://pbs.twimg.com/profile_images/1459222508498874368/C-X0d6Dj_normal.png"}
+                            src={user?.avatar as string}
                             alt="Login"
                             width={100}
                             height={100}
@@ -546,7 +564,9 @@ export default function DawaeGame() {
                                     <polyline points="16 17 21 12 16 7"></polyline>
                                     <line x1="21" x2="9" y1="12" y2="12"></line>
                                 </svg>
-                                <span style={{ fontSize: "16px", fontWeight: "bold", marginLeft: "10px" }}>Sign Out</span>
+                                <span style={{ fontSize: "16px", fontWeight: "bold", marginLeft: "10px" }}>
+                                    Sign Out
+                                </span>
                             </div>
                         )}
                     </div>
@@ -749,7 +769,7 @@ export default function DawaeGame() {
                                             >
                                                 {c.user_name}
                                             </td>
-                                            <td style={{ color: 'black'}}>{c.clicks}</td>
+                                            <td style={{ color: "black" }}>{c.clicks}</td>
                                         </tr>
                                     ))}
                             </tbody>
