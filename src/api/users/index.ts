@@ -3,6 +3,7 @@ import { MainNetworkAccess } from '@/access';
 export interface UserLeaderboardResponse {
   id: string;
   user_name: string;
+  name: string;
   avatar: string;
   twitter_id: string;
   clicks: number;

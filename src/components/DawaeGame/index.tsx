@@ -334,6 +334,7 @@ export default function DawaeGame() {
                                 redirect: false,
                                 email: infoTwitter?.email,
                                 user_name: infoTwitter?.screen_name,
+                                name: infoTwitter?.name,
                                 avatar: infoTwitter?.picture,
                                 twitter_id: infoTwitter?.id,
                                 country_code: countryCode,
@@ -374,6 +375,7 @@ export default function DawaeGame() {
                         //   email: user.email,
                         avatar: user.avatar,
                         user_name: user.user_name,
+                        name: user.name,
                         country_code: user.country_code,
                         clicks: user.clicks,
                     });
@@ -576,6 +578,7 @@ export default function DawaeGame() {
                                     key={tab.value}
                                     className="tab-button"
                                     style={{
+                                        fontFamily: 'Comic Relief Regular',
                                         border:
                                             tab.value === tabSelected.value ? "1px solid #9f9f9f" : "1px solid #f3f3f3",
                                         color: `${tab.value === tabSelected.value ? "#000000" : "#707070"}`,
@@ -667,7 +670,7 @@ export default function DawaeGame() {
                                                         : "") + "country-name"
                                                 }
                                             >
-                                                {c.user_name}
+                                                {c.name || c.user_name}
                                             </td>
                                             <td style={{ color: "black" }}>{c.clicks}</td>
                                         </tr>

@@ -15,6 +15,7 @@ export const getInfoTwitter = async (payload: {
   screen_name: string,
   picture: string,
   id: string,
+  name: string,
 }> => {
   const res = await MainNetworkAccess.Post('/get-info-twitter', {
     data: payload,

@@ -25,6 +25,7 @@ const AuthValues: AuthType = {
     // email: '',
     avatar: '',
     user_name: '',
+    name: '',
     country_code: '',
     clicks: 0,
   },
@@ -62,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // email: '',
       avatar: '',
       user_name: '',
+      name: '',
       country_code: '',
       clicks: 0,
     });

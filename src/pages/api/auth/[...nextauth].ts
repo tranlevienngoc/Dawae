@@ -50,6 +50,7 @@ export default NextAuth({
                 email: { label: "email", type: "text" },
                 password: { label: "password", type: "password" },
                 user_name: { label: "user_name", type: "text" },
+                name: { label: "name", type: "text" },
                 avatar: { label: "avatar", type: "text" },
                 twitter_id: { label: "twitter_id", type: "text" },
                 country_code: { label: "country_code", type: "text" },
@@ -57,13 +58,14 @@ export default NextAuth({
             authorize: async (credentials) => {
                 if (!credentials) return null;
 
-                const { email, user_name, avatar, twitter_id, country_code } = credentials;
+                const { email, user_name, name, avatar, twitter_id, country_code } = credentials;
 
                 try {
                     const { data } = await MainNetworkAccess.Post("login-by-twitter", {
                         data: {
                             email,
                             user_name,
+                            name,
                             avatar,
                             twitter_id,
                             country_code,
