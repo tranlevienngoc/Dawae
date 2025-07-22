@@ -677,9 +677,9 @@ export default function DawaeGame() {
                                         </tr>
                                     )}
                                     {tabSelected.value === "country_tribes" &&
-                                        leaderboard.map(
+                                        leaderboard.filter(c => c.total_clicks > 0).map(
                                             (c, i) =>
-                                                c.total_clicks > 0 && (
+                                                (
                                                     <tr
                                                         key={c.code}
                                                         style={{
