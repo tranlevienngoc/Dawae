@@ -262,7 +262,7 @@ h1 {
 }
 
 input[type='checkbox']:checked+.tab-label+.tab-content {
-  max-height: 500px;
+  max-height: 600px;
   /* Large enough to fit content; adjust if needed */
   opacity: 1;
   /* Fully visible */
@@ -621,7 +621,7 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
 
 .table-content {
   overflow-y: auto;
-  max-height: 300px;
+  max-height: 520px;
 }
 
 @keyframes skeleton-loading {
