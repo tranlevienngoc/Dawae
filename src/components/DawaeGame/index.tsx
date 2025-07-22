@@ -509,19 +509,86 @@ export default function DawaeGame() {
                         <div className="tab-label-left">
                             <div>🏆</div>
                             <div>
-                                <span className="text-label">{highestScoreCountry().name} </span>
-                                <span className="text-label">
-                                    {Number(highestScoreCountry().currentScore).toLocaleString()}
-                                </span>
+                                {!highestScoreCountry().name || highestScoreCountry().name === "Unknown" ? (
+                                    <>
+                                        <span
+                                            className="text-label"
+                                            style={{
+                                                display: "inline-block",
+                                                width: 80,
+                                                height: 16,
+                                                background: "#e0e0e0",
+                                                borderRadius: 4,
+                                                marginRight: 8,
+                                                animation: "skeleton-loading 1s linear infinite alternate",
+                                                verticalAlign: "middle",
+                                            }}
+                                        />
+                                        <span
+                                            className="text-label"
+                                            style={{
+                                                display: "inline-block",
+                                                width: 60,
+                                                height: 16,
+                                                background: "#e0e0e0",
+                                                borderRadius: 4,
+                                                animation: "skeleton-loading 1s linear infinite alternate",
+                                                verticalAlign: "middle",
+                                            }}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="text-label">{highestScoreCountry().name} </span>
+                                        <span className="text-label">
+                                            {Number(highestScoreCountry().currentScore).toLocaleString()}
+                                        </span>
+                                    </>
+                                )}
                             </div>
                         </div>
 
                         <div className="tab-label-right">
                             <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                                <ReactCountryFlag countryCode={userCountry.countryCode} svg className="flag-icon" />
+                                {/* <ReactCountryFlag countryCode={userCountry.countryCode} svg className="flag-icon" />
                                 <span style={{ fontSize: "16px" }} className="text-label">
                                     {myScore.toLocaleString()}
-                                </span>
+                                </span> */}
+                                {!userCountry.countryCode || userCountry.countryCode === "Unknown" ? (
+                                    <>
+                                        <div
+                                            style={{
+                                                width: 24,
+                                                height: 16,
+                                                background: "#e0e0e0",
+                                                borderRadius: 3,
+                                                display: "inline-block",
+                                                animation: "skeleton-loading 1s linear infinite alternate",
+                                            }}
+                                        />
+                                        <div
+                                            style={{
+                                                width: 40,
+                                                height: 16,
+                                                background: "#e0e0e0",
+                                                borderRadius: 4,
+                                                display: "inline-block",
+                                                animation: "skeleton-loading 1s linear infinite alternate",
+                                            }}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <ReactCountryFlag
+                                            countryCode={userCountry.countryCode}
+                                            svg
+                                            className="flag-icon"
+                                        />
+                                        <span style={{ fontSize: "16px" }} className="text-label">
+                                            {myScore.toLocaleString()}
+                                        </span>
+                                    </>
+                                )}
                             </div>
 
                             {isSvgClicked ? (
@@ -562,7 +629,7 @@ export default function DawaeGame() {
                     <input type="checkbox" style={{ display: "none" }} id="chck1" ref={checkboxRef} />
                     {/* Add ref */}
                     <label className="tab-label" htmlFor="chck1"></label>
-                    <div className="tab-content" style={{ overflowY: "auto" }}>
+                    <div className="tab-content">
                         <div
                             style={{
                                 display: "flex",
@@ -578,11 +645,16 @@ export default function DawaeGame() {
                                     key={tab.value}
                                     className="tab-button"
                                     style={{
-                                        fontFamily: 'Comic Relief Regular',
+                                        fontFamily: "Comic Relief Regular",
                                         border:
                                             tab.value === tabSelected.value ? "1px solid #9f9f9f" : "1px solid #f3f3f3",
                                         color: `${tab.value === tabSelected.value ? "#000000" : "#707070"}`,
-                                        boxShadow: `0px 3px 0px 0 ${tab.value === tabSelected.value ? "#000000" : "#dedede"}`,
+                                        boxShadow: `0px 3px 0px 0 ${
+                                            tab.value === tabSelected.value ? "#000000" : "#dedede"
+                                        }`,
+                                        width: "50%",
+                                        padding: "5px",
+                                        marginBottom: "15px",
                                     }}
                                     onClick={(e) => {
                                         setTabSelected(tab);
@@ -593,90 +665,103 @@ export default function DawaeGame() {
                                 </button>
                             ))}
                         </div>
-                        <table id="table">
-                            <tbody>
-                                {tabSelected.value === "country_tribes" && (
-                                    <tr style={{ borderBottom: "1px solid #e3e2e2" }}>
-                                        <td style={{ textAlign: "center" }}>🌏</td>
-                                        <td>WorldWide</td>
-                                        <td></td>
-                                        <td>{worldWideScore.toLocaleString()}</td>
-                                    </tr>
-                                )}
-                                {tabSelected.value === "country_tribes" &&
-                                    leaderboard.map((c, i) => (
-                                        <tr
-                                            key={c.code}
-                                            style={{
-                                                borderBottom:
-                                                    i != leaderboard.length - 1 ? "1px solid #e3e2e2" : "none",
-                                            }}
-                                        >
-                                            <td className={i < 3 ? "rank" : "text"}>
-                                                {i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : `${i + 1}`}
-                                            </td>
-                                            <td>
-                                                <ReactCountryFlag
-                                                    className="flag-icon-table"
-                                                    countryCode={c.code}
-                                                    svg
-                                                />
-                                            </td>
-                                            <td
-                                                className={
-                                                    (c.code === userCountry.countryCode.toLowerCase()
-                                                        ? "user-country "
-                                                        : "") + "country-name"
-                                                }
-                                            >
-                                                {c.name}
-                                            </td>
-                                            <td>
-                                                {c.pps > 0 && (
-                                                    <span>
-                                                        <span className="pps">{c.pps} PPS</span>{" "}
-                                                    </span>
-                                                )}
-                                                {c.total_clicks}
-                                            </td>
+                        <div className="table-content">
+                            <table id="table">
+                                <tbody>
+                                    {tabSelected.value === "country_tribes" && (
+                                        <tr style={{ borderBottom: "1px solid #e3e2e2" }}>
+                                            <td style={{ textAlign: "center" }}>🌏</td>
+                                            <td>WorldWide</td>
+                                            <td></td>
+                                            <td>{worldWideScore.toLocaleString()}</td>
                                         </tr>
-                                    ))}
+                                    )}
+                                    {tabSelected.value === "country_tribes" &&
+                                        leaderboard.map(
+                                            (c, i) =>
+                                                c.total_clicks > 0 && (
+                                                    <tr
+                                                        key={c.code}
+                                                        style={{
+                                                            borderBottom:
+                                                                i != leaderboard.length - 1
+                                                                    ? "1px solid #e3e2e2"
+                                                                    : "none",
+                                                        }}
+                                                    >
+                                                        <td className={i < 3 ? "rank" : "text"}>
+                                                            {i < 3
+                                                                ? i === 0
+                                                                    ? "🥇"
+                                                                    : i === 1
+                                                                    ? "🥈"
+                                                                    : "🥉"
+                                                                : `${i + 1}`}
+                                                        </td>
+                                                        <td>
+                                                            <ReactCountryFlag
+                                                                className="flag-icon-table"
+                                                                countryCode={c.code}
+                                                                svg
+                                                            />
+                                                        </td>
+                                                        <td
+                                                            className={
+                                                                (c.code === userCountry.countryCode.toLowerCase()
+                                                                    ? "user-country "
+                                                                    : "") + "country-name"
+                                                            }
+                                                        >
+                                                            {c.name}
+                                                        </td>
+                                                        <td>
+                                                            {c.pps > 0 && (
+                                                                <span>
+                                                                    <span className="pps">{c.pps} PPS</span>{" "}
+                                                                </span>
+                                                            )}
+                                                            {c.total_clicks}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                        )}
 
-                                {tabSelected.value === "knuckles_warriors" &&
-                                    userLeaderboard.map((c, i) => (
-                                        <tr
-                                            key={c.id}
-                                            style={{
-                                                borderBottom:
-                                                    i != userLeaderboard.length - 1 ? "1px solid #e3e2e2" : "none",
-                                            }}
-                                        >
-                                            <td className={i < 3 ? "rank" : "text"}>
-                                                {i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : `${i + 1}`}
-                                            </td>
-                                            <td>
-                                                <Image
-                                                    src={c.avatar}
-                                                    alt={c.user_name}
-                                                    width={32}
-                                                    height={32}
-                                                    style={{ borderRadius: "50%" }}
-                                                />
-                                            </td>
-                                            <td
-                                                className={
-                                                    (c.country_code === userCountry.countryCode.toLowerCase()
-                                                        ? "user-country "
-                                                        : "") + "country-name"
-                                                }
+                                    {tabSelected.value === "knuckles_warriors" &&
+                                        userLeaderboard.map((c, i) => (
+                                            <tr
+                                                key={c.id}
+                                                style={{
+                                                    borderBottom:
+                                                        i != userLeaderboard.length - 1 ? "1px solid #e3e2e2" : "none",
+                                                }}
                                             >
-                                                {c.name || c.user_name}
-                                            </td>
-                                            <td style={{ color: "black" }}>{c.clicks}</td>
-                                        </tr>
-                                    ))}
-                            </tbody>
-                        </table>
+                                                <td className={i < 3 ? "rank" : "text"}>
+                                                    {i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : `${i + 1}`}
+                                                </td>
+                                                <td>
+                                                    <Image
+                                                        src={c.avatar}
+                                                        alt={c.user_name}
+                                                        width={32}
+                                                        height={32}
+                                                        style={{ borderRadius: "50%" }}
+                                                    />
+                                                </td>
+                                                <td
+                                                    className={
+                                                        (c.country_code === userCountry.countryCode.toLowerCase()
+                                                            ? "user-country "
+                                                            : "") + "country-name"
+                                                    }
+                                                >
+                                                    {c.name || c.user_name}
+                                                </td>
+                                                <td style={{ color: "black" }}>{c.clicks}</td>
+                                            </tr>
+                                        ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -731,7 +816,9 @@ export default function DawaeGame() {
                                 <div style={{ width: "20px", height: "20px" }}>
                                     <Image src="/xIcon.svg" alt="Login" width={20} height={20} />
                                 </div>
-                                <span style={{ fontSize: "16px", fontWeight: "bold", marginLeft: "10px" }}>Login with X</span>
+                                <span style={{ fontSize: "16px", fontWeight: "bold", marginLeft: "10px" }}>
+                                    Login with X
+                                </span>
                             </button>
                         ) : (
                             <div
@@ -742,8 +829,26 @@ export default function DawaeGame() {
                                     e.stopPropagation();
                                 }}
                             >
-                                <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                    <div style={{ width: "42px", height: "42px", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999 }}>
+                                <div
+                                    style={{
+                                        position: "relative",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        width: "100%",
+                                        height: "100%",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: "42px",
+                                            height: "42px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            zIndex: 9999,
+                                        }}
+                                    >
                                         <Image
                                             src={user?.avatar as string}
                                             alt="Login"

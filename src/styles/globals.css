@@ -618,3 +618,13 @@ input[type='checkbox']:checked+.tab-label+.tab-content {
     text-align: right;
   }
 }
+
+.table-content {
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+@keyframes skeleton-loading {
+  0% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
