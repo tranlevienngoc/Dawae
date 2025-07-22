@@ -13,3 +13,15 @@ export const REGEX_URL =
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
 export const THRESHOLD = 1.1;
+
+
+export type ExpiresType = {
+  exp: number;
+};
+
+export type ErrorMsg = Error | string | string[];
+
+export enum TYPE_STATUS_AUTH {
+  LOADING = 'loading',
+  UNAUTHENTICATED = 'unauthenticated',
+}
