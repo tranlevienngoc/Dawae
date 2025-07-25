@@ -128,14 +128,14 @@ h1 {
     display: flex;
     flex-direction: column;
   }
-  
+/*   
   .container-icon {
     -webkit-transform: translateZ(0) !important;
     transform: translateZ(0) !important;
     -webkit-backface-visibility: hidden !important;
     backface-visibility: hidden !important;
   }
-  
+   */
   .login-button-container {
     -webkit-transform: translateZ(0) !important;
     transform: translateZ(0) !important;
@@ -148,7 +148,7 @@ h1 {
     justify-content: center !important;
     gap: 10px;
     bottom: 70px !important;
-    z-index: 9999 !important;
+    z-index: 99 !important;
   }
 
   .login-button-container {
@@ -180,6 +180,45 @@ h1 {
     width: 100px;
     height: 40px;
   }
+
+  /* .container {
+    text-align: center;
+    cursor: pointer;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: 100vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .container-icon-wrapper {
+    width: 100%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    bottom: 70px;
+  }
+
+  .login-button-container {
+    top: unset;
+    position: unset;
+    bottom: 70px;
+  }
+
+  .container-icon {
+    flex-direction: row;
+    top: unset;
+    position: unset;
+  }
+
+  .logout-button {
+    top: 0px;
+    left: 50px;
+    width: 100px;
+    height: 40px;
+  } */
 }
 
 

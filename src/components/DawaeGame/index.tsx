@@ -744,7 +744,7 @@ export default function DawaeGame() {
                                                         alt={c.user_name}
                                                         width={32}
                                                         height={32}
-                                                        style={{ borderRadius: "50%" }}
+                                                        style={{ borderRadius: "50%", marginRight: "5px" }}
                                                     />
                                                 </td>
                                                 <td
