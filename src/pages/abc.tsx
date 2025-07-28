@@ -8,7 +8,6 @@ const Chart = dynamic(() => import("@/components/Chart"), {
 export default function ABC() {
   return (
     <div className="flex flex-col items-center justify-center" style={{ backgroundColor: "white", height: "100vh" }}>
-      <h1 className="text-4xl font-bold">ABC</h1>
       <Chart />
     </div>
   );
