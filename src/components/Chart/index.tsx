@@ -75,15 +75,15 @@ const CustomTooltip = ({ data, x, y, visible }: { data: WarriorData | null, x: n
   if (!visible || !data) return null;
 
   const levelColors = {
-    steady: "#00ff00",
-    seeking: "#ff8c00", 
-    new: "#ff1493"
+    steady: "#26bb73",
+    seeking: "#ff9840", 
+    new: "#e12c4e"
   };
 
   const bgColors = {
-    steady: "rgba(0, 255, 0, 0.2)",
-    seeking: "rgba(255, 140, 0, 0.2)",
-    new: "rgba(255, 20, 147, 0.2)"
+    steady: "rgba(38, 187, 115, 0.2)",
+    seeking: "rgba(255, 152, 64, 0.2)",
+    new: "rgba(225, 44, 78, 0.2)"
   };
 
   const levelLabels = {
@@ -203,14 +203,14 @@ export default function WorldMap() {
       
       let color;
       switch (level) {
-        case "high":
-          color = am5.color(0xff0000);
+        case "new":
+          color = am5.color(0xe12c4e);
           break;
-        case "moderate":
-          color = am5.color(0xff8c00);
+        case "seeking":
+          color = am5.color(0xff9840);
           break;
         default:
-          color = am5.color(0x00ff00);
+          color = am5.color(0x26bb73);
       }
 
       container.children.push(
@@ -267,9 +267,9 @@ export default function WorldMap() {
         level: warrior.level,
         count: warrior.count,
         location: warrior.location,
-        color: warrior.level === "new" ? am5.color(0xff1493) : 
-               warrior.level === "seeking" ? am5.color(0xff8c00) : 
-               am5.color(0x00ff00)
+        color: warrior.level === "new" ? am5.color(0xe12c4e) : 
+               warrior.level === "seeking" ? am5.color(0xff9840) : 
+               am5.color(0x26bb73)
       });
     }
 
@@ -401,18 +401,18 @@ export default function WorldMap() {
           <div style={{ 
             width: `${(steadyWarriors/totalWarriors*100)}%`, 
             height: "100%", 
-            backgroundColor: "#00ff00", 
+            backgroundColor: "#26bb73", 
             borderRadius: "4px 0 0 4px" 
           }}></div>
           <div style={{ 
             width: `${(seekingWarriors/totalWarriors*100)}%`, 
             height: "100%", 
-            backgroundColor: "#ff8c00" 
+            backgroundColor: "#ff9840" 
           }}></div>
           <div style={{ 
             width: `${(newWarriors/totalWarriors*100)}%`, 
             height: "100%", 
-            backgroundColor: "#ff1493",
+            backgroundColor: "#e12c4e",
             borderRadius: "0 4px 4px 0" 
           }}></div>
         </div>
@@ -422,28 +422,28 @@ export default function WorldMap() {
             <div style={{ 
               width: "20px", 
               height: "8px", 
-              backgroundColor: "#00ff00", 
+              backgroundColor: "#26bb73", 
               borderRadius: "4px" 
             }}></div>
-            <span style={{ color: "#00ff00" }}>Steady Wae Warriors: {steadyWarriors} ({(steadyWarriors/totalWarriors*100).toFixed(1)}%)</span>
+            <span style={{ color: "#26bb73" }}>Steady Wae Warriors: {steadyWarriors} ({(steadyWarriors/totalWarriors*100).toFixed(1)}%)</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ 
               width: "20px", 
               height: "8px", 
-              backgroundColor: "#ff8c00", 
+              backgroundColor: "#ff9840", 
               borderRadius: "4px" 
             }}></div>
-            <span style={{ color: "#ff8c00" }}>Seeking Wae Warriors: {seekingWarriors} ({(seekingWarriors/totalWarriors*100).toFixed(1)}%)</span>
+            <span style={{ color: "#ff9840" }}>Seeking Wae Warriors: {seekingWarriors} ({(seekingWarriors/totalWarriors*100).toFixed(1)}%)</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ 
               width: "20px", 
               height: "8px", 
-              backgroundColor: "#ff1493", 
+              backgroundColor: "#e12c4e", 
               borderRadius: "4px" 
             }}></div>
-            <span style={{ color: "#ff1493" }}>New Wae Warriors: {newWarriors} ({(newWarriors/totalWarriors*100).toFixed(1)}%)</span>
+            <span style={{ color: "#e12c4e" }}>New Wae Warriors: {newWarriors} ({(newWarriors/totalWarriors*100).toFixed(1)}%)</span>
           </div>
         </div>
       </div>
