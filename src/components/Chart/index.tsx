@@ -6,6 +6,19 @@ import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
+interface RegionData {
+  title: string;
+  level: string;
+  rate: number;
+  location: string;
+}
+
+interface TooltipData extends RegionData {
+  x: number;
+  y: number;
+  visible: boolean;
+}
+
 // Data với các mức độ interruption khác nhau
 const regions = [
   // High interruption (Red) - 13 regions
@@ -56,8 +69,106 @@ const regions = [
   { title: "europe-west33", latitude: 37.9838, longitude: 23.7275, level: "low", rate: 0.0001, location: "Athens, Greece" },
 ];
 
+// Custom Tooltip Component
+const CustomTooltip = ({ data, x, y, visible }: { data: RegionData | null, x: number, y: number, visible: boolean }) => {
+  if (!visible || !data) return null;
+
+  const levelColors = {
+    high: "#ff0000",
+    moderate: "#ff8c00", 
+    low: "#00ff00"
+  };
+
+  const bgColors = {
+    high: "rgba(255, 0, 0, 0.2)",
+    moderate: "rgba(255, 140, 0, 0.2)",
+    low: "rgba(0, 255, 0, 0.2)"
+  };
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        left: x + 15,
+        top: y - 10,
+        zIndex: 10000,
+        backgroundColor: "rgba(42, 42, 42, 0.95)",
+        border: "1px solid #444",
+        borderRadius: "8px",
+        padding: "12px",
+        minWidth: "250px",
+        color: "white",
+        fontSize: "12px",
+        lineHeight: "1.5",
+        backdropFilter: "blur(10px)",
+        pointerEvents: "none",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          marginBottom: "12px",
+          padding: "6px 10px",
+          borderRadius: "4px",
+          backgroundColor: bgColors[data.level as keyof typeof bgColors]
+        }}
+      >
+        <div
+          style={{
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            backgroundColor: levelColors[data.level as keyof typeof levelColors]
+          }}
+        />
+        <span style={{ fontWeight: "bold", color: "white" }}>
+          Region: {data.title}
+        </span>
+      </div>
+      
+      <div style={{ color: "#e0e0e0" }}>
+        <div><strong>Location:</strong> {data.location}</div>
+        <div><strong>Interrupted nodes:</strong> {data.rate}%</div>
+        <div><strong>Availability zones:</strong> 3</div>
+        
+        <div style={{ marginTop: "8px", fontSize: "11px", color: "#ccc" }}>
+          <div style={{ marginBottom: "2px" }}>Availability Zone rates:</div>
+          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#333", padding: "4px 8px", marginBottom: "2px" }}>
+            <span>AZ</span>
+            <span>Interrupted nodes</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#2a2a2a", padding: "4px 8px", marginBottom: "1px" }}>
+            <span>{data.title}-c</span>
+            <span>{(data.rate * 2.8).toFixed(2)}%</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#2a2a2a", padding: "4px 8px", marginBottom: "1px" }}>
+            <span>{data.title}-b</span>
+            <span>{(data.rate * 1.4).toFixed(2)}%</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#2a2a2a", padding: "4px 8px" }}>
+            <span>{data.title}-a</span>
+            <span>{(data.rate * 1.2).toFixed(2)}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function WorldMap() {
   const [selectedRegion, setSelectedRegion] = useState(regions[13]); // europe-north1
+  const [tooltipData, setTooltipData] = useState<TooltipData>({
+    title: "",
+    level: "",
+    rate: 0,
+    location: "",
+    x: 0,
+    y: 0,
+    visible: false
+  });
 
   useEffect(() => {
     const root = am5.Root.new("chartdiv");
@@ -155,17 +266,6 @@ export default function WorldMap() {
       });
     });
 
-    pointSeries.bullets.push(function () {
-      return am5.Bullet.new(root, {
-        sprite: am5.Circle.new(root, {
-          radius: 6,
-          tooltipY: 0,
-          fill: am5.color(0xff8c00),
-          tooltipText: "{title}\nRate: {rate}%",
-        }),
-      });
-    });
-
     for (const region of regions) {
       pointSeries.data.push({
         geometry: { type: "Point", coordinates: [region.longitude, region.latitude] },
@@ -173,25 +273,60 @@ export default function WorldMap() {
         level: region.level,
         rate: region.rate,
         location: region.location,
+        color: region.level === "high" ? am5.color(0xff0000) : 
+               region.level === "moderate" ? am5.color(0xff8c00) : 
+               am5.color(0x00ff00)
       });
     }
 
-    // Set different colors for different levels
+    // Custom bullets with hover tooltip
     pointSeries.bullets.push(function () {
-      return am5.Bullet.new(root, {
+      const bullet = am5.Bullet.new(root, {
         sprite: am5.Circle.new(root, {
           radius: 6,
           tooltipY: 0,
           fill: am5.color(0xff8c00),
-          tooltipText: "{title}\nRate: {rate}%",
         }),
       });
+
+      // Set fill color from data
+      bullet.get("sprite").adapters.add("fill", function (fill, target) {
+        const dataItem = target.dataItem;
+        if (dataItem && dataItem.dataContext) {
+          const data = dataItem.dataContext as any;
+          return data.color || fill;
+        }
+        return fill;
+      });
+
+      // Add hover events for custom tooltip
+      bullet.get("sprite").events.on("pointerover", function (ev) {
+        const dataItem = ev.target.dataItem;
+        if (dataItem && dataItem.dataContext) {
+          const data = dataItem.dataContext as RegionData;
+          
+          setTooltipData({
+            ...data,
+            x: ev.originalEvent.clientX,
+            y: ev.originalEvent.clientY,
+            visible: true
+          });
+        }
+      });
+
+      bullet.get("sprite").events.on("pointerout", function () {
+        setTooltipData(prev => ({ ...prev, visible: false }));
+      });
+
+
+
+      return bullet;
     });
 
     chart.appear(1000, 100);
 
     return () => root.dispose();
-  }, [selectedRegion]);
+  }, [selectedRegion, setTooltipData]);
 
   // Calculate statistics
   const totalRegions = regions.length;
@@ -339,6 +474,14 @@ export default function WorldMap() {
         height: "100%",
         backgroundColor: "#1a1a1a"
       }}></div>
+
+      {/* Custom Tooltip */}
+      <CustomTooltip 
+        data={tooltipData.visible ? tooltipData : null}
+        x={tooltipData.x} 
+        y={tooltipData.y} 
+        visible={tooltipData.visible} 
+      />
     </div>
   );
 }
