@@ -188,8 +188,8 @@ export default function WorldMap() {
     );
 
     polygonSeries.mapPolygons.template.setAll({
-      fill: am5.color(0x2a2a2a),
-      stroke: am5.color(0x444444),
+      fill: am5.color(0x303037),
+      stroke: am5.color(0x0e0f13),
       strokeWidth: 0.5,
     });
 
@@ -334,39 +334,46 @@ export default function WorldMap() {
     <div style={{ 
       width: "100%", 
       height: "100vh", 
-      backgroundColor: "#1a1a1a",
+      backgroundColor: "#0e0f13",
       position: "relative",
       display: "flex",
       flexDirection: "column"
     }}>
       {/* Title and Description */}
       <div style={{
-        position: "absolute",
-        top: "40px",
-        left: "50%",
-        transform: "translateX(-50%)",
         zIndex: 1000,
         textAlign: "center",
-        color: "white"
+        color: "white",
+        marginBottom: "30px",
+        marginTop: "50px"
       }}>
         <h1 style={{ 
           margin: "0 0 20px 0", 
-          fontSize: "48px", 
-          fontWeight: "bold",
+          fontSize: "62px", 
+          fontWeight: 800,
           letterSpacing: "2px",
           fontFamily: "Soehne"
         }}>
           The Ugandan Knuckles Empire
         </h1>
-        <p style={{
-          margin: "0",
-          fontSize: "16px",
-          color: "#ccc",
-          maxWidth: "800px",
-          lineHeight: "1.6"
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "20px"
         }}>
-          Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great again! Dis house unites bruddahs globally, tappin' to honor Da Queen and prove Da Wae lives eternal. Join us, spit on da doubters, and let's show da world da Ugandan Knuckles tribe never fades.
-        </p>
+          <p style={{
+            margin: "0",
+            fontSize: "16px",
+            color: "white",
+            maxWidth: "1000px",
+            lineHeight: "1.6",
+            fontFamily: "Soehne",
+            textAlign: "center"
+          }}>
+            Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great again! Dis house unites bruddahs globally, tappin' to honor Da Queen and prove Da Wae lives eternal. Join us, spit on da doubters, and let's show da world da Ugandan Knuckles tribe never fades.
+          </p>
+        </div>
       </div>
 
       {/* Top Right Panel - Total Dawae Warriors */}
@@ -451,8 +458,8 @@ export default function WorldMap() {
       {/* Map Container */}
       <div id="chartdiv" style={{ 
         width: "100%", 
-        height: "100%",
-        backgroundColor: "#1a1a1a"
+        height: "90%",
+        backgroundColor: "#0e0f13"
       }}></div>
 
       {/* Custom Tooltip */}
