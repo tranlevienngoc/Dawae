@@ -1,10 +1,9 @@
 @font-face {
-  font-family: 'Comic Relief Regular';
+  font-family: 'Soehne';
   font-style: normal;
   font-weight: normal;
-  src: local('Comic Relief Regular'), url('../../public/fonts/ComicRelief-Regular.ttf') format('truetype');
+  src: local('Soehne'), url('../../public/fonts/TestSohneBreit-Dreiviertelfett-BF663d89c955618.otf') format('woff2');
 }
-
 @font-face {
   font-family: 'Luckiest Guy';
   font-style: normal;
@@ -28,7 +27,7 @@ body {
   height: 100%;
   background-position: 50%;
   margin: 0;
-  font-family: 'Comic Relief Regular';
+  font-family: 'Soehne';
   overflow: hidden;
 
 }
@@ -227,7 +226,7 @@ h1 {
   /* Larger font size for score */
   /* margin-bottom: 20px; */
   line-height: 1;
-  font-family: 'Comic Relief Regular';
+  font-family: 'Soehne';
   color: #FFF;
   text-shadow:
     -1px -1px 0 #000,
@@ -273,7 +272,7 @@ h1 {
 }
 
 .title {
-  font-family: 'Comic Relief Regular';
+  font-family: 'Soehne';
   color: #FFF;
   text-shadow:
     -1px -1px 0 #000,

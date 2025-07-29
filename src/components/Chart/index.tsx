@@ -353,7 +353,8 @@ export default function WorldMap() {
           margin: "0 0 20px 0", 
           fontSize: "48px", 
           fontWeight: "bold",
-          letterSpacing: "2px"
+          letterSpacing: "2px",
+          fontFamily: "Soehne"
         }}>
           The Ugandan Knuckles Empire
         </h1>
