@@ -153,7 +153,7 @@ const CustomTooltip = ({ data, x, y, visible }: { data: WarriorData | null, x: n
 };
 
 export default function WorldMap() {
-  const [selectedWarrior, setSelectedWarrior] = useState(warriors[0]); // Uganda Tribe Alpha
+  const [selectedWarrior] = useState(warriors[0]); // Uganda Tribe Alpha
   const [tooltipData, setTooltipData] = useState<TooltipData>({
     title: "",
     level: "",
@@ -193,72 +193,73 @@ export default function WorldMap() {
       strokeWidth: 0.5,
     });
 
-    const pointSeries = chart.series.push(am5map.ClusteredPointSeries.new(root, {}));
+    const pointSeries = chart.series.push(am5map.MapPointSeries.new(root, {}));
+    // const pointSeries = chart.series.push(am5map.ClusteredPointSeries.new(root, {}));
 
-    pointSeries.set("clusteredBullet", function (root) {
-      const container = am5.Container.new(root, { cursorOverStyle: "pointer" });
+    // pointSeries.set("clusteredBullet", function (root) {
+    //   const container = am5.Container.new(root, { cursorOverStyle: "pointer" });
 
-      // Get the level from the first data item in cluster
-      const level = (container.dataItem as any)?.get("level") || "low";
+    //   // Get the level from the first data item in cluster
+    //   const level = (container.dataItem as any)?.get("level") || "low";
       
-      let color;
-      switch (level) {
-        case "new":
-          color = am5.color(0xe12c4e);
-          break;
-        case "seeking":
-          color = am5.color(0xff9840);
-          break;
-        default:
-          color = am5.color(0x26bb73);
-      }
+    //   let color;
+    //   switch (level) {
+    //     case "new":
+    //       color = am5.color(0xe12c4e);
+    //       break;
+    //     case "seeking":
+    //       color = am5.color(0xff9840);
+    //       break;
+    //     default:
+    //       color = am5.color(0x26bb73);
+    //   }
 
-      container.children.push(
-        am5.Circle.new(root, { 
-          radius: 8, 
-          tooltipY: 0, 
-          fill: color,
-          stroke: am5.color(0xffffff),
-          strokeWidth: 1
-        })
-      );
-      container.children.push(
-        am5.Circle.new(root, {
-          radius: 12,
-          fillOpacity: 0.3,
-          tooltipY: 0,
-          fill: color,
-        })
-      );
-      container.children.push(
-        am5.Circle.new(root, {
-          radius: 16,
-          fillOpacity: 0.2,
-          tooltipY: 0,
-          fill: color,
-        })
-      );
-      container.children.push(
-        am5.Label.new(root, {
-          centerX: am5.p50,
-          centerY: am5.p50,
-          fill: am5.color(0xffffff),
-          populateText: true,
-          fontSize: "8",
-          text: "{value}",
-        })
-      );
+    //   // container.children.push(
+    //   //   am5.Circle.new(root, { 
+    //   //     radius: 8, 
+    //   //     tooltipY: 0, 
+    //   //     fill: color,
+    //   //     stroke: am5.color(0xffffff),
+    //   //     strokeWidth: 1
+    //   //   })
+    //   // );
+    //   // container.children.push(
+    //   //   am5.Circle.new(root, {
+    //   //     radius: 12,
+    //   //     fillOpacity: 0.3,
+    //   //     tooltipY: 0,
+    //   //     fill: color,
+    //   //   })
+    //   // );
+    //   // container.children.push(
+    //   //   am5.Circle.new(root, {
+    //   //     radius: 16,
+    //   //     fillOpacity: 0.2,
+    //   //     tooltipY: 0,
+    //   //     fill: color,
+    //   //   })
+    //   // );
+    //   // container.children.push(
+    //   //   am5.Label.new(root, {
+    //   //     centerX: am5.p50,
+    //   //     centerY: am5.p50,
+    //   //     fill: am5.color(0xffffff),
+    //   //     populateText: true,
+    //   //     fontSize: "8",
+    //   //     text: "{value}",
+    //   //   })
+    //   // );
 
-      container.events.on("click", function (e) {
-        if (e.target.dataItem) {
-          pointSeries.zoomToCluster(e.target.dataItem as any);
-        }
-      });
+    //   container.events.on("click", function (e) {
+    //     if (e.target.dataItem) {
+    //       pointSeries.zoomToCluster(e.target.dataItem as any);
+    //     }
+    //   });
 
-      return am5.Bullet.new(root, {
-        sprite: container,
-      });
-    });
+    //   return am5.Bullet.new(root, {
+    //     sprite: container,
+    //   });
+    // });
 
     for (const warrior of warriors) {
       pointSeries.data.push({
@@ -371,7 +372,7 @@ export default function WorldMap() {
             fontFamily: "Soehne",
             textAlign: "center"
           }}>
-            Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great again! Dis house unites bruddahs globally, tappin' to honor Da Queen and prove Da Wae lives eternal. Join us, spit on da doubters, and let's show da world da Ugandan Knuckles tribe never fades.
+            Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great again! Dis house unites bruddahs globally, tappin&apos; to honor Da Queen and prove Da Wae lives eternal. Join us, spit on da doubters, and let&apos;s show da world da Ugandan Knuckles tribe never fades.
           </p>
         </div>
       </div>
