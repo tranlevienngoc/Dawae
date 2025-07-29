@@ -304,10 +304,10 @@ export default function WorldMap() {
 
       // Set colors from data
       container.children.each((child) => {
-        child.adapters.add("fill", function (fill, target) {
+        child.adapters.add("fill" as keyof am5.ISpriteSettings, function (fill, target) {
           const dataItem = target.dataItem;
           if (dataItem && dataItem.dataContext) {
-            const data = dataItem.dataContext as any;
+            const data = dataItem.dataContext as WarriorData & { color: am5.Color };
             return data.color || fill;
           }
           return fill;
@@ -408,10 +408,6 @@ export default function WorldMap() {
       </div>
 
       {/* Top Right Panel - Total Dawae Warriors */}
-      
-
-
-
       <div style={{
         display: "flex",
         flexDirection: "column",

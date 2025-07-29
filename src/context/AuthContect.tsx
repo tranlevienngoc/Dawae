@@ -22,7 +22,6 @@ export interface AuthType {
 const AuthValues: AuthType = {
   user: {
     id: 0,
-    // email: '',
     avatar: '',
     user_name: '',
     name: '',
@@ -60,7 +59,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const resetUser = useCallback(() => {
     setUser({
       id: 0,
-      // email: '',
       avatar: '',
       user_name: '',
       name: '',
