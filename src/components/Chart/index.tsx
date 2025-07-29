@@ -6,83 +6,90 @@ import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-interface RegionData {
+interface WarriorData {
   title: string;
-  level: string;
-  rate: number;
+  level: string; // "steady", "seeking", "new"
+  count: number;
   location: string;
 }
 
-interface TooltipData extends RegionData {
+interface TooltipData extends WarriorData {
   x: number;
   y: number;
   visible: boolean;
 }
 
-// Data với các mức độ interruption khác nhau
-const regions = [
-  // High interruption (Red) - 13 regions
-  { title: "europe-west4", latitude: 52.3676, longitude: 4.9041, level: "high", rate: 19.917, location: "Netherlands" },
-  { title: "asia-northeast1", latitude: 35.6762, longitude: 139.6503, level: "high", rate: 15.094, location: "Tokyo, Japan" },
-  { title: "us-west1", latitude: 37.7749, longitude: -122.4194, level: "high", rate: 7.632, location: "Oregon, USA" },
-  { title: "us-central1", latitude: 41.8781, longitude: -87.6298, level: "high", rate: 6.8, location: "Iowa, USA" },
-  { title: "us-east1", latitude: 40.7128, longitude: -74.0060, level: "high", rate: 6.2, location: "South Carolina, USA" },
-  { title: "europe-west1", latitude: 52.5200, longitude: 13.4050, level: "high", rate: 5.9, location: "Belgium" },
-  { title: "asia-southeast1", latitude: 1.3521, longitude: 103.8198, level: "high", rate: 5.5, location: "Singapore" },
-  { title: "southamerica-east1", latitude: -23.5505, longitude: -46.6333, level: "high", rate: 5.1, location: "São Paulo, Brazil" },
-  { title: "australia-southeast1", latitude: -33.8688, longitude: 151.2093, level: "high", rate: 4.8, location: "Sydney, Australia" },
-  { title: "europe-west2", latitude: 51.5074, longitude: -0.1278, level: "high", rate: 4.5, location: "London, UK" },
-  { title: "us-west2", latitude: 34.0522, longitude: -118.2437, level: "high", rate: 4.2, location: "Los Angeles, USA" },
-  { title: "asia-east1", latitude: 25.0330, longitude: 121.5645, level: "high", rate: 3.9, location: "Taiwan" },
-  { title: "europe-west3", latitude: 50.1109, longitude: 8.6821, level: "high", rate: 3.6, location: "Frankfurt, Germany" },
+// Dawae Warriors data around the world
+const warriors = [
+  // Steady Wae Warriors (Green) - 12 warriors (28.7%)
+  { title: "Uganda Tribe Alpha", latitude: 1.3733, longitude: 32.2903, level: "steady", count: 8, location: "Kampala, Uganda" },
+  { title: "Kenya Warriors", latitude: -1.2921, longitude: 36.8219, level: "steady", count: 6, location: "Nairobi, Kenya" },
+  { title: "Tanzania Knuckles", latitude: -6.7924, longitude: 39.2083, level: "steady", count: 5, location: "Dar es Salaam, Tanzania" },
+  { title: "Nigeria Dawae", latitude: 9.0765, longitude: 7.3986, level: "steady", count: 7, location: "Abuja, Nigeria" },
+  { title: "Ghana Warriors", latitude: 5.6037, longitude: -0.1870, level: "steady", count: 4, location: "Accra, Ghana" },
+  { title: "South Africa Tribe", latitude: -25.7479, longitude: 28.2293, level: "steady", count: 3, location: "Pretoria, South Africa" },
+  { title: "Morocco Knuckles", latitude: 33.9716, longitude: -6.8498, level: "steady", count: 2, location: "Rabat, Morocco" },
+  { title: "Ethiopia Warriors", latitude: 9.1450, longitude: 40.4897, level: "steady", count: 4, location: "Addis Ababa, Ethiopia" },
+  { title: "Cameroon Dawae", latitude: 3.8480, longitude: 11.5021, level: "steady", count: 3, location: "Yaoundé, Cameroon" },
+  { title: "Senegal Tribe", latitude: 14.7167, longitude: -17.4677, level: "steady", count: 2, location: "Dakar, Senegal" },
+  { title: "Congo Warriors", latitude: -4.2634, longitude: 15.2429, level: "steady", count: 5, location: "Kinshasa, DRC" },
+  { title: "Madagascar Knuckles", latitude: -18.8792, longitude: 47.5079, level: "steady", count: 3, location: "Antananarivo, Madagascar" },
 
-  // Moderate interruption (Orange) - 15 regions
-  { title: "europe-north1", latitude: 60.1699, longitude: 24.9384, level: "moderate", rate: 0.35, location: "Hamina, Finland" },
-  { title: "europe-central1", latitude: 50.0755, longitude: 14.4378, level: "moderate", rate: 2.6, location: "Prague, Czech Republic" },
-  { title: "europe-west6", latitude: 46.9481, longitude: 7.4474, level: "moderate", rate: 2.4, location: "Zurich, Switzerland" },
-  { title: "europe-west8", latitude: 40.4168, longitude: -3.7038, level: "moderate", rate: 2.2, location: "Madrid, Spain" },
-  { title: "europe-west9", latitude: 48.8566, longitude: 2.3522, level: "moderate", rate: 2.0, location: "Paris, France" },
-  { title: "europe-west10", latitude: 41.9028, longitude: 12.4964, level: "moderate", rate: 1.8, location: "Milan, Italy" },
-  { title: "europe-west12", latitude: 52.2297, longitude: 21.0122, level: "moderate", rate: 1.6, location: "Warsaw, Poland" },
-  { title: "europe-west13", latitude: 47.4979, longitude: 19.0402, level: "moderate", rate: 1.4, location: "Budapest, Hungary" },
-  { title: "europe-west14", latitude: 44.4268, longitude: 26.1025, level: "moderate", rate: 1.2, location: "Bucharest, Romania" },
-  { title: "europe-west15", latitude: 55.7558, longitude: 37.6176, level: "moderate", rate: 1.0, location: "Moscow, Russia" },
-  { title: "europe-west16", latitude: 59.3293, longitude: 18.0686, level: "moderate", rate: 0.8, location: "Stockholm, Sweden" },
-  { title: "europe-west17", latitude: 52.3676, longitude: 4.9041, level: "moderate", rate: 0.6, location: "Amsterdam, Netherlands" },
-  { title: "europe-west18", latitude: 59.9139, longitude: 10.7522, level: "moderate", rate: 0.4, location: "Oslo, Norway" },
-  { title: "europe-west19", latitude: 55.6761, longitude: 12.5683, level: "moderate", rate: 0.2, location: "Copenhagen, Denmark" },
+  // Seeking Wae Warriors (Orange) - 16 warriors (35.1%)
+  { title: "London Seekers", latitude: 51.5074, longitude: -0.1278, level: "seeking", count: 4, location: "London, UK" },
+  { title: "Paris Dawae", latitude: 48.8566, longitude: 2.3522, level: "seeking", count: 3, location: "Paris, France" },
+  { title: "Berlin Warriors", latitude: 52.5200, longitude: 13.4050, level: "seeking", count: 5, location: "Berlin, Germany" },
+  { title: "Rome Knuckles", latitude: 41.9028, longitude: 12.4964, level: "seeking", count: 2, location: "Rome, Italy" },
+  { title: "Madrid Tribe", latitude: 40.4168, longitude: -3.7038, level: "seeking", count: 3, location: "Madrid, Spain" },
+  { title: "Amsterdam Warriors", latitude: 52.3676, longitude: 4.9041, level: "seeking", count: 4, location: "Amsterdam, Netherlands" },
+  { title: "Stockholm Dawae", latitude: 59.3293, longitude: 18.0686, level: "seeking", count: 2, location: "Stockholm, Sweden" },
+  { title: "Copenhagen Seekers", latitude: 55.6761, longitude: 12.5683, level: "seeking", count: 3, location: "Copenhagen, Denmark" },
+  { title: "Vienna Knuckles", latitude: 48.2082, longitude: 16.3738, level: "seeking", count: 2, location: "Vienna, Austria" },
+  { title: "Prague Warriors", latitude: 50.0755, longitude: 14.4378, level: "seeking", count: 3, location: "Prague, Czech Republic" },
+  { title: "Warsaw Tribe", latitude: 52.2297, longitude: 21.0122, level: "seeking", count: 4, location: "Warsaw, Poland" },
+  { title: "Budapest Dawae", latitude: 47.4979, longitude: 19.0402, level: "seeking", count: 2, location: "Budapest, Hungary" },
+  { title: "Bucharest Seekers", latitude: 44.4268, longitude: 26.1025, level: "seeking", count: 3, location: "Bucharest, Romania" },
+  { title: "Helsinki Warriors", latitude: 60.1699, longitude: 24.9384, level: "seeking", count: 2, location: "Helsinki, Finland" },
+  { title: "Oslo Knuckles", latitude: 59.9139, longitude: 10.7522, level: "seeking", count: 3, location: "Oslo, Norway" },
+  { title: "Zurich Tribe", latitude: 46.9481, longitude: 7.4474, level: "seeking", count: 2, location: "Zurich, Switzerland" },
 
-  // Low interruption (Green) - 14 regions
-  { title: "europe-west20", latitude: 48.2082, longitude: 16.3738, level: "low", rate: 0.15, location: "Vienna, Austria" },
-  { title: "europe-west21", latitude: 53.9045, longitude: 27.5615, level: "low", rate: 0.12, location: "Minsk, Belarus" },
-  { title: "europe-west22", latitude: 50.8503, longitude: 4.3517, level: "low", rate: 0.10, location: "Brussels, Belgium" },
-  { title: "europe-west23", latitude: 43.8564, longitude: 18.4131, level: "low", rate: 0.08, location: "Sarajevo, Bosnia" },
-  { title: "europe-west24", latitude: 42.6977, longitude: 23.3219, level: "low", rate: 0.06, location: "Sofia, Bulgaria" },
-  { title: "europe-west25", latitude: 45.8150, longitude: 15.9819, level: "low", rate: 0.04, location: "Zagreb, Croatia" },
-  { title: "europe-west26", latitude: 42.6629, longitude: 21.1655, level: "low", rate: 0.03, location: "Pristina, Kosovo" },
-  { title: "europe-west27", latitude: 50.0755, longitude: 14.4378, level: "low", rate: 0.02, location: "Prague, Czech Republic" },
-  { title: "europe-west28", latitude: 55.6761, longitude: 12.5683, level: "low", rate: 0.01, location: "Copenhagen, Denmark" },
-  { title: "europe-west29", latitude: 59.4369, longitude: 24.7536, level: "low", rate: 0.005, location: "Tallinn, Estonia" },
-  { title: "europe-west30", latitude: 60.1699, longitude: 24.9384, level: "low", rate: 0.003, location: "Helsinki, Finland" },
-  { title: "europe-west31", latitude: 48.8566, longitude: 2.3522, level: "low", rate: 0.001, location: "Paris, France" },
-  { title: "europe-west32", latitude: 52.5200, longitude: 13.4050, level: "low", rate: 0.0005, location: "Berlin, Germany" },
-  { title: "europe-west33", latitude: 37.9838, longitude: 23.7275, level: "low", rate: 0.0001, location: "Athens, Greece" },
+  // New Wae Warriors (Red/Pink) - 14 warriors (33.3%)
+  { title: "Tokyo New Dawae", latitude: 35.6762, longitude: 139.6503, level: "new", count: 6, location: "Tokyo, Japan" },
+  { title: "Seoul Warriors", latitude: 37.5665, longitude: 126.9780, level: "new", count: 5, location: "Seoul, South Korea" },
+  { title: "Beijing Knuckles", latitude: 39.9042, longitude: 116.4074, level: "new", count: 4, location: "Beijing, China" },
+  { title: "Mumbai Tribe", latitude: 19.0760, longitude: 72.8777, level: "new", count: 7, location: "Mumbai, India" },
+  { title: "Sydney Dawae", latitude: -33.8688, longitude: 151.2093, level: "new", count: 3, location: "Sydney, Australia" },
+  { title: "Singapore Warriors", latitude: 1.3521, longitude: 103.8198, level: "new", count: 4, location: "Singapore" },
+  { title: "Bangkok Seekers", latitude: 13.7563, longitude: 100.5018, level: "new", count: 3, location: "Bangkok, Thailand" },
+  { title: "Jakarta Knuckles", latitude: -6.2088, longitude: 106.8456, level: "new", count: 5, location: "Jakarta, Indonesia" },
+  { title: "Manila Warriors", latitude: 14.5995, longitude: 120.9842, level: "new", count: 4, location: "Manila, Philippines" },
+  { title: "Ho Chi Minh Tribe", latitude: 10.8231, longitude: 106.6297, level: "new", count: 3, location: "Ho Chi Minh City, Vietnam" },
+  { title: "Kuala Lumpur Dawae", latitude: 3.1390, longitude: 101.6869, level: "new", count: 2, location: "Kuala Lumpur, Malaysia" },
+  { title: "New York Seekers", latitude: 40.7128, longitude: -74.0060, level: "new", count: 8, location: "New York, USA" },
+  { title: "Los Angeles Warriors", latitude: 34.0522, longitude: -118.2437, level: "new", count: 6, location: "Los Angeles, USA" },
+  { title: "São Paulo Knuckles", latitude: -23.5505, longitude: -46.6333, level: "new", count: 4, location: "São Paulo, Brazil" },
 ];
 
 // Custom Tooltip Component
-const CustomTooltip = ({ data, x, y, visible }: { data: RegionData | null, x: number, y: number, visible: boolean }) => {
+const CustomTooltip = ({ data, x, y, visible }: { data: WarriorData | null, x: number, y: number, visible: boolean }) => {
   if (!visible || !data) return null;
 
   const levelColors = {
-    high: "#ff0000",
-    moderate: "#ff8c00", 
-    low: "#00ff00"
+    steady: "#00ff00",
+    seeking: "#ff8c00", 
+    new: "#ff1493"
   };
 
   const bgColors = {
-    high: "rgba(255, 0, 0, 0.2)",
-    moderate: "rgba(255, 140, 0, 0.2)",
-    low: "rgba(0, 255, 0, 0.2)"
+    steady: "rgba(0, 255, 0, 0.2)",
+    seeking: "rgba(255, 140, 0, 0.2)",
+    new: "rgba(255, 20, 147, 0.2)"
+  };
+
+  const levelLabels = {
+    steady: "Steady Wae Warriors",
+    seeking: "Seeking Wae Warriors",
+    new: "New Wae Warriors"
   };
 
   return (
@@ -125,32 +132,19 @@ const CustomTooltip = ({ data, x, y, visible }: { data: RegionData | null, x: nu
           }}
         />
         <span style={{ fontWeight: "bold", color: "white" }}>
-          Region: {data.title}
+          {data.title}
         </span>
       </div>
       
       <div style={{ color: "#e0e0e0" }}>
         <div><strong>Location:</strong> {data.location}</div>
-        <div><strong>Interrupted nodes:</strong> {data.rate}%</div>
-        <div><strong>Availability zones:</strong> 3</div>
+        <div><strong>Warriors Count:</strong> {data.count}</div>
+        <div><strong>Type:</strong> {levelLabels[data.level as keyof typeof levelLabels]}</div>
         
         <div style={{ marginTop: "8px", fontSize: "11px", color: "#ccc" }}>
-          <div style={{ marginBottom: "2px" }}>Availability Zone rates:</div>
-          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#333", padding: "4px 8px", marginBottom: "2px" }}>
-            <span>AZ</span>
-            <span>Interrupted nodes</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#2a2a2a", padding: "4px 8px", marginBottom: "1px" }}>
-            <span>{data.title}-c</span>
-            <span>{(data.rate * 2.8).toFixed(2)}%</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#2a2a2a", padding: "4px 8px", marginBottom: "1px" }}>
-            <span>{data.title}-b</span>
-            <span>{(data.rate * 1.4).toFixed(2)}%</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#2a2a2a", padding: "4px 8px" }}>
-            <span>{data.title}-a</span>
-            <span>{(data.rate * 1.2).toFixed(2)}%</span>
+          <div>"Do you know da wae, bruddah?"</div>
+          <div style={{ fontStyle: "italic", marginTop: "4px" }}>
+            Join the tribe and help spread da wae!
           </div>
         </div>
       </div>
@@ -159,11 +153,11 @@ const CustomTooltip = ({ data, x, y, visible }: { data: RegionData | null, x: nu
 };
 
 export default function WorldMap() {
-  const [selectedRegion, setSelectedRegion] = useState(regions[13]); // europe-north1
+  const [selectedWarrior, setSelectedWarrior] = useState(warriors[0]); // Uganda Tribe Alpha
   const [tooltipData, setTooltipData] = useState<TooltipData>({
     title: "",
     level: "",
-    rate: 0,
+    count: 0,
     location: "",
     x: 0,
     y: 0,
@@ -266,15 +260,15 @@ export default function WorldMap() {
       });
     });
 
-    for (const region of regions) {
+    for (const warrior of warriors) {
       pointSeries.data.push({
-        geometry: { type: "Point", coordinates: [region.longitude, region.latitude] },
-        title: region.title,
-        level: region.level,
-        rate: region.rate,
-        location: region.location,
-        color: region.level === "high" ? am5.color(0xff0000) : 
-               region.level === "moderate" ? am5.color(0xff8c00) : 
+        geometry: { type: "Point", coordinates: [warrior.longitude, warrior.latitude] },
+        title: warrior.title,
+        level: warrior.level,
+        count: warrior.count,
+        location: warrior.location,
+        color: warrior.level === "new" ? am5.color(0xff1493) : 
+               warrior.level === "seeking" ? am5.color(0xff8c00) : 
                am5.color(0x00ff00)
       });
     }
@@ -303,7 +297,7 @@ export default function WorldMap() {
       bullet.get("sprite").events.on("pointerover", function (ev) {
         const dataItem = ev.target.dataItem;
         if (dataItem && dataItem.dataContext) {
-          const data = dataItem.dataContext as RegionData;
+          const data = dataItem.dataContext as WarriorData;
           
           setTooltipData({
             ...data,
@@ -326,15 +320,15 @@ export default function WorldMap() {
     chart.appear(1000, 100);
 
     return () => root.dispose();
-  }, [selectedRegion, setTooltipData]);
+  }, [selectedWarrior, setTooltipData]);
 
   // Calculate statistics
-  const totalRegions = regions.length;
-  const highRegions = regions.filter(r => r.level === "high").length;
-  const moderateRegions = regions.filter(r => r.level === "moderate").length;
-  const lowRegions = regions.filter(r => r.level === "low").length;
+  const totalWarriors = warriors.length;
+  const steadyWarriors = warriors.filter(w => w.level === "steady").length;
+  const seekingWarriors = warriors.filter(w => w.level === "seeking").length;
+  const newWarriors = warriors.filter(w => w.level === "new").length;
   
-  const avgRate = regions.reduce((sum, r) => sum + r.rate, 0) / totalRegions;
+  const totalCount = warriors.reduce((sum, w) => sum + w.count, 0);
 
   return (
     <div style={{ 
@@ -342,39 +336,43 @@ export default function WorldMap() {
       height: "100vh", 
       backgroundColor: "#1a1a1a",
       position: "relative",
-      display: "flex"
+      display: "flex",
+      flexDirection: "column"
     }}>
-      {/* Top Left Panel - Avg. Spot interruption rate */}
+      {/* Title and Description */}
       <div style={{
         position: "absolute",
-        left: "20px",
-        top: "20px",
+        top: "40px",
+        left: "50%",
+        transform: "translateX(-50%)",
         zIndex: 1000,
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        borderRadius: "10px",
-        padding: "20px",
-        color: "white",
-        minWidth: "300px",
-        backdropFilter: "blur(10px)"
+        textAlign: "center",
+        color: "white"
       }}>
-        <h3 style={{ margin: "0 0 10px 0", fontSize: "16px", fontWeight: "normal" }}>
-          Avg. Spot interruption rate
-        </h3>
-        <div style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "15px" }}>
-          {avgRate.toFixed(4)}%
-        </div>
-        <div style={{ fontSize: "14px" }}>
-          <div style={{ color: "#ff0000" }}>europe-west4: 19.917%</div>
-          <div style={{ color: "#ff0000" }}>asia-northeast1: 15.094%</div>
-          <div style={{ color: "#ff0000" }}>us-west1: 7.632%</div>
-        </div>
+        <h1 style={{ 
+          margin: "0 0 20px 0", 
+          fontSize: "48px", 
+          fontWeight: "bold",
+          letterSpacing: "2px"
+        }}>
+          The Ugandan Knuckles Empire
+        </h1>
+        <p style={{
+          margin: "0",
+          fontSize: "16px",
+          color: "#ccc",
+          maxWidth: "800px",
+          lineHeight: "1.6"
+        }}>
+          Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great again! Dis house unites bruddahs globally, tappin' to honor Da Queen and prove Da Wae lives eternal. Join us, spit on da doubters, and let's show da world da Ugandan Knuckles tribe never fades.
+        </p>
       </div>
 
-      {/* Bottom Left Panel - Total regions */}
+      {/* Top Right Panel - Total Dawae Warriors */}
       <div style={{
         position: "absolute",
-        left: "20px",
-        bottom: "20px",
+        right: "20px",
+        top: "200px",
         zIndex: 1000,
         backgroundColor: "rgba(255, 255, 255, 0.1)",
         borderRadius: "10px",
@@ -384,11 +382,40 @@ export default function WorldMap() {
         backdropFilter: "blur(10px)"
       }}>
         <h3 style={{ margin: "0 0 10px 0", fontSize: "16px", fontWeight: "normal" }}>
-          Total regions
+          Total Dawae Warriors
         </h3>
         <div style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "15px" }}>
-          {totalRegions}
+          {totalCount}
         </div>
+        
+        {/* Progress Bar */}
+        <div style={{ 
+          width: "100%", 
+          height: "8px", 
+          backgroundColor: "#333", 
+          borderRadius: "4px", 
+          marginBottom: "15px",
+          display: "flex"
+        }}>
+          <div style={{ 
+            width: `${(steadyWarriors/totalWarriors*100)}%`, 
+            height: "100%", 
+            backgroundColor: "#00ff00", 
+            borderRadius: "4px 0 0 4px" 
+          }}></div>
+          <div style={{ 
+            width: `${(seekingWarriors/totalWarriors*100)}%`, 
+            height: "100%", 
+            backgroundColor: "#ff8c00" 
+          }}></div>
+          <div style={{ 
+            width: `${(newWarriors/totalWarriors*100)}%`, 
+            height: "100%", 
+            backgroundColor: "#ff1493",
+            borderRadius: "0 4px 4px 0" 
+          }}></div>
+        </div>
+
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ 
@@ -397,7 +424,7 @@ export default function WorldMap() {
               backgroundColor: "#00ff00", 
               borderRadius: "4px" 
             }}></div>
-            <span style={{ color: "#00ff00" }}>Low interruptions: {lowRegions} ({(lowRegions/totalRegions*100).toFixed(2)}%)</span>
+            <span style={{ color: "#00ff00" }}>Steady Wae Warriors: {steadyWarriors} ({(steadyWarriors/totalWarriors*100).toFixed(1)}%)</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ 
@@ -406,64 +433,16 @@ export default function WorldMap() {
               backgroundColor: "#ff8c00", 
               borderRadius: "4px" 
             }}></div>
-            <span style={{ color: "#ff8c00" }}>Moderate interruptions: {moderateRegions} ({(moderateRegions/totalRegions*100).toFixed(2)}%)</span>
+            <span style={{ color: "#ff8c00" }}>Seeking Wae Warriors: {seekingWarriors} ({(seekingWarriors/totalWarriors*100).toFixed(1)}%)</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ 
               width: "20px", 
               height: "8px", 
-              backgroundColor: "#ff0000", 
+              backgroundColor: "#ff1493", 
               borderRadius: "4px" 
             }}></div>
-            <span style={{ color: "#ff0000" }}>High interruptions: {highRegions} ({(highRegions/totalRegions*100).toFixed(2)}%)</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Top Right Panel - Region Detail */}
-      <div style={{
-        position: "absolute",
-        right: "20px",
-        top: "20px",
-        zIndex: 1000,
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        borderRadius: "10px",
-        padding: "20px",
-        color: "white",
-        minWidth: "300px",
-        backdropFilter: "blur(10px)"
-      }}>
-        <div style={{ 
-          display: "flex", 
-          alignItems: "center", 
-          gap: "10px", 
-          marginBottom: "15px",
-          padding: "8px 12px",
-          borderRadius: "6px",
-          backgroundColor: selectedRegion.level === "high" ? "rgba(255, 0, 0, 0.2)" : 
-                         selectedRegion.level === "moderate" ? "rgba(255, 140, 0, 0.2)" : 
-                         "rgba(0, 255, 0, 0.2)"
-        }}>
-          <div style={{ 
-            width: "12px", 
-            height: "12px", 
-            borderRadius: "50%",
-            backgroundColor: selectedRegion.level === "high" ? "#ff0000" : 
-                           selectedRegion.level === "moderate" ? "#ff8c00" : "#00ff00"
-          }}></div>
-          <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "normal" }}>
-            Region: {selectedRegion.title}
-          </h3>
-        </div>
-        <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
-          <div><strong>Location:</strong> {selectedRegion.location}</div>
-          <div><strong>Interrupted nodes:</strong> {selectedRegion.rate}%</div>
-          <div><strong>Availability zones:</strong> 3</div>
-          <div style={{ marginTop: "10px" }}>
-            <div style={{ fontSize: "12px", color: "#ccc", marginBottom: "5px" }}>Availability Zone rates:</div>
-            <div style={{ fontSize: "12px" }}>{selectedRegion.title}-c: {(selectedRegion.rate * 2.8).toFixed(2)}%</div>
-            <div style={{ fontSize: "12px" }}>{selectedRegion.title}-b: {(selectedRegion.rate * 1.4).toFixed(2)}%</div>
-            <div style={{ fontSize: "12px" }}>{selectedRegion.title}-a: {(selectedRegion.rate * 1.2).toFixed(2)}%</div>
+            <span style={{ color: "#ff1493" }}>New Wae Warriors: {newWarriors} ({(newWarriors/totalWarriors*100).toFixed(1)}%)</span>
           </div>
         </div>
       </div>
@@ -485,3 +464,4 @@ export default function WorldMap() {
     </div>
   );
 }
+
