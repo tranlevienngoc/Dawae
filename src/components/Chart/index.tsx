@@ -38,14 +38,14 @@ const warriors = [
   // Seeking Wae Warriors (Orange) - 16 warriors (35.1%)
   { title: "London Seekers", latitude: 51.5074, longitude: -0.1278, level: "seeking", count: 4, location: "London, UK" },
   { title: "Paris Dawae", latitude: 48.8566, longitude: 2.3522, level: "seeking", count: 3, location: "Paris, France" },
-  { title: "Berlin Warriors", latitude: 52.5200, longitude: 13.4050, level: "seeking", count: 5, location: "Berlin, Germany" },
-  { title: "Rome Knuckles", latitude: 41.9028, longitude: 12.4964, level: "seeking", count: 2, location: "Rome, Italy" },
-  { title: "Madrid Tribe", latitude: 40.4168, longitude: -3.7038, level: "seeking", count: 3, location: "Madrid, Spain" },
-  { title: "Amsterdam Warriors", latitude: 52.3676, longitude: 4.9041, level: "seeking", count: 4, location: "Amsterdam, Netherlands" },
-  { title: "Stockholm Dawae", latitude: 59.3293, longitude: 18.0686, level: "seeking", count: 2, location: "Stockholm, Sweden" },
-  { title: "Copenhagen Seekers", latitude: 55.6761, longitude: 12.5683, level: "seeking", count: 3, location: "Copenhagen, Denmark" },
-  { title: "Vienna Knuckles", latitude: 48.2082, longitude: 16.3738, level: "seeking", count: 2, location: "Vienna, Austria" },
-  { title: "Prague Warriors", latitude: 50.0755, longitude: 14.4378, level: "seeking", count: 3, location: "Prague, Czech Republic" },
+  // { title: "Berlin Warriors", latitude: 52.5200, longitude: 13.4050, level: "seeking", count: 5, location: "Berlin, Germany" },
+  // { title: "Rome Knuckles", latitude: 41.9028, longitude: 12.4964, level: "seeking", count: 2, location: "Rome, Italy" },
+  // { title: "Madrid Tribe", latitude: 40.4168, longitude: -3.7038, level: "seeking", count: 3, location: "Madrid, Spain" },
+  // { title: "Amsterdam Warriors", latitude: 52.3676, longitude: 4.9041, level: "seeking", count: 4, location: "Amsterdam, Netherlands" },
+  // { title: "Stockholm Dawae", latitude: 59.3293, longitude: 18.0686, level: "seeking", count: 2, location: "Stockholm, Sweden" },
+  // { title: "Copenhagen Seekers", latitude: 55.6761, longitude: 12.5683, level: "seeking", count: 3, location: "Copenhagen, Denmark" },
+  // { title: "Vienna Knuckles", latitude: 48.2082, longitude: 16.3738, level: "seeking", count: 2, location: "Vienna, Austria" },
+  // { title: "Prague Warriors", latitude: 50.0755, longitude: 14.4378, level: "seeking", count: 3, location: "Prague, Czech Republic" },
   { title: "Warsaw Tribe", latitude: 52.2297, longitude: 21.0122, level: "seeking", count: 4, location: "Warsaw, Poland" },
   { title: "Budapest Dawae", latitude: 47.4979, longitude: 19.0402, level: "seeking", count: 2, location: "Budapest, Hungary" },
   { title: "Bucharest Seekers", latitude: 44.4268, longitude: 26.1025, level: "seeking", count: 3, location: "Bucharest, Romania" },
@@ -56,13 +56,13 @@ const warriors = [
   // New Wae Warriors (Red/Pink) - 14 warriors (33.3%)
   { title: "Tokyo New Dawae", latitude: 35.6762, longitude: 139.6503, level: "new", count: 6, location: "Tokyo, Japan" },
   { title: "Seoul Warriors", latitude: 37.5665, longitude: 126.9780, level: "new", count: 5, location: "Seoul, South Korea" },
-  { title: "Beijing Knuckles", latitude: 39.9042, longitude: 116.4074, level: "new", count: 4, location: "Beijing, China" },
-  { title: "Mumbai Tribe", latitude: 19.0760, longitude: 72.8777, level: "new", count: 7, location: "Mumbai, India" },
+  // { title: "Beijing Knuckles", latitude: 39.9042, longitude: 116.4074, level: "new", count: 4, location: "Beijing, China" },
+  // { title: "Mumbai Tribe", latitude: 19.0760, longitude: 72.8777, level: "new", count: 7, location: "Mumbai, India" },
   { title: "Sydney Dawae", latitude: -33.8688, longitude: 151.2093, level: "new", count: 3, location: "Sydney, Australia" },
   { title: "Singapore Warriors", latitude: 1.3521, longitude: 103.8198, level: "new", count: 4, location: "Singapore" },
   { title: "Bangkok Seekers", latitude: 13.7563, longitude: 100.5018, level: "new", count: 3, location: "Bangkok, Thailand" },
-  { title: "Jakarta Knuckles", latitude: -6.2088, longitude: 106.8456, level: "new", count: 5, location: "Jakarta, Indonesia" },
-  { title: "Manila Warriors", latitude: 14.5995, longitude: 120.9842, level: "new", count: 4, location: "Manila, Philippines" },
+  // { title: "Jakarta Knuckles", latitude: -6.2088, longitude: 106.8456, level: "new", count: 5, location: "Jakarta, Indonesia" },
+  // { title: "Manila Warriors", latitude: 14.5995, longitude: 120.9842, level: "new", count: 4, location: "Manila, Philippines" },
   { title: "Ho Chi Minh Tribe", latitude: 10.8231, longitude: 106.6297, level: "new", count: 3, location: "Ho Chi Minh City, Vietnam" },
   { title: "Kuala Lumpur Dawae", latitude: 3.1390, longitude: 101.6869, level: "new", count: 2, location: "Kuala Lumpur, Malaysia" },
   { title: "New York Seekers", latitude: 40.7128, longitude: -74.0060, level: "new", count: 8, location: "New York, USA" },
@@ -276,29 +276,64 @@ export default function WorldMap() {
 
     // Custom bullets with hover tooltip
     pointSeries.bullets.push(function () {
-      const bullet = am5.Bullet.new(root, {
-        sprite: am5.Circle.new(root, {
-          radius: 6,
+      const container = am5.Container.new(root, { cursorOverStyle: "pointer" });
+
+      // Get color from data
+      const bulletColor = am5.color(0xff8c00);
+      
+      // Create outer glow circle
+      const outerCircle = container.children.push(
+        am5.Circle.new(root, {
+          radius: 26,
+          fillOpacity: 0.2,
           tooltipY: 0,
-          fill: am5.color(0xff8c00),
-        }),
+          fill: bulletColor,
+        })
+      );
+
+      // Create middle circle
+      const middleCircle = container.children.push(
+        am5.Circle.new(root, {
+          radius: 15,
+          fillOpacity: 0.3,
+          tooltipY: 0,
+          fill: bulletColor,
+        })
+      );
+
+      // Create inner circle
+      const innerCircle = container.children.push(
+        am5.Circle.new(root, {
+          radius: 8,
+          tooltipY: 0,
+          fill: bulletColor,
+          // stroke: am5.color(0xffffff),
+          strokeWidth: 1
+        })
+      );
+
+      // Set colors from data
+      container.children.each((child) => {
+        child.adapters.add("fill", function (fill, target) {
+          const dataItem = target.dataItem;
+          if (dataItem && dataItem.dataContext) {
+            const data = dataItem.dataContext as any;
+            return data.color || fill;
+          }
+          return fill;
+        });
       });
 
-      // Set fill color from data
-      bullet.get("sprite").adapters.add("fill", function (fill, target) {
-        const dataItem = target.dataItem;
-        if (dataItem && dataItem.dataContext) {
-          const data = dataItem.dataContext as any;
-          return data.color || fill;
-        }
-        return fill;
-      });
-
-      // Add hover events for custom tooltip
-      bullet.get("sprite").events.on("pointerover", function (ev) {
+      // Add hover effects
+      container.events.on("pointerover", function (ev) {
         const dataItem = ev.target.dataItem;
         if (dataItem && dataItem.dataContext) {
           const data = dataItem.dataContext as WarriorData;
+          
+          // Increase opacity on hover
+          outerCircle.set("fillOpacity", 0.4);
+          middleCircle.set("fillOpacity", 0.6);
+          innerCircle.set("fillOpacity", 1);
           
           setTooltipData({
             ...data,
@@ -309,13 +344,18 @@ export default function WorldMap() {
         }
       });
 
-      bullet.get("sprite").events.on("pointerout", function () {
+      container.events.on("pointerout", function () {
+        // Reset opacity
+        outerCircle.set("fillOpacity", 0.2);
+        middleCircle.set("fillOpacity", 0.3);
+        innerCircle.set("fillOpacity", 1);
+        
         setTooltipData(prev => ({ ...prev, visible: false }));
       });
 
-
-
-      return bullet;
+      return am5.Bullet.new(root, {
+        sprite: container,
+      });
     });
 
     chart.appear(1000, 100);
