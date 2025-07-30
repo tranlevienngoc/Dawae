@@ -452,15 +452,18 @@ export default function WorldMap() {
 
         const chart = root.container.children.push(
             am5map.MapChart.new(root, {
-                panX: "rotateX",
+                panX: "translateX",
                 panY: "translateY",
                 projection: am5map.geoMercator(),
                 homeGeoPoint: { longitude: 0, latitude: 0 },
+                maxPanOut: 0.1,
             })
         );
 
         // chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
         chart.set("zoomControl", undefined);
+
+
 
         const polygonSeries = chart.series.push(
             am5map.MapPolygonSeries.new(root, {
