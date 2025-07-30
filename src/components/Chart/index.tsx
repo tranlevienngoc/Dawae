@@ -7,7 +7,7 @@ import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import Image from "next/image";
 import AiOutlineMenu from "../svg/AiOutlineMenu";
-
+import ReactCountryFlag from "react-country-flag";
 interface WarriorData {
     title: string;
     level: string; // "steady", "seeking", "new"
@@ -764,18 +764,8 @@ export default function WorldMap() {
                     ></div>
 
                     <div
-                        style={{
-                            position: "absolute",
-                            right: "20px",
-                            top: "40px",
-                            zIndex: 1000,
-                            backgroundColor: "rgba(255, 255, 255, 0.1)",
-                            borderRadius: "10px",
-                            padding: "20px",
-                            color: "white",
-                            minWidth: "300px",
-                            backdropFilter: "blur(10px)",
-                        }}
+                        
+                        className="total-dawae-warriors-box"
                     >
                         <h3 style={{ margin: "0 0 10px 0", fontSize: "16px", fontWeight: "normal", color: "#646974" }}>
                             Total Dawae Warriors
@@ -916,6 +906,7 @@ export default function WorldMap() {
                         {[
                             {
                                 flag: "🇺🇸",
+                                countryCode: "US",
                                 title: "Dawae Tribe USA",
                                 description:
                                     "Connect and optimize Kubernetes workloads running in Microsoft Azure environments.",
@@ -923,24 +914,28 @@ export default function WorldMap() {
                             },
                             {
                                 flag: "🇨🇳",
+                                countryCode: "CN",
                                 title: "Dawae Tribe China",
                                 description: "Optimize your private Kubernetes Service cluster using automation.",
                                 button: "Join",
                             },
                             {
                                 flag: "🇮🇳",
+                                countryCode: "IN",
                                 title: "Dawae Tribe India",
                                 description: "Optimize your Google Kubernetes Engine cluster using automation.",
                                 button: "Join",
                             },
                             {
                                 flag: "🇻🇳",
+                                countryCode: "VN",
                                 title: "Dawae Tribe Vietnam",
                                 description: "Optimize your Kubernetes clusters with workload auto-scaling.",
                                 button: "Join",
                             },
                             {
                                 flag: "🇰🇷",
+                                countryCode: "KR",
                                 title: "Dawae Tribe Korea",
                                 description:
                                     "Visualize Cost AI metrics in Grafana dashboards alongside infrastructure data.",
@@ -948,6 +943,7 @@ export default function WorldMap() {
                             },
                             {
                                 flag: "🇯🇵",
+                                countryCode: "JP",
                                 title: "Dawae Tribe Japan",
                                 description:
                                     "Integrate with Terraform for infrastructure-as-Code-driven cluster onboarding.",
@@ -955,6 +951,7 @@ export default function WorldMap() {
                             },
                             {
                                 flag: "🇦🇺",
+                                countryCode: "AU",
                                 title: "Dawae Tribe Australia",
                                 description:
                                     "Infrastructure-as-Code framework for managing cloud resources using Kubernetes.",
@@ -962,6 +959,7 @@ export default function WorldMap() {
                             },
                             {
                                 flag: "🇳🇬",
+                                countryCode: "NG",
                                 title: "Dawae Tribe Nigeria",
                                 description:
                                     "Optimize query performance and caching with autonomous database optimization.",
@@ -969,6 +967,7 @@ export default function WorldMap() {
                             },
                             {
                                 flag: "🇹🇭",
+                                countryCode: "TH",
                                 title: "Dawae Tribe Thailand",
                                 description: "Ingest Prometheus metrics to inform workload optimization decisions.",
                                 button: "Join",
@@ -977,14 +976,24 @@ export default function WorldMap() {
                             <div key={index} className="unites-bruddahs-globally-card">
                                 <div className="unites-bruddahs-globally-card-header">
                                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                        <span style={{ fontSize: "24px" }}>{tribe.flag}</span>
-                                        <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>
-                                            {tribe.title}
-                                        </h3>
+                                        <ReactCountryFlag
+                                            countryCode={tribe.countryCode}
+                                            svg
+                                            className="flag-icon"
+                                            style={{
+                                                width: "24px",
+                                                height: "24px",
+                                            }}
+                                        />
                                     </div>
                                     <button className="join-community-button">{tribe.button}</button>
                                 </div>
-                                <p className="unites-bruddahs-globally-card-description">{tribe.description}</p>
+                                <div className="unites-bruddahs-globally-card-body">
+                                    <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>
+                                            {tribe.title}
+                                        </h3>
+                                    <p className="unites-bruddahs-globally-card-description">{tribe.description}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
