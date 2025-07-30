@@ -514,7 +514,7 @@ export default function WorldMap() {
                     fillOpacity: 0.3,
                     tooltipY: 0,
                     fill: bulletColor,
-                    // stroke: bulletColor,
+                    stroke: bulletColor,
                     strokeWidth: 1,
                 })
             );
@@ -531,7 +531,7 @@ export default function WorldMap() {
             );
 
             // Set colors from data
-            container.children.each((child) => {
+            container.children.each((child, index) => {
                 child.adapters.add("fill" as keyof am5.ISpriteSettings, function (fill, target) {
                     const dataItem = target.dataItem;
                     if (dataItem && dataItem.dataContext) {
@@ -540,19 +540,36 @@ export default function WorldMap() {
                     }
                     return fill;
                 });
+                
+                // Add stroke adapter only for middle circle (index 1)
+                if (index === 1) {
+                    child.adapters.add("stroke" as keyof am5.ISpriteSettings, function (stroke, target) {
+                        const dataItem = target.dataItem;
+                        if (dataItem && dataItem.dataContext) {
+                            const data = dataItem.dataContext as WarriorData & { color: am5.Color };
+                            return data.color || stroke;
+                        }
+                        return stroke;
+                    });
+                }
             });
 
-            // Add hover effects
+                        // Add hover effects
             container.events.on("pointerover", function (ev) {
                 const dataItem = ev.target.dataItem;
                 if (dataItem && dataItem.dataContext) {
                     const data = dataItem.dataContext as WarriorData;
-
+                    
                     // Increase opacity on hover
                     outerCircle.set("fillOpacity", 0.4);
                     middleCircle.set("fillOpacity", 0.6);
                     innerCircle.set("fillOpacity", 1);
-
+                    
+                    // Add stroke to outer circle on hover
+                    const dataWithColor = dataItem.dataContext as WarriorData & { color: am5.Color };
+                    outerCircle.set("stroke", dataWithColor.color || am5.color(0xff8c00));
+                    outerCircle.set("strokeWidth", 1);
+                    
                     setTooltipData({
                         ...data,
                         x: ev.originalEvent.clientX,
@@ -562,12 +579,16 @@ export default function WorldMap() {
                 }
             });
 
-            container.events.on("pointerout", function () {
+                        container.events.on("pointerout", function () {
                 // Reset opacity
                 outerCircle.set("fillOpacity", 0.2);
                 middleCircle.set("fillOpacity", 0.3);
                 innerCircle.set("fillOpacity", 1);
-
+                
+                // Remove stroke from outer circle
+                outerCircle.set("stroke", undefined);
+                outerCircle.set("strokeWidth", 0);
+                
                 setTooltipData((prev) => ({ ...prev, visible: false }));
             });
 
@@ -633,11 +654,11 @@ export default function WorldMap() {
                             <Image src="/logo.png" alt="Login" width={100} height={20} />
                         </div>
                         <nav style={{ display: "flex", gap: "20px", fontSize: "14px" }}>
-                            <span>Dawae Tribe</span>
-                            <span>Dawae Charity</span>
-                            <span>Dawae Click</span>
-                            <span>Dawae Coin</span>
-                            <span>Community</span>
+                            <span style={{ cursor: "pointer" }}>Dawae Tribe</span>
+                            <span style={{ cursor: "pointer" }}>Dawae Charity</span>
+                            <span style={{ cursor: "pointer" }}>Dawae Click</span>
+                            <span style={{ cursor: "pointer" }}>Dawae Coin</span>
+                            <span style={{ cursor: "pointer" }}>Community</span>
                         </nav>
                     </div>
                     <div style={{ display: "flex", gap: "10px", fontSize: "14px", alignItems: "center" }}>
@@ -649,6 +670,7 @@ export default function WorldMap() {
                                 padding: "5px 15px",
                                 borderRadius: "4px",
                                 fontSize: "14px",
+                                cursor: "pointer",
                             }}
                         >
                             Sign in
@@ -661,6 +683,7 @@ export default function WorldMap() {
                                 padding: "5px 15px",
                                 borderRadius: "4px",
                                 fontSize: "14px",
+                                cursor: "pointer",
                             }}
                         >
                             Join the tribe
@@ -677,6 +700,8 @@ export default function WorldMap() {
                         zIndex: 1000,
                         textAlign: "center",
                         color: "white",
+                        marginBottom: "50px",
+                        marginTop: "40px",
                     }}
                 >
                     <h1
@@ -702,11 +727,12 @@ export default function WorldMap() {
                             style={{
                                 margin: "0",
                                 fontSize: "16px",
-                                color: "white",
+                                color: "#8892a1",
                                 maxWidth: "1000px",
                                 lineHeight: "1.6",
                                 fontFamily: "Soehne",
                                 textAlign: "center",
+                                
                             }}
                         >
                             Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great
@@ -752,7 +778,7 @@ export default function WorldMap() {
                             backdropFilter: "blur(10px)",
                         }}
                     >
-                        <h3 style={{ margin: "0 0 10px 0", fontSize: "16px", fontWeight: "normal" }}>
+                        <h3 style={{ margin: "0 0 10px 0", fontSize: "16px", fontWeight: "normal", color: "#646974" }}>
                             Total Dawae Warriors
                         </h3>
                         <div style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "15px" }}>{totalCount}</div>
@@ -794,8 +820,8 @@ export default function WorldMap() {
                             ></div>
                         </div>
 
-                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                            <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ display: "flex", flexDirection: "column"}}>
+                            <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #48484d", padding: "10px 0px" }}>
                                 <div
                                     style={{
                                         width: "25px",
@@ -810,7 +836,7 @@ export default function WorldMap() {
                                     ({((steadyWarriors / totalWarriors) * 100).toFixed(1)}%)
                                 </span>
                             </div>
-                            <div style={{ display: "flex", alignItems: "center" }}>
+                            <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #48484d", padding: "10px 0px" }}>
                                 <div
                                     style={{
                                         width: "25px",
@@ -849,7 +875,7 @@ export default function WorldMap() {
             <div
                 style={{
                     backgroundColor: "white",
-                    padding: "80px 20px",
+                    padding: "40px 20px 80px 20px",
                     color: "#333",
                 }}
             >
@@ -976,9 +1002,10 @@ export default function WorldMap() {
                                         </h3>
                                     </div>
                                     <button
+                                        className="join-community-button"
                                         style={{
-                                            backgroundColor: "#007bff",
-                                            color: "white",
+                                            backgroundColor: "#f6f7fa",
+                                            color: "#666",
                                             border: "none",
                                             padding: "8px 16px",
                                             borderRadius: "4px",
@@ -1024,8 +1051,8 @@ export default function WorldMap() {
                         fontSize: "14px",
                     }}
                 >
-                    <div>© 2025 CAST AI Group Inc.</div>
-                    <div style={{ display: "flex", gap: "20px" }}>
+                    <div style={{ color: "rgb(136, 146, 161)" }}>© 2025 CAST AI Group Inc.</div>
+                    <div style={{ display: "flex", gap: "50px" }}>
                         <span>Privacy policy</span>
                         <span>Terms of service</span>
                         <span>EU Projects</span>

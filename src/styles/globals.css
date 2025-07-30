@@ -102,3 +102,17 @@ h1 {
   0% { opacity: 1; }
   100% { opacity: 0.5; }
 }
+
+.join-community-button {
+  background-color: #f6f7fa;
+  color: #666;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.join-community-button:hover {
+  background-color: #007bff !important;
+  color: white !important;
+}
