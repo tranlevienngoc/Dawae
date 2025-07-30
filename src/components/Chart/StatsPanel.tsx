@@ -65,15 +65,15 @@ const StatsPanel = () => {
                 >
                     <div
                         style={{
-                            width: "25px",
+                            width: "20px",
                             height: "5px",
                             backgroundColor: "#26bb73",
                             borderRadius: "4px",
                         }}
                     ></div>
-                    <span style={{ color: "white", marginLeft: "10px" }}>Steady Wae Warriors</span>
-                    <span style={{ color: "white", marginLeft: "10px" }}>{steadyWarriors}</span>
-                    <span style={{ color: "#646974" }}>
+                    <span style={{ color: "white", margin: "0 10px", fontSize: "14px" }}>Steady Wae Warriors</span>
+                    <span style={{ color: "white", marginLeft: "auto" }}>{steadyWarriors}</span>
+                    <span style={{ color: "#646974", marginLeft: "5px" }}>
                         ({((steadyWarriors / totalWarriors) * 100).toFixed(1)}%)
                     </span>
                 </div>
@@ -87,15 +87,15 @@ const StatsPanel = () => {
                 >
                     <div
                         style={{
-                            width: "25px",
+                            width: "20px",
                             height: "5px",
                             backgroundColor: "#ff9840",
                             borderRadius: "4px",
                         }}
                     ></div>
-                    <span style={{ color: "white", marginLeft: "10px" }}>Seeking Wae Warriors</span>
-                    <span style={{ color: "white", marginLeft: "10px" }}>{seekingWarriors}</span>
-                    <span style={{ color: "#646974" }}>
+                    <span style={{ color: "white", margin: "0 10px", fontSize: "14px" }}>Seeking Wae Warriors</span>
+                    <span style={{ color: "white", marginLeft: "auto" }}>{seekingWarriors}</span>
+                    <span style={{ color: "#646974", marginLeft: "5px" }}>
                         ({((seekingWarriors / totalWarriors) * 100).toFixed(1)}%)
                     </span>
                 </div>
@@ -108,15 +108,15 @@ const StatsPanel = () => {
                 >
                     <div
                         style={{
-                            width: "25px",
+                            width: "20px",
                             height: "5px",
                             backgroundColor: "#e12c4e",
                             borderRadius: "4px",
                         }}
                     ></div>
-                    <span style={{ color: "white", marginLeft: "10px" }}>New Wae Warriors</span>
-                    <span style={{ color: "white", marginLeft: "10px" }}>{newWarriors}</span>
-                    <span style={{ color: "#646974" }}>
+                    <span style={{ color: "white", margin: "0 10px", fontSize: "14px" }}>New Wae Warriors</span>
+                    <span style={{ color: "white", marginLeft: "auto" }}>{newWarriors}</span>
+                    <span style={{ color: "#646974", marginLeft: "5px" }}>
                         ({((newWarriors / totalWarriors) * 100).toFixed(1)}%)
                     </span>
                 </div>

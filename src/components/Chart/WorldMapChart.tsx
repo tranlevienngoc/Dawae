@@ -1,16 +1,44 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { warriors, WarriorData } from "../../constants/warriors";
+import { TooltipData } from "../../hooks/useTooltip";
+import CustomTooltip from "./CustomTooltip";
 
-interface WorldMapChartProps {
-    onTooltipShow: (data: WarriorData, x: number, y: number) => void;
-    onTooltipHide: () => void;
-}
+// interface WorldMapChartProps {
+//     onTooltipShow?: (data: WarriorData, x: number, y: number) => void;
+//     onTooltipHide?: () => void;
+// }
 
-const WorldMapChart = ({ onTooltipShow, onTooltipHide }: WorldMapChartProps) => {
+const WorldMapChart = () => {
+    console.log("WorldMapChart");
+    const [tooltipData, setTooltipData] = useState<TooltipData>({
+        title: "",
+        level: "",
+        count: 0,
+        location: "",
+        latitude: 0,
+        longitude: 0,
+        x: 0,
+        y: 0,
+        visible: false,
+    });
+
+    const showTooltip = (data: WarriorData, x: number, y: number) => {
+        setTooltipData({
+            ...data,
+            x,
+            y,
+            visible: true,
+        });
+    };
+
+    const hideTooltip = () => {
+        setTooltipData((prev) => ({ ...prev, visible: false }));
+    };
+
     useEffect(() => {
         const root = am5.Root.new("chartdiv");
 
@@ -139,7 +167,7 @@ const WorldMapChart = ({ onTooltipShow, onTooltipHide }: WorldMapChartProps) => 
                     outerCircle.set("stroke", dataWithColor.color || am5.color(0xff8c00));
                     outerCircle.set("strokeWidth", 1);
 
-                    onTooltipShow(data, ev.originalEvent.clientX, ev.originalEvent.clientY);
+                    showTooltip(data, ev.originalEvent.clientX, ev.originalEvent.clientY);
                 }
             });
 
@@ -153,7 +181,7 @@ const WorldMapChart = ({ onTooltipShow, onTooltipHide }: WorldMapChartProps) => 
                 outerCircle.set("stroke", undefined);
                 outerCircle.set("strokeWidth", 0);
 
-                onTooltipHide();
+                hideTooltip();
             });
 
             return am5.Bullet.new(root, {
@@ -164,19 +192,27 @@ const WorldMapChart = ({ onTooltipShow, onTooltipHide }: WorldMapChartProps) => 
         chart.appear(1000, 100);
 
         return () => root.dispose();
-    }, [onTooltipShow, onTooltipHide]);
+    }, []);
 
     return (
-        <div
-            id="chartdiv"
-            className="mobile-map-container"
-            style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "#0e0f13",
-            }}
-        />
+        <>
+            <div
+                id="chartdiv"
+                className="mobile-map-container"
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#0e0f13",
+                }}
+            />
+            <CustomTooltip
+                data={tooltipData.visible ? tooltipData : null}
+                x={tooltipData.x}
+                y={tooltipData.y}
+                visible={tooltipData.visible}
+            />
+        </>
     );
 };
 
-export default WorldMapChart; 
+export default WorldMapChart;

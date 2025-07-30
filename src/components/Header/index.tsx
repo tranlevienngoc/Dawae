@@ -33,6 +33,7 @@ const Header = () => {
                                 gap: "8px",
                                 fontWeight: "bold",
                                 fontSize: "18px",
+                                marginRight: "25px",
                             }}
                         >
                             <Image src="/logo.png" alt="DAWAE Logo" width={100} height={20} />

@@ -4,14 +4,14 @@
 import Header from "../Header";
 import WorldMapChart from "./WorldMapChart";
 import StatsPanel from "./StatsPanel";
-import CustomTooltip from "./CustomTooltip";
+// import CustomTooltip from "./CustomTooltip";
 import TribesSection from "../TribesSection";
 import Footer from "../Footer";
-import { useTooltip } from "../../hooks/useTooltip";
+// import { useTooltip } from "../../hooks/useTooltip";
 import "../../styles/responsive.css";
 
 export default function WorldMap() {
-    const { tooltipData, showTooltip, hideTooltip } = useTooltip();
+    // const { tooltipData, showTooltip, hideTooltip } = useTooltip();
 
     return (
         <div
@@ -54,7 +54,8 @@ export default function WorldMap() {
                     }}
                 >
                     {/* World Map Chart */}
-                    <WorldMapChart onTooltipShow={showTooltip} onTooltipHide={hideTooltip} />
+                    {/* <WorldMapChart onTooltipShow={showTooltip} onTooltipHide={hideTooltip} /> */}
+                    <WorldMapChart />
 
                     {/* Stats Panel */}
                     <StatsPanel />
@@ -68,12 +69,12 @@ export default function WorldMap() {
             <Footer />
 
             {/* Custom Tooltip */}
-            <CustomTooltip
+            {/* <CustomTooltip
                 data={tooltipData.visible ? tooltipData : null}
                 x={tooltipData.x}
                 y={tooltipData.y}
                 visible={tooltipData.visible}
-            />
+            /> */}
         </div>
     );
 } 
