@@ -49,7 +49,7 @@ export default function WorldMap() {
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
-                        height: "600px",
+                        height: "750px", // Điều chỉnh để phù hợp với chart height 700px
                         position: "relative",
                     }}
                 >

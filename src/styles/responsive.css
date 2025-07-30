@@ -173,7 +173,7 @@
     }
 
     .mobile-map-container {
-        height: 400px !important;
+        height: 500px !important; /* Override cho mobile */
     }
 
     .total-dawae-warriors-box {

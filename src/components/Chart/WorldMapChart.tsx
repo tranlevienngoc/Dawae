@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
@@ -25,6 +25,8 @@ const WorldMapChart = () => {
         y: 0,
         visible: false,
     });
+    const [showCtrlHint, setShowCtrlHint] = useState(false);
+    const hintTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const showTooltip = (data: WarriorData, x: number, y: number) => {
         setTooltipData({
@@ -51,11 +53,17 @@ const WorldMapChart = () => {
                 projection: am5map.geoMercator(),
                 homeGeoPoint: { longitude: 0, latitude: 0 },
                 maxPanOut: 0.1,
+                // Set default zoom level (1.5 = 50% zoomed in)
+                zoomLevel: 1.5,
             })
         );
 
-        // Disable zoom controls
+        // Disable zoom controls but allow mouse wheel zoom
         chart.set("zoomControl", undefined);
+        
+        // Enable mouse wheel zoom
+        chart.set("wheelY", "zoom");
+        chart.set("wheelX", "zoom");
 
         const polygonSeries = chart.series.push(
             am5map.MapPolygonSeries.new(root, {
@@ -191,6 +199,24 @@ const WorldMapChart = () => {
 
         chart.appear(1000, 100);
 
+        // Wheel event handler for CTRL hint
+        const chartDiv = document.getElementById("chartdiv");
+        if (chartDiv) {
+            const handleWheel = (e: WheelEvent) => {
+                if (!e.ctrlKey) {
+                    setShowCtrlHint(true);
+                    if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+                    hintTimeoutRef.current = setTimeout(() => setShowCtrlHint(false), 2000);
+                } else {
+                    setShowCtrlHint(false);
+                }
+            };
+            chartDiv.addEventListener("wheel", handleWheel, { passive: true });
+            return () => {
+                chartDiv.removeEventListener("wheel", handleWheel);
+            };
+        }
+
         return () => root.dispose();
     }, []);
 
@@ -201,10 +227,40 @@ const WorldMapChart = () => {
                 className="mobile-map-container"
                 style={{
                     width: "100%",
-                    height: "100%",
+                    height: "700px", // Set fixed height for chart
                     backgroundColor: "#0e0f13",
+                    position: "relative",
                 }}
             />
+            {showCtrlHint && (
+                <div
+                    style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        width: "100%",
+                        height: "600px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        pointerEvents: "none",
+                        zIndex: 20000,
+                    }}
+                >
+                    <div
+                        style={{
+                            color: "#fff",
+                            padding: "18px 36px",
+                            borderRadius: 12,
+                            fontSize: "30px",
+                            fontWeight: 500,
+                            userSelect: "none",
+                        }}
+                    >
+                        Use CTRL + Scroll to zoom
+                    </div>
+                </div>
+            )}
             <CustomTooltip
                 data={tooltipData.visible ? tooltipData : null}
                 x={tooltipData.x}
