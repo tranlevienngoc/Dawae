@@ -463,8 +463,6 @@ export default function WorldMap() {
         // chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
         chart.set("zoomControl", undefined);
 
-
-
         const polygonSeries = chart.series.push(
             am5map.MapPolygonSeries.new(root, {
                 geoJSON: am5geodata_worldLow,
@@ -677,32 +675,8 @@ export default function WorldMap() {
                                     marginLeft: "auto",
                                 }}
                             >
-                                <button
-                                    style={{
-                                        backgroundColor: "white",
-                                        color: "black",
-                                        border: "1px solid #e1e4ea",
-                                        padding: "5px 15px",
-                                        borderRadius: "4px",
-                                        fontSize: "14px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Sign in
-                                </button>
-                                <button
-                                    style={{
-                                        backgroundColor: "rgb(14, 15, 19)",
-                                        color: "white",
-                                        border: "none",
-                                        padding: "5px 15px",
-                                        borderRadius: "4px",
-                                        fontSize: "14px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Join the tribe
-                                </button>
+                                <button className="sign-in-button">Sign in</button>
+                                <button className="join-the-tribe-button">Join the tribe</button>
                             </div>
                         </div>
                     </div>
@@ -766,10 +740,7 @@ export default function WorldMap() {
                         }}
                     ></div>
 
-                    <div
-                        
-                        className="total-dawae-warriors-box"
-                    >
+                    <div className="total-dawae-warriors-box">
                         <h3 style={{ margin: "0 0 10px 0", fontSize: "16px", fontWeight: "normal", color: "#646974" }}>
                             Total Dawae Warriors
                         </h3>
@@ -985,16 +956,16 @@ export default function WorldMap() {
                                             className="flag-icon"
                                             style={{
                                                 width: "24px",
-                                                height: "24px",
+                                                height: "18px",
+                                                borderRadius: "5px",
+                                                border: "1px solid #e1e4ea",
                                             }}
                                         />
                                     </div>
                                     <button className="join-community-button">{tribe.button}</button>
                                 </div>
                                 <div className="unites-bruddahs-globally-card-body">
-                                    <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>
-                                            {tribe.title}
-                                        </h3>
+                                    <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>{tribe.title}</h3>
                                     <p className="unites-bruddahs-globally-card-description">{tribe.description}</p>
                                 </div>
                             </div>
@@ -1100,32 +1071,8 @@ export default function WorldMap() {
                                     alignItems: "center",
                                 }}
                             >
-                                <button
-                                    style={{
-                                        backgroundColor: "white",
-                                        color: "black",
-                                        border: "1px solid #e1e4ea",
-                                        padding: "5px 15px",
-                                        borderRadius: "4px",
-                                        fontSize: "14px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Sign in
-                                </button>
-                                <button
-                                    style={{
-                                        backgroundColor: "rgb(14, 15, 19)",
-                                        color: "white",
-                                        border: "none",
-                                        padding: "5px 15px",
-                                        borderRadius: "4px",
-                                        fontSize: "14px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Join the tribe
-                                </button>
+                                <button className="sign-in-button">Sign in</button>
+                                <button className="join-the-tribe-button">Join the tribe</button>
                             </div>
                         </div>
                     </div>

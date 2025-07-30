@@ -167,6 +167,36 @@ h1 {
   color: white !important;
 }
 
+.sign-in-button {
+  background-color: white;
+  color: black;
+  border: 1px solid #e1e4ea;
+  padding: 5px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sign-in-button:hover {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.join-the-tribe-button {  
+  background-color: rgb(14, 15, 19);
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.join-the-tribe-button:hover {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
 .header-nav-links-container {
   display: flex;
   align-items: center;
