@@ -1,0 +1,263 @@
+export interface WarriorData {
+    title: string;
+    level: string; // "steady", "seeking", "new"
+    count: number;
+    location: string;
+    latitude: number;
+    longitude: number;
+}
+
+// Dawae Warriors data around the world
+export const warriors: WarriorData[] = [
+    // Steady Wae Warriors (Green) - 12 warriors (28.7%)
+    {
+        title: "Uganda Tribe Alpha",
+        latitude: 1.3733,
+        longitude: 32.2903,
+        level: "steady",
+        count: 8,
+        location: "Kampala, Uganda",
+    },
+    {
+        title: "Kenya Warriors",
+        latitude: -1.2921,
+        longitude: 36.8219,
+        level: "steady",
+        count: 6,
+        location: "Nairobi, Kenya",
+    },
+    {
+        title: "Tanzania Knuckles",
+        latitude: -6.7924,
+        longitude: 39.2083,
+        level: "steady",
+        count: 5,
+        location: "Dar es Salaam, Tanzania",
+    },
+    {
+        title: "Nigeria Dawae",
+        latitude: 9.0765,
+        longitude: 7.3986,
+        level: "steady",
+        count: 7,
+        location: "Abuja, Nigeria",
+    },
+    {
+        title: "Ghana Warriors",
+        latitude: 5.6037,
+        longitude: -0.187,
+        level: "steady",
+        count: 4,
+        location: "Accra, Ghana",
+    },
+    {
+        title: "South Africa Tribe",
+        latitude: -25.7479,
+        longitude: 28.2293,
+        level: "steady",
+        count: 3,
+        location: "Pretoria, South Africa",
+    },
+    {
+        title: "Morocco Knuckles",
+        latitude: 33.9716,
+        longitude: -6.8498,
+        level: "steady",
+        count: 2,
+        location: "Rabat, Morocco",
+    },
+    {
+        title: "Ethiopia Warriors",
+        latitude: 9.145,
+        longitude: 40.4897,
+        level: "steady",
+        count: 4,
+        location: "Addis Ababa, Ethiopia",
+    },
+    {
+        title: "Cameroon Dawae",
+        latitude: 3.848,
+        longitude: 11.5021,
+        level: "steady",
+        count: 3,
+        location: "Yaoundé, Cameroon",
+    },
+    {
+        title: "Senegal Tribe",
+        latitude: 14.7167,
+        longitude: -17.4677,
+        level: "steady",
+        count: 2,
+        location: "Dakar, Senegal",
+    },
+    {
+        title: "Congo Warriors",
+        latitude: -4.2634,
+        longitude: 15.2429,
+        level: "steady",
+        count: 5,
+        location: "Kinshasa, DRC",
+    },
+    {
+        title: "Madagascar Knuckles",
+        latitude: -18.8792,
+        longitude: 47.5079,
+        level: "steady",
+        count: 3,
+        location: "Antananarivo, Madagascar",
+    },
+
+    // Seeking Wae Warriors (Orange) - 16 warriors (35.1%)
+    {
+        title: "London Seekers",
+        latitude: 51.5074,
+        longitude: -0.1278,
+        level: "seeking",
+        count: 4,
+        location: "London, UK",
+    },
+    {
+        title: "Paris Dawae",
+        latitude: 48.8566,
+        longitude: 2.3522,
+        level: "seeking",
+        count: 3,
+        location: "Paris, France",
+    },
+    {
+        title: "Warsaw Tribe",
+        latitude: 52.2297,
+        longitude: 21.0122,
+        level: "seeking",
+        count: 4,
+        location: "Warsaw, Poland",
+    },
+    {
+        title: "Budapest Dawae",
+        latitude: 47.4979,
+        longitude: 19.0402,
+        level: "seeking",
+        count: 2,
+        location: "Budapest, Hungary",
+    },
+    {
+        title: "Bucharest Seekers",
+        latitude: 44.4268,
+        longitude: 26.1025,
+        level: "seeking",
+        count: 3,
+        location: "Bucharest, Romania",
+    },
+    {
+        title: "Helsinki Warriors",
+        latitude: 60.1699,
+        longitude: 24.9384,
+        level: "seeking",
+        count: 2,
+        location: "Helsinki, Finland",
+    },
+    {
+        title: "Oslo Knuckles",
+        latitude: 59.9139,
+        longitude: 10.7522,
+        level: "seeking",
+        count: 3,
+        location: "Oslo, Norway",
+    },
+    {
+        title: "Zurich Tribe",
+        latitude: 46.9481,
+        longitude: 7.4474,
+        level: "seeking",
+        count: 2,
+        location: "Zurich, Switzerland",
+    },
+
+    // New Wae Warriors (Red/Pink) - 14 warriors (33.3%)
+    {
+        title: "Tokyo New Dawae",
+        latitude: 35.6762,
+        longitude: 139.6503,
+        level: "new",
+        count: 6,
+        location: "Tokyo, Japan",
+    },
+    {
+        title: "Seoul Warriors",
+        latitude: 37.5665,
+        longitude: 126.978,
+        level: "new",
+        count: 5,
+        location: "Seoul, South Korea",
+    },
+    {
+        title: "Sydney Dawae",
+        latitude: -33.8688,
+        longitude: 151.2093,
+        level: "new",
+        count: 3,
+        location: "Sydney, Australia",
+    },
+    {
+        title: "Singapore Warriors",
+        latitude: 1.3521,
+        longitude: 103.8198,
+        level: "new",
+        count: 4,
+        location: "Singapore",
+    },
+    {
+        title: "Bangkok Seekers",
+        latitude: 13.7563,
+        longitude: 100.5018,
+        level: "new",
+        count: 3,
+        location: "Bangkok, Thailand",
+    },
+    {
+        title: "Ho Chi Minh Tribe",
+        latitude: 10.8231,
+        longitude: 106.6297,
+        level: "new",
+        count: 3,
+        location: "Ho Chi Minh City, Vietnam",
+    },
+    {
+        title: "Kuala Lumpur Dawae",
+        latitude: 3.139,
+        longitude: 101.6869,
+        level: "new",
+        count: 2,
+        location: "Kuala Lumpur, Malaysia",
+    },
+    {
+        title: "New York Seekers",
+        latitude: 40.7128,
+        longitude: -74.006,
+        level: "new",
+        count: 8,
+        location: "New York, USA",
+    },
+    {
+        title: "Los Angeles Warriors",
+        latitude: 34.0522,
+        longitude: -118.2437,
+        level: "new",
+        count: 6,
+        location: "Los Angeles, USA",
+    },
+    {
+        title: "São Paulo Knuckles",
+        latitude: -23.5505,
+        longitude: -46.6333,
+        level: "new",
+        count: 4,
+        location: "São Paulo, Brazil",
+    },
+];
+
+export const LEVEL_COLORS = {
+    steady: "#26bb73",
+    seeking: "#ff9840", 
+    new: "#e12c4e"
+} as const; 

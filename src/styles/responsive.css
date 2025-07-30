@@ -1,0 +1,229 @@
+/* Desktop styles - default */
+.header-nav-links-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.header-nav-links {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.header-hamburger-menu {
+    display: none;
+    cursor: pointer;
+}
+
+.title-dawae-container {
+    z-index: 1000;
+    text-align: center;
+    color: white;
+    margin-bottom: 50px;
+    margin-top: 40px;
+}
+
+.title-dawae {
+    margin: 0 0 20px 0;
+    font-size: 62px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-family: "Soehne";
+}
+
+.title-dawae-description-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.title-dawae-description {
+    margin: 0;
+    font-size: 16px;
+    color: #8892a1;
+    max-width: 1000px;
+    line-height: 1.6;
+    font-family: "Soehne";
+    text-align: center;
+}
+
+.total-dawae-warriors-box {
+    position: absolute;
+    right: 20px;
+    top: 40px;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    min-width: 300px;
+    backdrop-filter: blur(10px);
+}
+
+.unites-bruddahs-globally-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.unites-bruddahs-globally-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 60px;
+}
+
+.unites-bruddahs-globally-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: left;
+    border: 1px solid #e1e4ea;
+}
+
+.unites-bruddahs-globally-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.unites-bruddahs-globally-card-body {
+    margin-top: 15px;
+}
+
+.unites-bruddahs-globally-card-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin: 10px 0 0 0;
+}
+
+.join-community-button {
+    background-color: #f6f7fa;
+    color: #666;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sign-in-button {
+    background-color: white;
+    color: black;
+    border: 1px solid #e1e4ea;
+    padding: 5px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.join-the-tribe-button {
+    background-color: rgb(14, 15, 19);
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 50px;
+}
+
+.flag-icon {
+    object-fit: cover;
+}
+
+/* Mobile styles - max-width: 700px */
+@media (max-width: 700px) {
+    .header-nav-links {
+        display: none;
+    }
+    
+    .header-hamburger-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .title-dawae {
+        font-size: 32px !important;
+        padding: 0 20px !important;
+    }
+
+    .title-dawae-description {
+        font-size: 14px !important;
+        padding: 0 20px !important;
+    }
+
+    .mobile-map-container {
+        height: 400px !important;
+    }
+
+    .total-dawae-warriors-box {
+        position: relative !important;
+        right: auto !important;
+        top: auto !important;
+        margin: 20px !important;
+        width: auto !important;
+        min-width: auto !important;
+    }
+
+    .mobile-tribes-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 0 20px !important;
+    }
+
+    .unites-bruddahs-globally-title {
+        font-size: 32px;
+        padding: 0 20px;
+    }
+
+    .unites-bruddahs-globally-description {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+
+    .footer-container {
+        flex-direction: column !important;
+        gap: 20px !important;
+        padding: 20px !important;
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .unites-bruddahs-globally-card {
+        padding: 20px;
+    }
+
+    .unites-bruddahs-globally-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .join-community-button {
+        align-self: flex-start;
+    }
+} 
