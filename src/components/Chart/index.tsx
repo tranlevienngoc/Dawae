@@ -6,6 +6,7 @@ import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import Image from "next/image";
+import AiOutlineMenu from "../svg/AiOutlineMenu";
 
 interface WarriorData {
     title: string;
@@ -457,7 +458,8 @@ export default function WorldMap() {
             })
         );
 
-        chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
+        // chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
+        chart.set("zoomControl", undefined);
 
         const polygonSeries = chart.series.push(
             am5map.MapPolygonSeries.new(root, {
@@ -540,7 +542,7 @@ export default function WorldMap() {
                     }
                     return fill;
                 });
-                
+
                 // Add stroke adapter only for middle circle (index 1)
                 if (index === 1) {
                     child.adapters.add("stroke" as keyof am5.ISpriteSettings, function (stroke, target) {
@@ -554,22 +556,22 @@ export default function WorldMap() {
                 }
             });
 
-                        // Add hover effects
+            // Add hover effects
             container.events.on("pointerover", function (ev) {
                 const dataItem = ev.target.dataItem;
                 if (dataItem && dataItem.dataContext) {
                     const data = dataItem.dataContext as WarriorData;
-                    
+
                     // Increase opacity on hover
                     outerCircle.set("fillOpacity", 0.4);
                     middleCircle.set("fillOpacity", 0.6);
                     innerCircle.set("fillOpacity", 1);
-                    
+
                     // Add stroke to outer circle on hover
                     const dataWithColor = dataItem.dataContext as WarriorData & { color: am5.Color };
                     outerCircle.set("stroke", dataWithColor.color || am5.color(0xff8c00));
                     outerCircle.set("strokeWidth", 1);
-                    
+
                     setTooltipData({
                         ...data,
                         x: ev.originalEvent.clientX,
@@ -579,16 +581,16 @@ export default function WorldMap() {
                 }
             });
 
-                        container.events.on("pointerout", function () {
+            container.events.on("pointerout", function () {
                 // Reset opacity
                 outerCircle.set("fillOpacity", 0.2);
                 middleCircle.set("fillOpacity", 0.3);
                 innerCircle.set("fillOpacity", 1);
-                
+
                 // Remove stroke from outer circle
                 outerCircle.set("stroke", undefined);
                 outerCircle.set("strokeWidth", 0);
-                
+
                 setTooltipData((prev) => ({ ...prev, visible: false }));
             });
 
@@ -639,7 +641,7 @@ export default function WorldMap() {
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: "20px",
+                            width: "100%",
                         }}
                     >
                         <div
@@ -653,41 +655,49 @@ export default function WorldMap() {
                         >
                             <Image src="/logo.png" alt="Login" width={100} height={20} />
                         </div>
-                        <nav style={{ display: "flex", gap: "20px", fontSize: "14px" }}>
-                            <span style={{ cursor: "pointer" }}>Dawae Tribe</span>
-                            <span style={{ cursor: "pointer" }}>Dawae Charity</span>
-                            <span style={{ cursor: "pointer" }}>Dawae Click</span>
-                            <span style={{ cursor: "pointer" }}>Dawae Coin</span>
-                            <span style={{ cursor: "pointer" }}>Community</span>
-                        </nav>
+                        <div className="header-nav-links-container">
+                            <nav
+                                className="header-nav-links"
+                            >
+                                <span style={{ cursor: "pointer" }}>Dawae Tribe</span>
+                                <span style={{ cursor: "pointer" }}>Dawae Charity</span>
+                                <span style={{ cursor: "pointer" }}>Dawae Click</span>
+                                <span style={{ cursor: "pointer" }}>Dawae Coin</span>
+                                <span style={{ cursor: "pointer" }}>Community</span>
+                            </nav>
+
+                            <div style={{ display: "flex", gap: "10px", fontSize: "14px", alignItems: "center", marginLeft: "auto" }}>
+                                <button
+                                    style={{
+                                        backgroundColor: "white",
+                                        color: "black",
+                                        border: "1px solid #e1e4ea",
+                                        padding: "5px 15px",
+                                        borderRadius: "4px",
+                                        fontSize: "14px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Sign in
+                                </button>
+                                <button
+                                    style={{
+                                        backgroundColor: "rgb(14, 15, 19)",
+                                        color: "white",
+                                        border: "none",
+                                        padding: "5px 15px",
+                                        borderRadius: "4px",
+                                        fontSize: "14px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Join the tribe
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div style={{ display: "flex", gap: "10px", fontSize: "14px", alignItems: "center" }}>
-                        <button
-                            style={{
-                                backgroundColor: "white",
-                                color: "black",
-                                border: "1px solid #e1e4ea",
-                                padding: "5px 15px",
-                                borderRadius: "4px",
-                                fontSize: "14px",
-                                cursor: "pointer",
-                            }}
-                        >
-                            Sign in
-                        </button>
-                        <button
-                            style={{
-                                backgroundColor: "rgb(14, 15, 19)",
-                                color: "white",
-                                border: "none",
-                                padding: "5px 15px",
-                                borderRadius: "4px",
-                                fontSize: "14px",
-                                cursor: "pointer",
-                            }}
-                        >
-                            Join the tribe
-                        </button>
+                    <div className="header-hamburger-menu">
+                        <AiOutlineMenu />
                     </div>
                 </div>
             </header>
@@ -732,7 +742,6 @@ export default function WorldMap() {
                                 lineHeight: "1.6",
                                 fontFamily: "Soehne",
                                 textAlign: "center",
-                                
                             }}
                         >
                             Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great
@@ -820,8 +829,15 @@ export default function WorldMap() {
                             ></div>
                         </div>
 
-                        <div style={{ display: "flex", flexDirection: "column"}}>
-                            <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #48484d", padding: "10px 0px" }}>
+                        <div style={{ display: "flex", flexDirection: "column" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    borderBottom: "1px solid #48484d",
+                                    padding: "10px 0px",
+                                }}
+                            >
                                 <div
                                     style={{
                                         width: "25px",
@@ -836,7 +852,14 @@ export default function WorldMap() {
                                     ({((steadyWarriors / totalWarriors) * 100).toFixed(1)}%)
                                 </span>
                             </div>
-                            <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #48484d", padding: "10px 0px" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    borderBottom: "1px solid #48484d",
+                                    padding: "10px 0px",
+                                }}
+                            >
                                 <div
                                     style={{
                                         width: "25px",

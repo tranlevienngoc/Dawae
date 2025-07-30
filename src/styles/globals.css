@@ -116,3 +116,36 @@ h1 {
   background-color: #007bff !important;
   color: white !important;
 }
+
+.header-nav-links-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-nav-links {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  margin-left: 20px;
+}
+
+.header-nav-links span {
+  cursor: pointer;
+}
+
+.header-hamburger-menu {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .header-nav-links-container {
+    display: none;
+  }
+
+  .header-hamburger-menu {
+    display: block;
+  }
+}
