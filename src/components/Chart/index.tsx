@@ -443,6 +443,7 @@ export default function WorldMap() {
         y: 0,
         visible: false,
     });
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         const root = am5.Root.new("chartdiv");
@@ -656,9 +657,7 @@ export default function WorldMap() {
                             <Image src="/logo.png" alt="Login" width={100} height={20} />
                         </div>
                         <div className="header-nav-links-container">
-                            <nav
-                                className="header-nav-links"
-                            >
+                            <nav className="header-nav-links">
                                 <span style={{ cursor: "pointer" }}>Dawae Tribe</span>
                                 <span style={{ cursor: "pointer" }}>Dawae Charity</span>
                                 <span style={{ cursor: "pointer" }}>Dawae Click</span>
@@ -666,7 +665,15 @@ export default function WorldMap() {
                                 <span style={{ cursor: "pointer" }}>Community</span>
                             </nav>
 
-                            <div style={{ display: "flex", gap: "10px", fontSize: "14px", alignItems: "center", marginLeft: "auto" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: "10px",
+                                    fontSize: "14px",
+                                    alignItems: "center",
+                                    marginLeft: "auto",
+                                }}
+                            >
                                 <button
                                     style={{
                                         backgroundColor: "white",
@@ -696,8 +703,26 @@ export default function WorldMap() {
                             </div>
                         </div>
                     </div>
-                    <div className="header-hamburger-menu">
-                        <AiOutlineMenu />
+                    <div className="header-hamburger-menu" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        {!isMenuOpen ? (
+                            <AiOutlineMenu />
+                        ) : (
+                            <button
+                                style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: "white",
+                                    fontSize: "24px",
+                                    cursor: "pointer",
+                                    padding: "0",
+                                    marginRight: "2px",
+                                    zIndex: 10002,
+                                    position: "relative",
+                                }}
+                            >
+                                ✕
+                            </button>
+                        )}
                     </div>
                 </div>
             </header>
@@ -705,45 +730,10 @@ export default function WorldMap() {
             {/* Main Content */}
             <div style={{ backgroundColor: "#0e0f13" }}>
                 {/* Title and Description */}
-                <div
-                    style={{
-                        zIndex: 1000,
-                        textAlign: "center",
-                        color: "white",
-                        marginBottom: "50px",
-                        marginTop: "40px",
-                    }}
-                >
-                    <h1
-                        style={{
-                            margin: "0 0 20px 0",
-                            fontSize: "62px",
-                            fontWeight: 800,
-                            letterSpacing: "2px",
-                            fontFamily: "Soehne",
-                        }}
-                    >
-                        The Ugandan Knuckles Empire
-                    </h1>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            marginTop: "20px",
-                        }}
-                    >
-                        <p
-                            style={{
-                                margin: "0",
-                                fontSize: "16px",
-                                color: "#8892a1",
-                                maxWidth: "1000px",
-                                lineHeight: "1.6",
-                                fontFamily: "Soehne",
-                                textAlign: "center",
-                            }}
-                        >
+                <div className="title-dawae-container">
+                    <h1 className="title-dawae">The Ugandan Knuckles Empire</h1>
+                    <div className="title-dawae-description-container">
+                        <p className="title-dawae-description">
                             Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great
                             again! Dis house unites bruddahs globally, tappin&apos; to honor Da Queen and prove Da Wae
                             lives eternal. Join us, spit on da doubters, and let&apos;s show da world da Ugandan
@@ -909,23 +899,8 @@ export default function WorldMap() {
                         textAlign: "center",
                     }}
                 >
-                    <h2
-                        style={{
-                            fontSize: "48px",
-                            fontWeight: "bold",
-                            marginBottom: "20px",
-                            color: "#333",
-                        }}
-                    >
-                        Unites Bruddahs Globally
-                    </h2>
-                    <p
-                        style={{
-                            fontSize: "16px",
-                            color: "#666",
-                            marginBottom: "60px",
-                        }}
-                    >
+                    <h2 className="unites-bruddahs-globally-title">Unites Bruddahs Globally</h2>
+                    <p className="unites-bruddahs-globally-description">
                         Join us, spit on da doubters, and let&apos;s show da world da Knuckles tribe never fades
                     </p>
 
@@ -999,56 +974,17 @@ export default function WorldMap() {
                                 button: "Join",
                             },
                         ].map((tribe, index) => (
-                            <div
-                                key={index}
-                                style={{
-                                    backgroundColor: "white",
-                                    borderRadius: "8px",
-                                    padding: "30px",
-                                    // boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-                                    textAlign: "left",
-                                    border: "1px solid #e1e4ea",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "flex-start",
-                                        marginBottom: "15px",
-                                    }}
-                                >
+                            <div key={index} className="unites-bruddahs-globally-card">
+                                <div className="unites-bruddahs-globally-card-header">
                                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                         <span style={{ fontSize: "24px" }}>{tribe.flag}</span>
                                         <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>
                                             {tribe.title}
                                         </h3>
                                     </div>
-                                    <button
-                                        className="join-community-button"
-                                        style={{
-                                            backgroundColor: "#f6f7fa",
-                                            color: "#666",
-                                            border: "none",
-                                            padding: "8px 16px",
-                                            borderRadius: "4px",
-                                            fontSize: "14px",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        {tribe.button}
-                                    </button>
+                                    <button className="join-community-button">{tribe.button}</button>
                                 </div>
-                                <p
-                                    style={{
-                                        fontSize: "14px",
-                                        color: "#666",
-                                        lineHeight: "1.5",
-                                        margin: "0",
-                                    }}
-                                >
-                                    {tribe.description}
-                                </p>
+                                <p className="unites-bruddahs-globally-card-description">{tribe.description}</p>
                             </div>
                         ))}
                     </div>
@@ -1064,18 +1000,9 @@ export default function WorldMap() {
                     textAlign: "center",
                 }}
             >
-                <div
-                    style={{
-                        maxWidth: "1200px",
-                        margin: "0 auto",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        fontSize: "14px",
-                    }}
-                >
+                <div className="footer-container">
                     <div style={{ color: "rgb(136, 146, 161)" }}>© 2025 CAST AI Group Inc.</div>
-                    <div style={{ display: "flex", gap: "50px" }}>
+                    <div className="footer-links">
                         <span>Privacy policy</span>
                         <span>Terms of service</span>
                         <span>EU Projects</span>
@@ -1091,6 +1018,107 @@ export default function WorldMap() {
                 y={tooltipData.y}
                 visible={tooltipData.visible}
             />
+
+            {/* Mobile Menu Overlay */}
+            {isMenuOpen && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        zIndex: 1000,
+                        display: "flex",
+                        flexDirection: "column",
+                    }}
+                >
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: 60,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            zIndex: 1001,
+                            display: "flex",
+                            flexDirection: "column",
+                            height: "400px",
+                        }}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: "white",
+                                flex: 1,
+                                margin: "20px",
+                                borderRadius: "12px",
+                                padding: "20px",
+                            }}
+                        >
+                            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+                                {[
+                                    { text: "Dawae Tribe", hasChevron: true },
+                                    { text: "Dawae Charity", hasChevron: true },
+                                    { text: "Dawae Click", hasChevron: true },
+                                    { text: "Dawae Coin", hasChevron: true },
+                                    { text: "Community", hasChevron: false },
+                                ].map((item, index) => (
+                                    <div key={index}>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                padding: "15px 0",
+                                                borderBottom: index < 4 ? "1px solid #e1e4ea" : "none",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            <span style={{ color: "#333", fontSize: "16px" }}>{item.text}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: "10px",
+                                    fontSize: "14px",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <button
+                                    style={{
+                                        backgroundColor: "white",
+                                        color: "black",
+                                        border: "1px solid #e1e4ea",
+                                        padding: "5px 15px",
+                                        borderRadius: "4px",
+                                        fontSize: "14px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Sign in
+                                </button>
+                                <button
+                                    style={{
+                                        backgroundColor: "rgb(14, 15, 19)",
+                                        color: "white",
+                                        border: "none",
+                                        padding: "5px 15px",
+                                        borderRadius: "4px",
+                                        fontSize: "14px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Join the tribe
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

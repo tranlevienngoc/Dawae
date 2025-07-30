@@ -103,6 +103,56 @@ h1 {
   100% { opacity: 0.5; }
 }
 
+
+
+
+
+.title-dawae-container {
+  z-index: 1000;
+  text-align: center;
+  color: white;
+  margin-bottom: 50px;
+  margin-top: 40px;
+}
+
+.title-dawae {
+  font-size: 62px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-family: "Soehne";
+}
+
+.title-dawae-description-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.title-dawae-description {
+  font-size: 16px;
+  /* font-weight: 400; */
+  letter-spacing: 1px;
+  font-family: "Soehne";
+  color: #8892a1;
+  max-width: 1000px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.unites-bruddahs-globally-title {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.unites-bruddahs-globally-description {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 60px;
+}
+
 .join-community-button {
   background-color: #f6f7fa;
   color: #666;
@@ -140,6 +190,42 @@ h1 {
   display: none;
 }
 
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 50px;
+}
+
+.unites-bruddahs-globally-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: left;
+  border: 1px solid #e1e4ea;
+}
+
+.unites-bruddahs-globally-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.unites-bruddahs-globally-card-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
 @media (max-width: 900px) {
   .header-nav-links-container {
     display: none;
@@ -147,5 +233,60 @@ h1 {
 
   .header-hamburger-menu {
     display: block;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-links span {
+    height: 30px;
+  }
+
+  .title-dawae {
+    font-size: 42px;
+  }
+
+  .title-dawae-description {
+    font-size: 14px;
+  }
+
+  .unites-bruddahs-globally-title {
+    font-size: 32px;
+  }
+
+  .unites-bruddahs-globally-description {
+    font-size: 14px;
+  }
+
+  .title-dawae-description-container {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .unites-bruddahs-globally-card-header div h3 {
+    font-size: 20px;
+  }
+
+  .unites-bruddahs-globally-card-description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-links {
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 13px;
   }
 }
