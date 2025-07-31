@@ -426,6 +426,14 @@ canvas {
     height: 700px !important;
   }
   
+
+  .sign-in-button {
+    padding: 10px 15px;
+  }
+
+  .join-the-tribe-button {  
+    padding: 10px 15px;
+  }
 }
 
 @media (max-width: 600px) {
