@@ -171,7 +171,7 @@ h1 {
   background-color: white;
   color: black;
   border: 1px solid #e1e4ea;
-  padding: 5px 15px;
+  padding: 10px 15px;
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
@@ -186,7 +186,7 @@ h1 {
   background-color: rgb(14, 15, 19);
   color: white;
   border: none;
-  padding: 5px 15px;
+  padding: 10px 15px;
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
@@ -207,13 +207,19 @@ h1 {
 
 .header-nav-links {
   display: flex;
-  gap: 20px;
+  /* gap: 10px; */
   font-size: 14px;
-  margin-left: 20px;
+  margin-left: 25px;
 }
 
 .header-nav-links span {
   cursor: pointer;
+  padding: 8px 15px;
+}
+
+.header-nav-links span:hover {
+  background-color: #f4f4f5;
+  border-radius: 60px;
 }
 
 .header-hamburger-menu {
@@ -267,8 +273,77 @@ h1 {
   border-radius: 10px;
   padding: 20px;
   color: white;
-  min-width: 300px;
+  /* min-width: 300px; */
   backdrop-filter: blur(10px);
+}
+
+
+canvas {
+  width: 100% !important;
+  height: 900px !important;
+}
+
+
+.map-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 900px;
+  position: relative;
+}
+
+.ctrl-hint {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 20000;
+}
+
+.ctrl-hint-text {
+  color: #fff;
+  padding: 18px 36px;
+  border-radius: 12px;
+  font-size: 30px;
+  font-weight: 500;
+  user-select: none;
+}
+
+.tribes-section-container {
+  background-color: white;
+  padding: 40px 20px 80px 20px;
+  color: #333;
+}
+
+#chartdiv {
+  width: 100%;
+  height: 900px;
+  background-color: #0e0f13;
+  position: relative;
+}
+
+@media (max-width: 1050px) {  
+  .header-nav-links {
+    margin-left: 0px;
+  }
+  .header-nav-links span {
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  .sign-in-button {
+    padding: 6px;
+  }
+
+  .join-the-tribe-button {
+    padding: 6px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -297,7 +372,7 @@ h1 {
   }
 
   .title-dawae {
-    font-size: 42px;
+    font-size: 32px;
   }
 
   .title-dawae-description {
@@ -335,6 +410,21 @@ h1 {
     top: 0px;
     z-index: 1000;
   }
+
+  .map-section {
+    height: 700px;
+  }
+
+  .ctrl-hint {
+    height: 700px;
+  }
+
+  .ctrl-hint-text {
+    font-size: 20px;
+  }
+  canvas {
+    height: 700px !important;
+  }
   
 }
 
@@ -344,5 +434,47 @@ h1 {
     flex-wrap: wrap;
     gap: 10px;
     font-size: 13px;
+  }
+
+  .map-section {
+    height: 700px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .total-dawae-warriors-box {
+    z-index: 1000;
+    width: 90% !important;
+    font-size: 12px !important;
+    position: unset;
+    order: 1;
+  }
+
+  #chartdiv {
+    height: 400px;
+    top: 120px;
+    position: unset;
+    order: 2;
+  }
+
+  canvas {
+    height: 400px !important;
+  }
+  .ctrl-hint {
+    height: 400px;
+    display: none;
+  }
+
+  .ctrl-hint-text {
+    font-size: 16px;
+  }
+
+
+  .tribes-section-container {
+    padding: 40px 20px;
   }
 }

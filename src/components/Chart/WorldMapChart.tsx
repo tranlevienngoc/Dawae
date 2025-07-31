@@ -13,7 +13,6 @@ import CustomTooltip from "./CustomTooltip";
 // }
 
 const WorldMapChart = () => {
-    console.log("WorldMapChart");
     const [tooltipData, setTooltipData] = useState<TooltipData>({
         title: "",
         level: "",
@@ -42,6 +41,14 @@ const WorldMapChart = () => {
     };
 
     useEffect(() => {
+        // Check if root already exists and dispose it
+        try {
+            const existingRoot = am5.Root.new("chartdiv");
+            existingRoot.dispose();
+        } catch {
+            // Root doesn't exist, continue
+        }
+
         const root = am5.Root.new("chartdiv");
 
         root.setThemes([am5themes_Animated.new(root)]);
@@ -54,16 +61,14 @@ const WorldMapChart = () => {
                 homeGeoPoint: { longitude: 0, latitude: 0 },
                 maxPanOut: 0.1,
                 // Set default zoom level (1.5 = 50% zoomed in)
-                zoomLevel: 1.5,
+                zoomLevel: 1,
             })
         );
 
-        // Disable zoom controls but allow mouse wheel zoom
+        // Disable zoom controls and default mouse wheel zoom
         chart.set("zoomControl", undefined);
-        
-        // Enable mouse wheel zoom
-        chart.set("wheelY", "zoom");
-        chart.set("wheelX", "zoom");
+        chart.set("wheelY", "none");
+        chart.set("wheelX", "none");
 
         const polygonSeries = chart.series.push(
             am5map.MapPolygonSeries.new(root, {
@@ -201,64 +206,46 @@ const WorldMapChart = () => {
 
         // Wheel event handler for CTRL hint
         const chartDiv = document.getElementById("chartdiv");
+        let wheelHandler: ((e: WheelEvent) => void) | null = null;
+
         if (chartDiv) {
-            const handleWheel = (e: WheelEvent) => {
+            wheelHandler = (e: WheelEvent) => {
                 if (!e.ctrlKey) {
+                    // Show hint when scrolling without CTRL, but don't prevent default scroll
                     setShowCtrlHint(true);
                     if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
                     hintTimeoutRef.current = setTimeout(() => setShowCtrlHint(false), 2000);
                 } else {
+                    // Prevent default scroll behavior and allow zoom when CTRL is pressed
+                    e.preventDefault();
                     setShowCtrlHint(false);
+                    // Manually trigger zoom
+                    const deltaY = e.deltaY;
+                    const currentZoom = chart.get("zoomLevel") || 1;
+                    const newZoom = Math.max(0.5, Math.min(3, currentZoom - deltaY * 0.001));
+                    chart.set("zoomLevel", newZoom);
                 }
             };
-            chartDiv.addEventListener("wheel", handleWheel, { passive: true });
-            return () => {
-                chartDiv.removeEventListener("wheel", handleWheel);
-            };
+            chartDiv.addEventListener("wheel", wheelHandler, { passive: false });
         }
 
-        return () => root.dispose();
+        return () => {
+            if (hintTimeoutRef.current) {
+                clearTimeout(hintTimeoutRef.current);
+            }
+            if (chartDiv && wheelHandler) {
+                chartDiv.removeEventListener("wheel", wheelHandler);
+            }
+            root.dispose();
+        };
     }, []);
 
     return (
         <>
-            <div
-                id="chartdiv"
-                className="mobile-map-container"
-                style={{
-                    width: "100%",
-                    height: "700px", // Set fixed height for chart
-                    backgroundColor: "#0e0f13",
-                    position: "relative",
-                }}
-            />
+            <div id="chartdiv" />
             {showCtrlHint && (
-                <div
-                    style={{
-                        position: "absolute",
-                        left: 0,
-                        top: 0,
-                        width: "100%",
-                        height: "600px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        pointerEvents: "none",
-                        zIndex: 20000,
-                    }}
-                >
-                    <div
-                        style={{
-                            color: "#fff",
-                            padding: "18px 36px",
-                            borderRadius: 12,
-                            fontSize: "30px",
-                            fontWeight: 500,
-                            userSelect: "none",
-                        }}
-                    >
-                        Use CTRL + Scroll to zoom
-                    </div>
+                <div className="ctrl-hint">
+                    <div className="ctrl-hint-text">Use CTRL + Scroll to zoom</div>
                 </div>
             )}
             <CustomTooltip

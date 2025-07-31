@@ -42,16 +42,7 @@ export default function WorldMap() {
                 </div>
 
                 {/* Map Section */}
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "600px",
-                        position: "relative",
-                    }}
-                >
+                <div className="map-section">
                     {/* World Map Chart */}
                     <WorldMapChart />
 

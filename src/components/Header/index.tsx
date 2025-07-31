@@ -36,7 +36,7 @@ const Header = () => {
                                 marginRight: "25px",
                             }}
                         >
-                            <Image src="/logo.png" alt="DAWAE Logo" width={100} height={20} />
+                            <Image src="/logo.png" alt="DAWAE Logo" width={130} height={25} />
                         </div>
                         <div className="header-nav-links-container">
                             <nav className="header-nav-links">

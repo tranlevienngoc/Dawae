@@ -3,13 +3,7 @@ import TribeCard from "./TribeCard";
 
 const TribesSection = () => {
     return (
-        <div
-            style={{
-                backgroundColor: "white",
-                padding: "40px 20px 80px 20px",
-                color: "#333",
-            }}
-        >
+        <div className="tribes-section-container">
             <div
                 style={{
                     maxWidth: "1200px",
@@ -40,4 +34,4 @@ const TribesSection = () => {
     );
 };
 
-export default TribesSection; 
+export default TribesSection;

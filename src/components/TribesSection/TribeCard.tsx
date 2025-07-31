@@ -15,8 +15,8 @@ const TribeCard = ({ tribe }: TribeCardProps) => {
                         svg
                         className="flag-icon"
                         style={{
-                            width: "24px",
-                            height: "18px",
+                            width: "45px",
+                            height: "34px",
                             borderRadius: "5px",
                             border: "1px solid #e1e4ea",
                         }}
