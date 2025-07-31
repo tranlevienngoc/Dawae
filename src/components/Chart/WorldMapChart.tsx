@@ -222,7 +222,7 @@ const WorldMapChart = () => {
                     // Manually trigger zoom
                     const deltaY = e.deltaY;
                     const currentZoom = chart.get("zoomLevel") || 1;
-                    const newZoom = Math.max(0.5, Math.min(3, currentZoom - deltaY * 0.001));
+                    const newZoom = Math.max(0.5, Math.min(3, currentZoom - deltaY * 0.003));
                     chart.set("zoomLevel", newZoom);
                 }
             };
