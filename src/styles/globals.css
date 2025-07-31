@@ -116,7 +116,7 @@ h1 {
 }
 
 .title-dawae {
-  font-size: 62px;
+  font-size: 60px;
   font-weight: 800;
   letter-spacing: 2px;
   font-family: "Soehne";
@@ -126,16 +126,16 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .title-dawae-description {
-  font-size: 14px;
+  font-size: 16px;
   /* font-weight: 400; */
   letter-spacing: 1px;
   font-family: "Soehne";
-  color: #8892a1;
-  max-width: 1200px;
+  color: #a3a6a9;
+  max-width: 1000px;
   line-height: 1.6;
   text-align: center;
 }

@@ -33,10 +33,7 @@ export default function WorldMap() {
                     <h1 className="title-dawae">The Ugandan Knuckles Empire</h1>
                     <div className="title-dawae-description-container">
                         <p className="title-dawae-description">
-                            Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great
-                            again! Dis house unites bruddahs globally, tappin&apos; to honor Da Queen and prove Da Wae
-                            lives eternal. Join us, spit on da doubters, and let&apos;s show da world da Ugandan
-                            Knuckles tribe never fades.
+                        Our sacred mission is to revive the spirit of Ugandan Knuckles, to make da tribe great again! Dis house unites bruddahs globally, tappin&apos; to honor Da Queen and prove Da Wae lives eternal.
                         </p>
                     </div>
                 </div>

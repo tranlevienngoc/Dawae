@@ -10,7 +10,7 @@ const Footer = () => {
             }}
         >
             <div className="footer-container">
-                <div style={{ color: "rgb(136, 146, 161)" }}>© 2025 CAST AI Group Inc.</div>
+                <div style={{ color: "rgb(136, 146, 161)" }}>© 2025 Dawae Tribe.</div>
                 <div className="footer-links">
                     <span>Privacy policy</span>
                     <span>Terms of service</span>
