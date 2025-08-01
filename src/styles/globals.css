@@ -261,6 +261,22 @@ h1 {
   color: white;
 }
 
+/* Disable hover effects on mobile devices */
+@media (max-width: 768px) {
+  .unites-bruddahs-globally-card:hover {
+    background-color: transparent;
+    color: inherit;
+  }
+  
+  .unites-bruddahs-globally-card:hover .unites-bruddahs-globally-card-header {
+    color: inherit;
+  }
+  
+  .unites-bruddahs-globally-card:hover .unites-bruddahs-globally-card-description {
+    color: #666;
+  }
+}
+
 .unites-bruddahs-globally-card-header {
   display: flex;
   justify-content: space-between;

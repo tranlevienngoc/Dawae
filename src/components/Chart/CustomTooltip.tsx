@@ -10,6 +10,29 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ data, x, y, visible }: CustomTooltipProps) => {
     if (!visible || !data) return null;
 
+    // Calculate position to prevent tooltip from being cut off
+    const tooltipWidth = 280; // maxWidth
+    const tooltipHeight = 200; // estimated height
+    const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+    
+    let tooltipX = x + 15;
+    let tooltipY = y - 10;
+    
+    // Adjust horizontal position if tooltip would go off screen
+    if (tooltipX + tooltipWidth > windowWidth - 20) {
+        tooltipX = x - tooltipWidth - 15;
+    }
+    
+    // Adjust vertical position if tooltip would go off screen
+    if (tooltipY + tooltipHeight > windowHeight - 20) {
+        tooltipY = y - tooltipHeight - 10;
+    }
+    
+    // Ensure tooltip doesn't go above or left of screen
+    tooltipX = Math.max(20, tooltipX);
+    tooltipY = Math.max(20, tooltipY);
+
     const levelColors = {
         steady: "#26bb73",
         seeking: "#ff9840",
@@ -29,13 +52,14 @@ const CustomTooltip = ({ data, x, y, visible }: CustomTooltipProps) => {
         <div
             style={{
                 position: "fixed",
-                left: x + 15,
-                top: y - 10,
-                zIndex: 10000,
+                left: tooltipX,
+                top: tooltipY,
+                zIndex: 99999,
                 backgroundColor: "#161618",
                 border: "1px solid #444",
                 borderRadius: "8px",
                 minWidth: "220px",
+                maxWidth: "280px",
                 color: "white",
                 padding: "10px",
                 fontSize: "12px",
@@ -43,6 +67,8 @@ const CustomTooltip = ({ data, x, y, visible }: CustomTooltipProps) => {
                 backdropFilter: "blur(10px)",
                 pointerEvents: "none",
                 boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                wordWrap: "break-word",
+                overflowWrap: "break-word",
             }}
         >
             {/* Header Section */}
