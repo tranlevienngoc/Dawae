@@ -463,6 +463,21 @@ canvas {
   .join-the-tribe-button {  
     padding: 10px 15px;
   }
+
+
+  .unites-bruddahs-globally-card:hover {
+    background-color: #303037;
+    color: white;
+  }
+
+  .unites-bruddahs-globally-card:hover .unites-bruddahs-globally-card-header {
+    color: white;
+  }
+
+  .unites-bruddahs-globally-card:hover .unites-bruddahs-globally-card-description {
+    color: white;
+  }
+
 }
 
 @media (max-width: 600px) {
