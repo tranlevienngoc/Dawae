@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import AiOutlineMenu from "../svg/AiOutlineMenu";
 import MobileMenu from "./MobileMenu";
+import { menu } from "@/constants/menu";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,11 +41,9 @@ const Header = () => {
                         </div>
                         <div className="header-nav-links-container">
                             <nav className="header-nav-links">
-                                <span style={{ cursor: "pointer" }}>Dawae Tribe</span>
-                                <span style={{ cursor: "pointer" }}>Dawae Charity</span>
-                                <span style={{ cursor: "pointer" }}>Dawae Click</span>
-                                <span style={{ cursor: "pointer" }}>Dawae Coin</span>
-                                <span style={{ cursor: "pointer" }}>Community</span>
+                                {menu.map((item) => (
+                                    <span key={item.title} style={{ cursor: "pointer" }}>{item.title}</span>
+                                ))}
                             </nav>
 
                             <div

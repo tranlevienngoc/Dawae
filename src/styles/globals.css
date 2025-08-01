@@ -248,6 +248,19 @@ h1 {
   border: 1px solid #e1e4ea;
 }
 
+.unites-bruddahs-globally-card:hover {
+  background-color: #303037;
+  color: white;
+}
+
+.unites-bruddahs-globally-card:hover .unites-bruddahs-globally-card-header {
+  color: white;
+}
+
+.unites-bruddahs-globally-card:hover .unites-bruddahs-globally-card-description {
+  color: white;
+}
+
 .unites-bruddahs-globally-card-header {
   display: flex;
   justify-content: space-between;
@@ -484,5 +497,9 @@ canvas {
 
   .tribes-section-container {
     padding: 40px 20px;
+  }
+
+  .title-dawae-container {
+    margin-bottom: 0px;
   }
 }
