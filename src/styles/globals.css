@@ -261,6 +261,32 @@ h1 {
   color: white;
 }
 
+
+.avatar-wrapper {
+  width: 42px;
+  height: 42px;
+  z-index: 900;
+  cursor: pointer;
+  position: relative;
+}
+
+.logout-button {
+  position: absolute;
+  top: 50px;
+  left: -80px;
+  width: 110px;
+  height: 40px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0 10px;
+  border: 1px solid #f0f0f0;
+}
 /* Disable hover effects on mobile devices */
 @media (max-width: 768px) {
   .unites-bruddahs-globally-card:hover {
@@ -311,7 +337,6 @@ canvas {
   width: 100% !important;
   height: 900px !important;
 }
-
 
 .map-section {
   display: flex;
@@ -478,6 +503,9 @@ canvas {
     color: white;
   }
 
+  .logout-button {
+    min-width: unset;
+  }
 }
 
 @media (max-width: 600px) {

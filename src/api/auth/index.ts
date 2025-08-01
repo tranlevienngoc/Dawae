@@ -2,7 +2,7 @@ import { MainNetworkAccess } from '@/access';
 import { UserResponse } from '@/constants/model';
 
 export const authorizationTwitter = async (): Promise<string> => {
-  const res = await MainNetworkAccess.Get(`/authorization-twitter`);
+  const res = await MainNetworkAccess.Get(`/authorization-twitter?is_dawae=true`);
   return res?.data;
 };
 
@@ -18,7 +18,10 @@ export const getInfoTwitter = async (payload: {
   name: string,
 }> => {
   const res = await MainNetworkAccess.Post('/get-info-twitter', {
-    data: payload,
+    data: {
+      ...payload,
+      is_dawae: true,
+    },
   });
   return res?.data;
 };

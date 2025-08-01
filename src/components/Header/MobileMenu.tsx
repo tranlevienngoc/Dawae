@@ -1,9 +1,45 @@
+import { useAuth } from "@/context/AuthContect";
+import Image from "next/image";
+import { useAuthActions } from "@/hooks/useAuthActions";
+import { useState, useEffect, useRef } from "react";
+
 interface MobileMenuProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const MobileMenu = ({ isOpen }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
+    const { user } = useAuth();
+    const { handleLoginTwitter, handleLogout } = useAuthActions();
+    const [showSignOut, setShowSignOut] = useState(false);
+    const avatarRef = useRef<HTMLDivElement>(null);
+
+    const handleMobileLogin = () => {
+        handleLoginTwitter();
+        onClose(); // Close mobile menu after login attempt
+    };
+
+    const handleMobileLogout = () => {
+        handleLogout();
+        onClose(); // Close mobile menu after logout
+    };
+
+    const handleAvatarClick = () => {
+        setShowSignOut(!showSignOut);
+    };
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (showSignOut && avatarRef.current && !avatarRef.current.contains(event.target as Node)) {
+                setShowSignOut(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showSignOut]);
     if (!isOpen) return null;
 
     return (
@@ -72,9 +108,75 @@ const MobileMenu = ({ isOpen }: MobileMenuProps) => {
                             gap: "10px",
                             fontSize: "14px",
                             alignItems: "center",
+                            marginTop: "20px",
                         }}
                     >
-                        <button className="sign-in-button">Sign in</button>
+                        {!user?.id ? (
+                            <button 
+                                className="sign-in-button"
+                                onClick={handleMobileLogin}
+                            >
+                                Sign in
+                            </button>
+                        ) : (
+                            <div ref={avatarRef} style={{ position: "relative" }}>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={handleAvatarClick}
+                                >
+                                    <Image
+                                        src={user?.avatar as string}
+                                        alt="User Avatar"
+                                        width={32}
+                                        height={32}
+                                        style={{ borderRadius: "50%" }}
+                                    />
+                                </div>
+                                {showSignOut && (
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            top: "100%",
+                                            left: 0,
+                                            minWidth: "120px",
+                                            backgroundColor: "white",
+                                            border: "1px solid #e1e4ea",
+                                            borderRadius: "8px",
+                                            padding: "10px",
+                                            marginTop: "5px",
+                                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                                            zIndex: 1000,
+                                        }}
+                                        onClick={handleMobileLogout}
+                                    >
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "8px",
+                                                cursor: "pointer",
+                                                whiteSpace: "nowrap",
+                                            }}
+                                        >
+                                            <Image
+                                                src="/logoutIcon.svg"
+                                                alt="Logout"
+                                                width={16}
+                                                height={16}
+                                            />
+                                            <span style={{ color: "#333", fontSize: "14px" }}>
+                                                Sign Out
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         <button className="join-the-tribe-button">Join the tribe</button>
                     </div>
                 </div>
